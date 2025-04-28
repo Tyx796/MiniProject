@@ -9,7 +9,7 @@ import java.util.Set;
  */
 public class Shapes3D {
     private static final Map<String, String> shapes = new HashMap<>();
-    private static final String RESOURCES_PATH = "com/geometry/resources/task2/";
+    private static final String RESOURCES_PATH = "com/geometry/resources/task1_3D/";
 
     // map shape name to the imgs in the resources folder
     static {

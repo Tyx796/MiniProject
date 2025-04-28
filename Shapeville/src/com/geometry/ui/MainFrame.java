@@ -77,7 +77,7 @@ public class MainFrame extends JFrame {
         
         // 添加到卡片布局
         cardPanel.add(homePanel, HOME_PANEL);
-        cardPanel.add(shapePanel, SHAPE_PANEL);
+        cardPanel.add(shapePanel, SHAPE2D_PANEL);
         cardPanel.add(shape3DPanel, SHAPE3D_PANEL);
         cardPanel.add(anglePanel, ANGLE_PANEL);
         cardPanel.add(exercisePanel, EXERCISE_PANEL);
@@ -143,7 +143,7 @@ public class MainFrame extends JFrame {
         
         JButton shapeButton = createMenuButton("2D图形学习");
         shapeButton.setPreferredSize(new Dimension(150, 100));
-        shapeButton.addActionListener(e -> showCard(SHAPE_PANEL));
+        shapeButton.addActionListener(e -> showCard(SHAPE2D_PANEL));
         
         JButton shape3DButton = createMenuButton("3D图形学习");
         shape3DButton.setPreferredSize(new Dimension(150, 100));

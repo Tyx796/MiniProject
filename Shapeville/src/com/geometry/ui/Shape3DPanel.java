@@ -3,6 +3,8 @@ package com.geometry.ui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+
+import com.geometry.service.Task13D;
 import com.geometry.service.Task2;
 import com.geometry.entity.Shapes3D;
 
@@ -22,7 +24,7 @@ public class Shape3DPanel extends JPanel {
     private JLabel attemptsLabel;
     private JLabel resultLabel;
     private JTextField answerField;
-    private Task2 shapeTask;
+    private Task13D shapeTask;
     private static final String FONT_NAME = "Arial";
     
     /**
@@ -31,7 +33,7 @@ public class Shape3DPanel extends JPanel {
      */
     public Shape3DPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
-        this.shapeTask = new Task2();
+        this.shapeTask = new Task13D();
         initComponents();
         setupLayout();
         
@@ -259,7 +261,7 @@ public class Shape3DPanel extends JPanel {
      */
     private void restartTask() {
         // 重新初始化任务
-        shapeTask = new Task2();
+        shapeTask = new Task13D();
         
         // 重新设置UI组件
         answerField.setEnabled(true);

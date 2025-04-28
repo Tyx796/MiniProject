@@ -1,152 +1,213 @@
 package com.geometry.service;
 
-import com.geometry.entity.Shapes3D;
 import com.geometry.entity.User;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
- * 3D Shape recognition task business logic
+ * 角度识别任务业务逻辑
  */
 public class Task2 {
-    private List<String> shapes;
-    private int currentShapeIndex;
-    private int attempts;
-    private int correctCount;
+    // 角度类型常量
+    public static final String ACUTE_ANGLE = "acute";
+    public static final String RIGHT_ANGLE = "right";
+    public static final String OBTUSE_ANGLE = "obtuse";
+    public static final String STRAIGHT_ANGLE = "straight";
+    public static final String REFLEX_ANGLE = "reflex";
+    
+    // 角度类型与度数范围的映射
+    private final List<String> angleTypes = Arrays.asList(
+        ACUTE_ANGLE, RIGHT_ANGLE, OBTUSE_ANGLE, STRAIGHT_ANGLE, REFLEX_ANGLE
+    );
+    
+    // 已完成的角度类型
+    private Set<String> completedTypes = new HashSet<>();
+    
+    // 当前角度
+    private int currentAngle = 0;
+    
+    // 当前尝试次数
+    private int attempts = 0;
+    
+    // 最大尝试次数
     private int maxAttempts = 3;
-    private int requiredShapes = 4;
+    
+    // 当前角度类型
+    private String currentAngleType = "";
+    
+    // 正确回答数
+    private int correctCount = 0;
+    
+    // 需要完成的角度类型数
+    private int requiredTypes = 4;
     
     /**
-     * Initialize the task with available 3D shapes
+     * 设置当前角度（用户输入）
+     * @param angle 用户输入的角度
      */
-    public Task2() {
-        // Initialize with available shapes from Shapes3D
-        shapes = new ArrayList<>(Shapes3D.getAvailableShapes());
+    public void setCurrentAngle(int angle) {
+        this.currentAngle = angle;
+        this.attempts = 0;
+        this.currentAngleType = getAngleType(angle);
+    }
+    
+    /**
+     * 根据角度值获取角度类型
+     * @param angle 角度值
+     * @return 角度类型
+     */
+    public String getAngleType(int angle) {
+        if (angle == 0) return ACUTE_ANGLE; // 特殊情况，0度当作锐角处理
+        if (angle > 0 && angle < 90) return ACUTE_ANGLE;
+        if (angle == 90) return RIGHT_ANGLE;
+        if (angle > 90 && angle < 180) return OBTUSE_ANGLE;
+        if (angle == 180) return STRAIGHT_ANGLE;
+        if (angle > 180 && angle < 360) return REFLEX_ANGLE;
+        if (angle == 360) return STRAIGHT_ANGLE; // 特殊情况，360度当作平角处理
+        return "";
+    }
+    
+    /**
+     * 检查用户输入的角度类型是否正确
+     * @param answer 用户回答的角度类型
+     * @return 是否正确
+     */
+    public boolean checkAnswer(String answer) {
+        boolean isCorrect = answer.equalsIgnoreCase(currentAngleType);
         
-        // Shuffle the shapes to randomize order
-        Collections.shuffle(shapes);
-        
-        // Start with the first shape
-        currentShapeIndex = 0;
-        attempts = 0;
-        correctCount = 0;
+        if (isCorrect) {
+            // 添加分数
+            int attemptsUsed = maxAttempts - getRemainingAttempts() + 1;
+            User.addScores("Basic", attemptsUsed);
+            
+            // 记录已完成的角度类型
+            completedTypes.add(currentAngleType);
+            correctCount++;
+            
+            return true;
+        } else {
+            attempts++;
+            return false;
+        }
     }
     
     /**
-     * Get the current shape name
-     * @return current shape name
+     * 获取当前角度
+     * @return 当前角度
      */
-    public String getCurrentShape() {
-        if (currentShapeIndex < shapes.size()) {
-            return shapes.get(currentShapeIndex);
-        }
-        return null;
-    }
-
-    /**
-     * 获取上一个图形名称
-     * @return 上一个图形名称
-     */
-    public String getPreviousShape() {
-        if (currentShapeIndex > 0 && currentShapeIndex <= shapes.size()) {
-            return shapes.get(currentShapeIndex - 1);
-        }
-        return null;
+    public int getCurrentAngle() {
+        return currentAngle;
     }
     
     /**
-     * Get current attempt count
-     * @return attempt count
+     * 获取当前角度类型
+     * @return 当前角度类型
+     */
+    public String getCurrentAngleType() {
+        return currentAngleType;
+    }
+    
+    /**
+     * 获取已尝试次数
+     * @return 已尝试次数
      */
     public int getAttempts() {
         return attempts;
     }
-
-    /**
-     * Check if answer is correct for current shape
-     * @param answer User's answer
-     * @return true if correct, false otherwise
-     */
-    public boolean checkAnswer(String answer) {
-        boolean isCorrect = false;
-        
-        if (currentShapeIndex < shapes.size()) {
-            String currentShape = shapes.get(currentShapeIndex);
-            isCorrect = currentShape.equalsIgnoreCase(answer);
-            
-            if (isCorrect) {
-                // Add score based on attempts remaining
-                int attemptsUsed = maxAttempts - getRemainingAttempts() + 1;
-                User.addScores("Advanced", attemptsUsed);
-                
-                correctCount++;
-                nextShape();
-            } else {
-                attempts++;
-                if (attempts >= maxAttempts) {
-                    // Move to next shape after max attempts
-                    nextShape();
-                }
-            }
-        }
-        
-        return isCorrect;
-    }
     
     /**
-     * Move to the next shape
-     */
-    private void nextShape() {
-        currentShapeIndex++;
-        attempts = 0;
-    }
-    
-    /**
-     * Check if the task is completed
-     * @return true if all required shapes are identified or shown
-     */
-    public boolean isTaskCompleted() {
-        return currentShapeIndex >= requiredShapes || currentShapeIndex >= shapes.size();
-    }
-    
-    /**
-     * Get the number of remaining attempts for current shape
-     * @return remaining attempts
+     * 获取剩余尝试次数
+     * @return 剩余尝试次数
      */
     public int getRemainingAttempts() {
         return maxAttempts - attempts;
     }
     
     /**
-     * Get the total number of correct answers
-     * @return correct count
+     * 获取正确回答次数
+     * @return 正确回答次数
      */
     public int getCorrectCount() {
         return correctCount;
     }
     
     /**
-     * Get the index of current shape
-     * @return current shape index
+     * 检查任务是否完成
+     * @return 是否完成
      */
-    public int getCurrentShapeIndex() {
-        return currentShapeIndex;
+    public boolean isTaskCompleted() {
+        return completedTypes.size() >= requiredTypes || completedTypes.size() >= angleTypes.size();
     }
     
     /**
-     * Get the total number of shapes to be shown
-     * @return total shape count (limited to required shapes)
-     */
-    public int getTotalShapes() {
-        return Math.min(requiredShapes, shapes.size());
-    }
-    
-    /**
-     * Get current user score
-     * @return current score
+     * 获取当前用户得分
+     * @return 当前得分
      */
     public int getCurrentScore() {
         return User.getScores();
     }
-} 
+    
+    /**
+     * 获取所有可用的角度类型
+     * @return 角度类型列表
+     */
+    public List<String> getAngleTypes() {
+        return new ArrayList<>(angleTypes);
+    }
+    
+    /**
+     * 获取角度类型的显示名称
+     * @param type 角度类型
+     * @return 显示名称
+     */
+    public String getAngleTypeName(String type) {
+        switch (type) {
+            case ACUTE_ANGLE:
+                return "Acute Angle";
+            case RIGHT_ANGLE:
+                return "Right Angle";
+            case OBTUSE_ANGLE:
+                return "Obtuse Angle";
+            case STRAIGHT_ANGLE:
+                return "Straight Angle";
+            case REFLEX_ANGLE:
+                return "Reflex Angle";
+            default:
+                return "Unknown";
+        }
+    }
+    
+    /**
+     * 获取角度类型的描述
+     * @param type 角度类型
+     * @return 描述
+     */
+    public String getAngleTypeDescription(String type) {
+        switch (type) {
+            case ACUTE_ANGLE:
+                return "less than 90° and greater than 0°";
+            case RIGHT_ANGLE:
+                return "equal to 90°";
+            case OBTUSE_ANGLE:
+                return "less than 180° and greater than 90°";
+            case STRAIGHT_ANGLE:
+                return "equal to 180°";
+            case REFLEX_ANGLE:
+                return "greater than 180° and less than 360°";
+            default:
+                return "";
+        }
+    }
+    
+    /**
+     * 获取角度对应的图像
+     * @param degrees 角度值
+     * @return 角度图像
+     */
+    public javax.swing.ImageIcon getAngleImage(int degrees) {
+        return com.geometry.entity.Angles.getAngleIcon(degrees);
+    }
+}

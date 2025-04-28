@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import com.geometry.service.Task1;
+import com.geometry.service.Task12D;
 import com.geometry.entity.Shapes2D;
 
 /**
@@ -26,7 +26,7 @@ public class Shape2DPanel extends JPanel {
     private JLabel attemptsLabel;
     private JLabel resultLabel;
     private JTextField answerField;
-    private Task1 shapeTask;
+    private Task12D shapeTask;
     private static final String FONT_NAME = "Arial";
     
     /**
@@ -35,7 +35,7 @@ public class Shape2DPanel extends JPanel {
      */
     public Shape2DPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
-        this.shapeTask = new Task1();
+        this.shapeTask = new Task12D();
         initComponents();
         setupLayout();
         
@@ -265,7 +265,7 @@ public class Shape2DPanel extends JPanel {
      */
     private void restartTask() {
         // 重新初始化任务
-        shapeTask = new Task1();
+        shapeTask = new Task12D();
         
         // 重新设置UI组件
         answerField.setEnabled(true);

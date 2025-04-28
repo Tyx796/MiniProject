@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class Shapes2D {
     private static final Map<String, String> shapes = new HashMap<>();
-    private static final String RESOURCES_PATH = "com/geometry/resources/task1/";
+    private static final String RESOURCES_PATH = "com/geometry/resources/task1_2D/";
 
     // map shape name to the imgs in the resources folder
     static {

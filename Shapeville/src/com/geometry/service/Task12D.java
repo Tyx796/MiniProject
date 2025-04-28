@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Shape recognition task business logic
  */
-public class Task1 {
+public class Task12D {
     private List<String> shapes;
     private int currentShapeIndex;
     private int attempts;
@@ -20,7 +20,7 @@ public class Task1 {
     /**
      * Initialize the task with available shapes
      */
-    public Task1() {
+    public Task12D() {
         // Initialize with available shapes from Shapes2D
         shapes = new ArrayList<>(Shapes2D.getAvailableShapes());
         
