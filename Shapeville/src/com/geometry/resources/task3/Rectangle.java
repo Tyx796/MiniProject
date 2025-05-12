@@ -23,11 +23,29 @@ public class Rectangle {
     /**
      * 矩形面积计算面板
      */
-    static class RectanglePanel extends JPanel {
+    public static class RectanglePanel extends JPanel {
         // 矩形参数
-        private final int length = 5;    // 长度(l)
-        private final int width = 4;     // 宽度(w)
-        private final int area = length * width; // 面积
+        private int length = 5;    // 长度(l)
+        private int width = 4;     // 宽度(w)
+        private int area;          // 面积
+        
+        /**
+         * 默认构造函数
+         */
+        public RectanglePanel() {
+            this.area = length * width;
+        }
+        
+        /**
+         * 参数化构造函数
+         * @param length 长度
+         * @param width 宽度
+         */
+        public RectanglePanel(int length, int width) {
+            this.length = length;
+            this.width = width;
+            this.area = length * width;
+        }
         
         @Override
         protected void paintComponent(Graphics g) {

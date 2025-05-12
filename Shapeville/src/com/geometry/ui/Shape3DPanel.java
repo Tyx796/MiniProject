@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import com.geometry.service.Task13D;
 import com.geometry.service.Task2;
 import com.geometry.entity.Shapes3D;
+import com.geometry.entity.User;
 
 /**
  * 3D图形学习与识别界面
@@ -172,11 +173,45 @@ public class Shape3DPanel extends JPanel {
             updateAttemptsLabel();
             resultLabel.setText("Correct! Well done!");
             resultLabel.setForeground(new Color(0, 128, 0)); // 绿色
+            
+            // 计算得分
+            int points = User.calScores("Basic", 3 - shapeTask.getRemainingAttempts() + 1);
+            
+            // 创建得分提示弹窗
+            JDialog scoreDialog = new JDialog((Frame)SwingUtilities.getWindowAncestor(this), "Score Alert", true);
+            scoreDialog.setLayout(new BorderLayout(10, 10));
+            scoreDialog.setSize(300, 150);
+            scoreDialog.setLocationRelativeTo(this);
+            
+            // 创建得分面板
+            JPanel scorePanel = new JPanel(new BorderLayout(10, 10));
+            scorePanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+            
+            // 添加得分信息
+            JLabel scoreLabel = new JLabel("Congratulations! You earned " + points + " points!", JLabel.CENTER);
+            scoreLabel.setFont(new Font(FONT_NAME, Font.BOLD, 18));
+            scoreLabel.setForeground(new Color(0, 150, 0));
+            
+            // 确认按钮
+            JButton okButton = new JButton("Continue");
+            okButton.addActionListener(e -> scoreDialog.dispose());
+            
+            // 组装面板
+            scorePanel.add(scoreLabel, BorderLayout.NORTH);
+            scorePanel.add(okButton, BorderLayout.SOUTH);
+            
+            scoreDialog.add(scorePanel);
+            
+            // 更新主窗口分数显示
             mainFrame.updateScore(shapeTask.getCurrentScore());
+            
+            // 显示得分弹窗
+            scoreDialog.setVisible(true);
             
             // 显示下一个图形 (延迟一秒)
             Timer timer = new Timer(1000, e -> {
                 if (shapeTask.isTaskCompleted()) {
+                    mainFrame.updateTaskStatus("Task 1-3D", true);
                     completeTask();
                 } else {
                     showCurrentShape();

@@ -24,12 +24,32 @@ public class Trapezium {
     /**
      * 梯形面积计算面板
      */
-    static class TrapeziumPanel extends JPanel {
+    public static class TrapeziumPanel extends JPanel {
         // 梯形参数
-        private final int topLength = 3;      // 上底长(a)
-        private final int bottomLength = 4;   // 下底长(b)
-        private final int height = 3;         // 高度(h)
-        private final double area = (topLength + bottomLength) * height / 2.0; // 面积
+        private int topLength = 3;      // 上底长(a)
+        private int bottomLength = 4;   // 下底长(b)
+        private int height = 3;         // 高度(h)
+        private double area;            // 面积
+        
+        /**
+         * 默认构造函数
+         */
+        public TrapeziumPanel() {
+            this.area = (topLength + bottomLength) * height / 2.0;
+        }
+        
+        /**
+         * 参数化构造函数
+         * @param topLength 上底长
+         * @param bottomLength 下底长
+         * @param height 高度
+         */
+        public TrapeziumPanel(int topLength, int bottomLength, int height) {
+            this.topLength = topLength;
+            this.bottomLength = bottomLength;
+            this.height = height;
+            this.area = (topLength + bottomLength) * height / 2.0;
+        }
         
         @Override
         protected void paintComponent(Graphics g) {

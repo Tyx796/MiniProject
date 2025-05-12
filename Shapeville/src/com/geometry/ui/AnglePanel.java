@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import com.geometry.service.Task2;
 import com.geometry.entity.Angles;
+import com.geometry.entity.User;
 
 /**
  * 角度学习与识别界面
@@ -342,7 +343,7 @@ public class AnglePanel extends JPanel {
             optionButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    checkAnswer(type);
+                    checkAngleType(type);
                 }
             });
             
@@ -364,48 +365,77 @@ public class AnglePanel extends JPanel {
     /**
      * 检查用户回答
      */
-    private void checkAnswer(String answer) {
-        boolean isCorrect = angleTask.checkAnswer(answer);
+    private void checkAngleType(String selectedType) {
+        boolean isCorrect = angleTask.checkAnswer(selectedType);
         
         if (isCorrect) {
-            // 正确答案
+            // 计算得分
+            int points = User.calScores("Basic", 3 - angleTask.getRemainingAttempts() + 1);
+            
+            // 创建得分提示弹窗
+            JDialog scoreDialog = new JDialog((Frame)SwingUtilities.getWindowAncestor(this), "Score Alert", true);
+            scoreDialog.setLayout(new BorderLayout(10, 10));
+            scoreDialog.setSize(300, 150);
+            scoreDialog.setLocationRelativeTo(this);
+            
+            // 创建得分面板
+            JPanel scorePanel = new JPanel(new BorderLayout(10, 10));
+            scorePanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+            
+            // 添加得分信息
+            JLabel scoreLabel = new JLabel("Congratulations! You earned " + points + " points!", JLabel.CENTER);
+            scoreLabel.setFont(new Font(FONT_NAME, Font.BOLD, 18));
+            scoreLabel.setForeground(new Color(0, 150, 0));
+            
+            // 确认按钮
+            JButton okButton = new JButton("Continue");
+            okButton.addActionListener(e -> scoreDialog.dispose());
+            
+            // 组装面板
+            scorePanel.add(scoreLabel, BorderLayout.NORTH);
+            scorePanel.add(okButton, BorderLayout.SOUTH);
+            
+            scoreDialog.add(scorePanel);
+            
+            // 更新结果标签
             resultLabel.setText("Correct! Well done!");
-            resultLabel.setForeground(new Color(0, 128, 0)); // 绿色
+            resultLabel.setForeground(new Color(0, 150, 0));
             
-            // 更新主窗口的分数显示
-            mainFrame.updateScore(angleTask.getCurrentScore());
+            // 显示得分弹窗
+            scoreDialog.setVisible(true);
             
-            // 如果已完成所有所需的角度类型，则显示结果面板
-            if (angleTask.isTaskCompleted()) {
-                showResultPanel();
-            } else {
-                // 否则返回到角度输入面板
-                Timer timer = new Timer(1500, e -> showInputPanel());
-                timer.setRepeats(false);
-                timer.start();
-            }
+            // 延迟显示下一个问题
+            Timer timer = new Timer(1000, e -> {
+                if (angleTask.isTaskCompleted()) {
+                    mainFrame.updateTaskStatus("Task 2", true);
+                    showResultPanel();
+                } else {
+                    showInputPanel();
+                }
+            });
+            timer.setRepeats(false);
+            timer.start();
         } else {
-            // 错误答案
-            resultLabel.setText("Incorrect, try again!");
+            resultLabel.setText("Try again!");
             resultLabel.setForeground(Color.RED);
             
-            // 更新尝试次数标签
-            updateAttemptsLabel();
-            
-            // 如果已用完所有尝试次数，显示正确答案
-            if (angleTask.getRemainingAttempts() == 0) {
-                String correctType = angleTask.getCurrentAngleType();
-                String typeName = angleTask.getAngleTypeName(correctType);
-                String typeDesc = angleTask.getAngleTypeDescription(correctType);
-                
-                resultLabel.setText("The correct answer is: " + typeName + " (" + typeDesc + ")");
-                
-                // 延迟返回到角度输入面板
-                Timer timer = new Timer(3000, e -> showInputPanel());
+            if (angleTask.getRemainingAttempts() <= 0) {
+                // 显示正确答案
+                resultLabel.setText("The correct answer was: " + angleTask.getCurrentAngleType());
+                Timer timer = new Timer(2000, e -> {
+                    if (angleTask.isTaskCompleted()) {
+                        showResultPanel();
+                    } else {
+                        showInputPanel();
+                    }
+                });
                 timer.setRepeats(false);
                 timer.start();
             }
         }
+        
+        // 更新尝试次数显示
+        updateAttemptsLabel();
     }
     
     /**

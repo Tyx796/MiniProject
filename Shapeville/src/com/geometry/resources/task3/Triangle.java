@@ -24,11 +24,29 @@ public class Triangle {
     /**
      * 三角形面积计算面板
      */
-    static class TrianglePanel extends JPanel {
+    public static class TrianglePanel extends JPanel {
         // 三角形参数
-        private final int base = 5;     // 底边长(b)
-        private final int height = 3;   // 高度(h)
-        private final double area = base * height / 2.0; // 面积
+        private int base = 5;     // 底边长(b)
+        private int height = 3;   // 高度(h)
+        private double area;      // 面积
+        
+        /**
+         * 默认构造函数
+         */
+        public TrianglePanel() {
+            this.area = base * height / 2.0;
+        }
+        
+        /**
+         * 参数化构造函数
+         * @param base 底边长
+         * @param height 高度
+         */
+        public TrianglePanel(int base, int height) {
+            this.base = base;
+            this.height = height;
+            this.area = base * height / 2.0;
+        }
         
         @Override
         protected void paintComponent(Graphics g) {

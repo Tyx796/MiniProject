@@ -5,8 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 /**
- * 应用程序主界面
- * 显示可用游戏级别、进度条和结束会话按钮
+ * Main window of the application
  */
 public class MainFrame extends JFrame {
     private JProgressBar progressBar;
@@ -18,14 +17,23 @@ public class MainFrame extends JFrame {
     // 当前得分
     private int currentScore = 0;
     
+    // 新增任务完成情况
+    private JPanel taskStatusPanel;
+    private java.util.Map<String, Boolean> currentTaskStatus = new java.util.LinkedHashMap<>() {{
+        put("Task 1-2D", true);
+        put("Task 1-3D", true);
+        put("Task 2", true);
+    }};
+    
     // 界面名称常量
     public static final String HOME_PANEL = "HOME";
-    public static final String SHAPE2D_PANEL = "SHAPE2D";
-    public static final String SHAPE3D_PANEL = "SHAPE3D";
+    public static final String SHAPE_2D_PANEL = "SHAPE_2D";
+    public static final String SHAPE_3D_PANEL = "SHAPE_3D";
     public static final String ANGLE_PANEL = "ANGLE";
     public static final String EXERCISE_PANEL = "EXERCISE";
     public static final String BONUS_PANEL = "BONUS";
     public static final String KS1_SELECTION_PANEL = "KS1_SELECTION";
+    public static final String KS2_SELECTION_PANEL = "KS2_SELECTION";
     
     /**
      * 构造函数
@@ -36,8 +44,8 @@ public class MainFrame extends JFrame {
         setupListeners();
         
         // 设置窗口属性
-        setTitle("几何学习乐园");
-        setSize(800, 600);
+        setTitle("Geometry Learning for Kids");
+        setSize(1000, 800);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // 居中显示
         setResizable(true);
@@ -48,17 +56,17 @@ public class MainFrame extends JFrame {
      */
     private void initComponents() {
         // 创建主要组件
-        levelInfoLabel = new JLabel("<html><h1>游戏级别信息</h1>" +
-                "<p style='font-size: 16px;'>级别1 (KS1): 认识基本图形和角度 </p>" +
-                "<p style='font-size: 16px;'>级别2 (KS2): 图形面积计算</p>" +
-                "<p style='font-size: 16px;'>级别3 (Bonus): 复合图形和扇形</p></html>");
+        levelInfoLabel = new JLabel("<html><h1>Game Level Information</h1>" +
+                "<p style='font-size: 16px;'>Level 1 (KS1): Recognize basic shapes and angles </p>" +
+                "<p style='font-size: 16px;'>Level 2 (KS2): Area and Perimeter</p>" +
+                "<p style='font-size: 16px;'>Level 3 (Bonus): Complex shapes and sectors</p></html>");
         
         progressBar = new JProgressBar(0, 100);
         progressBar.setValue(0);
         progressBar.setStringPainted(true);
-        progressBar.setString("当前进度: 0%");
+        progressBar.setString("Current Progress: 0%");
         
-        endSessionButton = new JButton("结束会话");
+        endSessionButton = new JButton("End Session");
         
         // 创建卡片布局面板
         cardLayout = new CardLayout();
@@ -74,15 +82,17 @@ public class MainFrame extends JFrame {
         JPanel exercisePanel = new ExercisePanel(this);
         JPanel bonusPanel = new BonusTasksPanel(this);
         JPanel ks1SelectionPanel = createKS1SelectionPanel();
+        JPanel ks2SelectionPanel = createKS2SelectionPanel();
         
         // 添加到卡片布局
         cardPanel.add(homePanel, HOME_PANEL);
-        cardPanel.add(shapePanel, SHAPE2D_PANEL);
-        cardPanel.add(shape3DPanel, SHAPE3D_PANEL);
+        cardPanel.add(shapePanel, SHAPE_2D_PANEL);
+        cardPanel.add(shape3DPanel, SHAPE_3D_PANEL);
         cardPanel.add(anglePanel, ANGLE_PANEL);
         cardPanel.add(exercisePanel, EXERCISE_PANEL);
         cardPanel.add(bonusPanel, BONUS_PANEL);
         cardPanel.add(ks1SelectionPanel, KS1_SELECTION_PANEL);
+        cardPanel.add(ks2SelectionPanel, KS2_SELECTION_PANEL);
     }
     
     /**
@@ -90,36 +100,37 @@ public class MainFrame extends JFrame {
      */
     private JPanel createHomePanel() {
         JPanel panel = new JPanel(new BorderLayout(20, 20));
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
         
-        // 标题部分
-        JLabel titleLabel = new JLabel("欢迎来到几何学习乐园！", JLabel.CENTER);
-        titleLabel.setFont(new Font("宋体", Font.BOLD, 24));
-        titleLabel.setForeground(new Color(70, 130, 180)); // 钢青色
+        // Title section
+        JLabel titleLabel = new JLabel("Welcome to Geometry Learning", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         panel.add(titleLabel, BorderLayout.NORTH);
         
-        // 内容部分
+        // Content section
         JPanel contentPanel = new JPanel(new BorderLayout(15, 15));
         contentPanel.add(levelInfoLabel, BorderLayout.NORTH);
         
-        // 创建功能按钮
-        JPanel buttonPanel = new JPanel(new GridLayout(1, 3, 20, 20));
+        // Create menu buttons
+        JPanel buttonPanel = new JPanel(new GridLayout(3, 1, 20, 20));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
         
-        JButton ks1Button = createMenuButton("基础图形与角度");
+        JButton ks1Button = createMenuButton("Key Stage 1 (KS1)", "Basic shapes and angles for beginners");
         ks1Button.addActionListener(e -> showCard(KS1_SELECTION_PANEL));
         
-        JButton ks2Button = createMenuButton("图形面积计算");
-        ks2Button.addActionListener(e -> showCard(EXERCISE_PANEL));
-        
-        JButton bonusButton = createMenuButton("高级任务");
-        bonusButton.addActionListener(e -> showCard(BONUS_PANEL));
+        JButton ks2Button = createMenuButton("Key Stage 2 (KS2)", "Core and bonus tasks for advanced learners");
+        ks2Button.addActionListener(e -> showCard(KS2_SELECTION_PANEL));
         
         buttonPanel.add(ks1Button);
         buttonPanel.add(ks2Button);
-        buttonPanel.add(bonusButton);
         
         contentPanel.add(buttonPanel, BorderLayout.CENTER);
         panel.add(contentPanel, BorderLayout.CENTER);
+        
+        // Footer label
+        JLabel footerLabel = new JLabel("Choose a stage to start learning!", JLabel.CENTER);
+        footerLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        panel.add(footerLabel, BorderLayout.SOUTH);
         
         return panel;
     }
@@ -132,8 +143,8 @@ public class MainFrame extends JFrame {
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         
         // 标题部分
-        JLabel titleLabel = new JLabel("请选择学习内容", JLabel.CENTER);
-        titleLabel.setFont(new Font("宋体", Font.BOLD, 24));
+        JLabel titleLabel = new JLabel("Please select learning content", JLabel.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setForeground(new Color(70, 130, 180)); // 钢青色
         panel.add(titleLabel, BorderLayout.NORTH);
         
@@ -141,15 +152,15 @@ public class MainFrame extends JFrame {
         JPanel buttonPanel = new JPanel(new GridLayout(1, 3, 30, 30));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
         
-        JButton shapeButton = createMenuButton("2D图形学习");
+        JButton shapeButton = createMenuButton("2D Shapes Learning", "Learn about 2D shapes");
         shapeButton.setPreferredSize(new Dimension(150, 100));
-        shapeButton.addActionListener(e -> showCard(SHAPE2D_PANEL));
+        shapeButton.addActionListener(e -> showCard(SHAPE_2D_PANEL));
         
-        JButton shape3DButton = createMenuButton("3D图形学习");
+        JButton shape3DButton = createMenuButton("3D Shapes Learning", "Learn about 3D shapes");
         shape3DButton.setPreferredSize(new Dimension(150, 100));
-        shape3DButton.addActionListener(e -> showCard(SHAPE3D_PANEL));
+        shape3DButton.addActionListener(e -> showCard(SHAPE_3D_PANEL));
         
-        JButton angleButton = createMenuButton("角度学习");
+        JButton angleButton = createMenuButton("Angles Learning", "Learn about angles");
         angleButton.setPreferredSize(new Dimension(150, 100));
         angleButton.addActionListener(e -> showCard(ANGLE_PANEL));
         
@@ -160,7 +171,7 @@ public class MainFrame extends JFrame {
         panel.add(buttonPanel, BorderLayout.CENTER);
         
         // 返回按钮
-        JButton backButton = new JButton("返回主页");
+        JButton backButton = new JButton("Back to Home");
         backButton.addActionListener(e -> showCard(HOME_PANEL));
         
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -171,13 +182,61 @@ public class MainFrame extends JFrame {
     }
     
     /**
+     * 创建KS2选择面板
+     */
+    private JPanel createKS2SelectionPanel() {
+        JPanel panel = new JPanel(new BorderLayout(20, 20));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        JLabel titleLabel = new JLabel("Please select a KS2 task", JLabel.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setForeground(new Color(70, 130, 180));
+        panel.add(titleLabel, BorderLayout.NORTH);
+
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 2, 30, 30));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
+
+        JButton task3Button = createMenuButton("Task 3: Shape Area", "Calculate areas of shapes");
+        task3Button.setPreferredSize(new Dimension(180, 80));
+        task3Button.addActionListener(e -> showCard(EXERCISE_PANEL)); // 进入ExercisePanel并自动选中Task3
+
+        JButton task4Button = createMenuButton("Task 4: Circle", "Circle area and circumference");
+        task4Button.setPreferredSize(new Dimension(180, 80));
+        task4Button.addActionListener(e -> showCard(EXERCISE_PANEL)); // 进入ExercisePanel并自动选中Task4
+
+        JButton bonus1Button = createMenuButton("Bonus 1: Compound Area", "Advanced compound area challenge");
+        bonus1Button.setPreferredSize(new Dimension(180, 80));
+        bonus1Button.addActionListener(e -> showCard(BONUS_PANEL)); // 进入BonusTasksPanel并自动选中Bonus1
+
+        JButton bonus2Button = createMenuButton("Bonus 2: Sector Area", "Advanced sector area challenge");
+        bonus2Button.setPreferredSize(new Dimension(180, 80));
+        bonus2Button.addActionListener(e -> showCard(BONUS_PANEL)); // 进入BonusTasksPanel并自动选中Bonus2
+
+        buttonPanel.add(task3Button);
+        buttonPanel.add(task4Button);
+        buttonPanel.add(bonus1Button);
+        buttonPanel.add(bonus2Button);
+
+        panel.add(buttonPanel, BorderLayout.CENTER);
+
+        JButton backButton = new JButton("Back to Home");
+        backButton.addActionListener(e -> showCard(HOME_PANEL));
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        bottomPanel.add(backButton);
+        panel.add(bottomPanel, BorderLayout.SOUTH);
+
+        return panel;
+    }
+    
+    /**
      * 创建菜单按钮
      */
-    private JButton createMenuButton(String buttonText) {
-        JButton button = new JButton(buttonText);
-        button.setFont(new Font("宋体", Font.BOLD, 16));
-        button.setPreferredSize(new Dimension(120, 80));
-        button.setBackground(new Color(240, 240, 255)); // 淡蓝色
+    private JButton createMenuButton(String title, String tooltip) {
+        JButton button = new JButton(title);
+        button.setFont(new Font("Arial", Font.BOLD, 16));
+        button.setToolTipText(tooltip);
+        button.setPreferredSize(new Dimension(150, 80));
+        button.setBackground(new Color(240, 240, 240));
         button.setFocusPainted(false);
         return button;
     }
@@ -191,10 +250,21 @@ public class MainFrame extends JFrame {
         statusPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         JPanel progressPanel = new JPanel(new BorderLayout(5, 0));
-        progressPanel.add(new JLabel("学习进度: "), BorderLayout.WEST);
+        progressPanel.add(new JLabel("Learning Progress: "), BorderLayout.WEST);
         progressPanel.add(progressBar, BorderLayout.CENTER);
         
-        statusPanel.add(progressPanel, BorderLayout.CENTER);
+        // 新增任务完成情况面板
+        taskStatusPanel = new JPanel();
+        taskStatusPanel.setLayout(new BoxLayout(taskStatusPanel, BoxLayout.X_AXIS));
+        updateTaskStatusPanel();
+        
+        JPanel progressAndTaskPanel = new JPanel();
+        progressAndTaskPanel.setLayout(new BoxLayout(progressAndTaskPanel, BoxLayout.Y_AXIS));
+        progressAndTaskPanel.add(progressPanel);
+        progressAndTaskPanel.add(Box.createVerticalStrut(5));
+        progressAndTaskPanel.add(taskStatusPanel);
+        
+        statusPanel.add(progressAndTaskPanel, BorderLayout.CENTER);
         statusPanel.add(endSessionButton, BorderLayout.EAST);
         
         // 主布局
@@ -218,8 +288,8 @@ public class MainFrame extends JFrame {
      */
     private void endSession() {
         JOptionPane.showMessageDialog(this, 
-                "你在本次会话中获得了 " + currentScore + " 分。再见！", 
-                "会话结束", 
+                "You scored " + currentScore + " points in this session. Goodbye!", 
+                "Session Ended", 
                 JOptionPane.INFORMATION_MESSAGE);
         System.exit(0);
     }
@@ -246,7 +316,31 @@ public class MainFrame extends JFrame {
         // 这里简单假设100分为满分
         int progress = Math.min(currentScore, 100);
         progressBar.setValue(progress);
-        progressBar.setString("当前进度: " + progress + "%");
+        progressBar.setString("Current Progress: " + progress + "%");
+    }
+    
+    // 新增：更新任务完成情况面板
+    private void updateTaskStatusPanel() {
+        taskStatusPanel.removeAll();
+        if (currentTaskStatus.isEmpty()) {
+            taskStatusPanel.add(new JLabel("No task status available."));
+        } else {
+            for (java.util.Map.Entry<String, Boolean> entry : currentTaskStatus.entrySet()) {
+                String taskName = entry.getKey();
+                boolean done = entry.getValue();
+                JLabel label = new JLabel(taskName + ": " + (done ? "Done" : "Not Done"));
+                label.setForeground(done ? new Color(0, 150, 0) : Color.GRAY);
+                taskStatusPanel.add(label);
+            }
+        }
+        taskStatusPanel.revalidate();
+        taskStatusPanel.repaint();
+    }
+    
+    // 新增：只需传入任务名和完成状态
+    public void updateTaskStatus(String taskName, boolean done) {
+        this.currentTaskStatus.put(taskName, done);
+        updateTaskStatusPanel();
     }
     
     /**

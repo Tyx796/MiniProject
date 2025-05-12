@@ -24,11 +24,29 @@ public class Parallelogram {
     /**
      * 平行四边形面积计算面板
      */
-    static class ParallelogramPanel extends JPanel {
+    public static class ParallelogramPanel extends JPanel {
         // 平行四边形参数
-        private final int base = 4; // 底边长
-        private final int height = 3; // 高度
-        private final int area = base * height; // 面积
+        private int base = 4; // 底边长
+        private int height = 3; // 高度
+        private int area; // 面积
+        
+        /**
+         * 默认构造函数
+         */
+        public ParallelogramPanel() {
+            this.area = base * height;
+        }
+        
+        /**
+         * 参数化构造函数
+         * @param base 底边长
+         * @param height 高度
+         */
+        public ParallelogramPanel(int base, int height) {
+            this.base = base;
+            this.height = height;
+            this.area = base * height;
+        }
         
         @Override
         protected void paintComponent(Graphics g) {

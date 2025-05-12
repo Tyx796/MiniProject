@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import com.geometry.service.Task12D;
 import com.geometry.entity.Shapes2D;
+import com.geometry.entity.User;
 
 /**
  * 图形学习与识别界面
@@ -174,13 +175,45 @@ public class Shape2DPanel extends JPanel {
             updateAttemptsLabel();
             resultLabel.setText("Correct! Well done!");
             resultLabel.setForeground(new Color(0, 128, 0)); // 绿色
-            // 不再直接调用mainFrame.updateScore，分数已在Task1中通过User类更新
-            // 这里更新MainFrame中的进度条显示
+            
+            // 计算得分
+            int points = User.calScores("Basic", 3 - shapeTask.getRemainingAttempts() + 1);
+            
+            // 创建得分提示弹窗
+            JDialog scoreDialog = new JDialog((Frame)SwingUtilities.getWindowAncestor(this), "Score Alert", true);
+            scoreDialog.setLayout(new BorderLayout(10, 10));
+            scoreDialog.setSize(500, 150);
+            scoreDialog.setLocationRelativeTo(this);
+            
+            // 创建得分面板
+            JPanel scorePanel = new JPanel(new BorderLayout(10, 10));
+            scorePanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+            
+            // 添加得分信息
+            JLabel scoreLabel = new JLabel("Congratulations! You earned " + points + " points!", JLabel.CENTER);
+            scoreLabel.setFont(new Font(FONT_NAME, Font.BOLD, 18));
+            scoreLabel.setForeground(new Color(0, 150, 0));
+            
+            // 确认按钮
+            JButton okButton = new JButton("Continue");
+            okButton.addActionListener(e -> scoreDialog.dispose());
+            
+            // 组装面板
+            scorePanel.add(scoreLabel, BorderLayout.NORTH);
+            scorePanel.add(okButton, BorderLayout.SOUTH);
+            
+            scoreDialog.add(scorePanel);
+            
+            // 更新主窗口分数显示
             mainFrame.updateScore(shapeTask.getCurrentScore());
+            
+            // 显示得分弹窗
+            scoreDialog.setVisible(true);
             
             // 显示下一个图形 (延迟一秒)
             Timer timer = new Timer(1000, e -> {
                 if (shapeTask.isTaskCompleted()) {
+                    mainFrame.updateTaskStatus("Task 1-2D", true);
                     completeTask();
                 } else {
                     showCurrentShape();
@@ -189,30 +222,10 @@ public class Shape2DPanel extends JPanel {
             timer.setRepeats(false);
             timer.start();
         } else {
-            resultLabel.setText("Incorrect, try again!");
+            resultLabel.setText("Try again!");
             resultLabel.setForeground(Color.RED);
             answerField.setText("");
             answerField.requestFocus();
-            
-            if (shapeTask.getAttempts() == 0) {
-                attemptsLabel.setText("Attempts remaining: 0");
-                // 展示正确答案
-                String correctAnswer = shapeTask.getPreviousShape();
-                resultLabel.setText("The correct answer is: " + correctAnswer);
-                
-                // 显示下一个图形 (延迟两秒)
-                Timer timer = new Timer(2000, e -> {
-                    if (shapeTask.isTaskCompleted()) {
-                        completeTask();
-                    } else {
-                        showCurrentShape();
-                    }
-                });
-                timer.setRepeats(false);
-                timer.start();
-            } else {
-                updateAttemptsLabel();
-            }
         }
     }
     
