@@ -8,25 +8,25 @@ import com.geometry.service.Task13D;
 import com.geometry.service.Task2;
 import com.geometry.entity.Shapes3D;
 import com.geometry.entity.User;
+import com.geometry.ui.uiUtils.KidButton;
 
 /**
  * 3D图形学习与识别界面
  */
 public class Shape3DPanel extends JPanel {
     private MainFrame mainFrame;
-    private JButton homeButton;
-    private JButton submitButton;
+    private KidButton homeButton;
+    private KidButton submitButton;
     private JLabel progressLabel;
     
     // 图形识别练习组件
     private JPanel recognitionPanel;
     private JLabel shapeImageLabel;
-    private JLabel instructionLabel;
     private JLabel attemptsLabel;
     private JLabel resultLabel;
     private JTextField answerField;
     private Task13D shapeTask;
-    private static final String FONT_NAME = "Arial";
+    private static final String FONT_NAME = "Comic Sans MS";
     
     /**
      * 构造函数
@@ -35,6 +35,7 @@ public class Shape3DPanel extends JPanel {
     public Shape3DPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         this.shapeTask = new Task13D();
+        setBackground(new Color(220, 240, 255));
         initComponents();
         setupLayout();
         
@@ -47,34 +48,51 @@ public class Shape3DPanel extends JPanel {
      */
     private void initComponents() {
         // 创建返回主页按钮
-        homeButton = new JButton("Return Home");
+        homeButton = new KidButton("Home");
+        homeButton.setFont(new Font(FONT_NAME, Font.BOLD, 20));
+        homeButton.setPreferredSize(new Dimension(150, 40));
         homeButton.addActionListener(e -> mainFrame.showCard(MainFrame.HOME_PANEL));
         
         // 创建提交按钮
-        submitButton = new JButton("Submit");
+        submitButton = new KidButton("OK");
+        submitButton.setNormalColor(Color.WHITE);
+        submitButton.setForeground(Color.BLACK);
+        submitButton.setFont(new Font(FONT_NAME, Font.BOLD, 20));
+        submitButton.setPreferredSize(new Dimension(120, 40));
         submitButton.addActionListener(e -> checkAnswer());
         
         // 创建进度标签
         progressLabel = new JLabel("");
-        progressLabel.setFont(new Font(FONT_NAME, Font.BOLD, 16));
+        progressLabel.setFont(new Font(FONT_NAME, Font.BOLD, 22));
         updateProgressLabel();
         
         // 初始化识别练习组件
         recognitionPanel = new JPanel(new BorderLayout(15, 15));
+        recognitionPanel.setOpaque(false);
         shapeImageLabel = new JLabel();
         shapeImageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         
-        instructionLabel = new JLabel("What is the name of this 3D shape?", SwingConstants.CENTER);
-        instructionLabel.setFont(new Font(FONT_NAME, Font.BOLD, 16));
-        
         attemptsLabel = new JLabel("", SwingConstants.CENTER);
+        attemptsLabel.setFont(new Font(FONT_NAME, Font.BOLD, 20));
+        attemptsLabel.setForeground(Color.WHITE);
         updateAttemptsLabel();
         
         resultLabel = new JLabel("", SwingConstants.CENTER);
-        resultLabel.setFont(new Font(FONT_NAME, Font.BOLD, 14));
+        resultLabel.setFont(new Font(FONT_NAME, Font.BOLD, 20));
         
-        answerField = new JTextField(20);
+        answerField = new JTextField(10);
+        answerField.setFont(new Font(FONT_NAME, Font.PLAIN, 22));
+        answerField.setPreferredSize(new Dimension(100, 40));
         answerField.addActionListener(e -> checkAnswer());
+        // 添加焦点请求，使面板显示时自动获取焦点
+        answerField.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorAdded(javax.swing.event.AncestorEvent event) {
+                // 使用SwingUtilities.invokeLater确保组件完全显示后再请求焦点
+                SwingUtilities.invokeLater(() -> answerField.requestFocusInWindow());
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent event) {}
+            public void ancestorMoved(javax.swing.event.AncestorEvent event) {}
+        });
     }
     
     /**
@@ -86,37 +104,38 @@ public class Shape3DPanel extends JPanel {
         
         // 顶部导航区域
         JPanel topPanel = new JPanel(new BorderLayout());
-        JLabel titleLabel = new JLabel("3D Shape Recognition", SwingConstants.CENTER);
-        titleLabel.setFont(new Font(FONT_NAME, Font.BOLD, 20));
-        topPanel.add(titleLabel, BorderLayout.CENTER);
-        
+        topPanel.setOpaque(false);
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.setOpaque(false);
         buttonPanel.add(homeButton);
         topPanel.add(buttonPanel, BorderLayout.EAST);
-        topPanel.add(progressLabel, BorderLayout.WEST);
         
         // 设置识别练习面板
         JPanel imagePanel = new JPanel(new BorderLayout(10, 10));
+        imagePanel.setOpaque(false);
         imagePanel.add(shapeImageLabel, BorderLayout.CENTER);
         
         JPanel inputPanel = new JPanel();
+        inputPanel.setOpaque(false);
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
         
-        JPanel instructionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        instructionPanel.add(instructionLabel);
-        inputPanel.add(instructionPanel);
-        
         JPanel attemptsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        attemptsPanel.setOpaque(false);
         attemptsPanel.add(attemptsLabel);
         inputPanel.add(attemptsPanel);
         
-        JPanel answerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        answerPanel.add(new JLabel("Answer: "));
+        JPanel answerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        answerPanel.setOpaque(false);
+        JLabel answerLabel = new JLabel("Name: ", SwingConstants.CENTER);
+        answerLabel.setFont(new Font(FONT_NAME, Font.BOLD, 20));
+        answerLabel.setForeground(Color.WHITE);
+        answerPanel.add(answerLabel);
         answerPanel.add(answerField);
         answerPanel.add(submitButton);
         inputPanel.add(answerPanel);
         
         JPanel resultPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        resultPanel.setOpaque(false);
         resultPanel.add(resultLabel);
         inputPanel.add(resultPanel);
         
@@ -137,8 +156,9 @@ public class Shape3DPanel extends JPanel {
             ImageIcon icon = createShapeIcon(shapeName, 300, 300);
             if (icon != null) {
                 shapeImageLabel.setIcon(icon);
+                shapeImageLabel.setText("");
             } else {
-                shapeImageLabel.setText("Image loading failed");
+                shapeImageLabel.setText("No image");
             }
             
             // 更新标签
@@ -162,7 +182,7 @@ public class Shape3DPanel extends JPanel {
         String answer = answerField.getText().trim();
         
         if (answer.isEmpty()) {
-            resultLabel.setText("Please enter an answer!");
+            resultLabel.setText("Type answer!");
             resultLabel.setForeground(Color.RED);
             return;
         }
@@ -171,16 +191,16 @@ public class Shape3DPanel extends JPanel {
         
         if (isCorrect) {
             updateAttemptsLabel();
-            resultLabel.setText("Correct! Well done!");
-            resultLabel.setForeground(new Color(0, 128, 0)); // 绿色
+            resultLabel.setText("Great!");
+            resultLabel.setForeground(new Color(0, 128, 0));
             
             // 计算得分
             int points = User.calScores("Basic", 3 - shapeTask.getRemainingAttempts() + 1);
             
             // 创建得分提示弹窗
-            JDialog scoreDialog = new JDialog((Frame)SwingUtilities.getWindowAncestor(this), "Score Alert", true);
+            JDialog scoreDialog = new JDialog((Frame)SwingUtilities.getWindowAncestor(this), "Score", true);
             scoreDialog.setLayout(new BorderLayout(10, 10));
-            scoreDialog.setSize(300, 150);
+            scoreDialog.setSize(400, 220);
             scoreDialog.setLocationRelativeTo(this);
             
             // 创建得分面板
@@ -188,16 +208,18 @@ public class Shape3DPanel extends JPanel {
             scorePanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
             
             // 添加得分信息
-            JLabel scoreLabel = new JLabel("Congratulations! You earned " + points + " points!", JLabel.CENTER);
-            scoreLabel.setFont(new Font(FONT_NAME, Font.BOLD, 18));
+            JLabel scoreLabel = new JLabel("Score + " + points + " !", SwingConstants.CENTER);
+            scoreLabel.setFont(new Font(FONT_NAME, Font.BOLD, 28));
             scoreLabel.setForeground(new Color(0, 150, 0));
             
             // 确认按钮
-            JButton okButton = new JButton("Continue");
+            KidButton okButton = new KidButton("OK");
+            okButton.setFont(new Font(FONT_NAME, Font.BOLD, 20));
             okButton.addActionListener(e -> scoreDialog.dispose());
+            scoreDialog.getRootPane().setDefaultButton(okButton);
             
             // 组装面板
-            scorePanel.add(scoreLabel, BorderLayout.NORTH);
+            scorePanel.add(scoreLabel, BorderLayout.CENTER);
             scorePanel.add(okButton, BorderLayout.SOUTH);
             
             scoreDialog.add(scorePanel);
@@ -209,9 +231,9 @@ public class Shape3DPanel extends JPanel {
             scoreDialog.setVisible(true);
             
             // 显示下一个图形 (延迟一秒)
-            Timer timer = new Timer(1000, e -> {
+            Timer timer = new Timer(500, e -> {
                 if (shapeTask.isTaskCompleted()) {
-                    mainFrame.updateTaskStatus("Task 1-3D", true);
+                    mainFrame.updateTaskStatus("3D Shapes", true);
                     completeTask();
                 } else {
                     showCurrentShape();
@@ -220,20 +242,21 @@ public class Shape3DPanel extends JPanel {
             timer.setRepeats(false);
             timer.start();
         } else {
-            resultLabel.setText("Incorrect, try again!");
-            resultLabel.setForeground(Color.RED);
+            resultLabel.setText("Try again!");
+            resultLabel.setForeground(Color.WHITE);
             answerField.setText("");
             answerField.requestFocus();
             
             if (shapeTask.getAttempts() == 0) {
-                attemptsLabel.setText("Attempts remaining: 0");
+                attemptsLabel.setText("Tries: 0");
                 // 展示正确答案
                 String correctAnswer = shapeTask.getPreviousShape();
-                resultLabel.setText("The correct answer is: " + correctAnswer);
+                resultLabel.setText("Answer: " + correctAnswer);
                 
                 // 显示下一个图形 (延迟两秒)
                 Timer timer = new Timer(2000, e -> {
                     if (shapeTask.isTaskCompleted()) {
+                        mainFrame.updateTaskStatus("3D Shapes", true);
                         completeTask();
                     } else {
                         showCurrentShape();
@@ -261,18 +284,22 @@ public class Shape3DPanel extends JPanel {
         int totalShapes = shapeTask.getTotalShapes();
         
         JPanel completionPanel = new JPanel();
+        completionPanel.setOpaque(false);
         completionPanel.setLayout(new BoxLayout(completionPanel, BoxLayout.Y_AXIS));
         
-        JLabel completionLabel = new JLabel("Task Completed!", JLabel.CENTER);
-        completionLabel.setFont(new Font(FONT_NAME, Font.BOLD, 20));
+        JLabel completionLabel = new JLabel("All done!", SwingConstants.CENTER);
+        completionLabel.setFont(new Font(FONT_NAME, Font.BOLD, 38));
+        completionLabel.setForeground(Color.WHITE);
         completionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         
-        JLabel scoreLabel = new JLabel("You correctly identified " + correctCount + 
-                " out of " + totalShapes + " 3D shapes!", JLabel.CENTER);
-        scoreLabel.setFont(new Font(FONT_NAME, Font.PLAIN, 16));
+        JLabel scoreLabel = new JLabel("You got " + correctCount + " / " + totalShapes + "!", SwingConstants.CENTER);
+        scoreLabel.setFont(new Font(FONT_NAME, Font.PLAIN, 34));
+        scoreLabel.setForeground(Color.WHITE);
         scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         
-        JButton restartButton = new JButton("Try Again");
+        KidButton restartButton = new KidButton("Again");
+        restartButton.setFont(new Font(FONT_NAME, Font.BOLD, 20));
+        restartButton.setPreferredSize(new Dimension(150, 40));
         restartButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         restartButton.addActionListener(e -> restartTask());
         
@@ -308,6 +335,7 @@ public class Shape3DPanel extends JPanel {
             remove(centerComponent);
             
             JPanel imagePanel = new JPanel(new BorderLayout(10, 10));
+            imagePanel.setOpaque(false);
             imagePanel.add(shapeImageLabel, BorderLayout.CENTER);
             add(imagePanel, BorderLayout.CENTER);
         }
@@ -324,7 +352,7 @@ public class Shape3DPanel extends JPanel {
     private void updateProgressLabel() {
         int current = shapeTask.getCurrentShapeIndex() + 1;
         int total = shapeTask.getTotalShapes();
-        progressLabel.setText("Shape " + current + " of " + total);
+        progressLabel.setText(current + " / " + total);
     }
     
     /**
@@ -332,7 +360,7 @@ public class Shape3DPanel extends JPanel {
      */
     private void updateAttemptsLabel() {
         int remaining = shapeTask.getRemainingAttempts();
-        attemptsLabel.setText("Attempts remaining: " + remaining);
+        attemptsLabel.setText("Tries: " + remaining);
     }
     
     /**

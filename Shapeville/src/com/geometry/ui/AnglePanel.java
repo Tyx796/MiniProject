@@ -8,15 +8,16 @@ import java.awt.image.BufferedImage;
 import com.geometry.service.Task2;
 import com.geometry.entity.Angles;
 import com.geometry.entity.User;
+import com.geometry.ui.uiUtils.KidButton;
 
 /**
  * 角度学习与识别界面
  */
 public class AnglePanel extends JPanel {
     private MainFrame mainFrame;
-    private JButton homeButton;
+    private KidButton homeButton;
     private Task2 angleTask;
-    private static final String FONT_NAME = "Arial";
+    private static final String FONT_NAME = "Comic Sans MS";
     
     // 主要面板
     private JPanel inputPanel;    // 角度输入面板
@@ -25,7 +26,7 @@ public class AnglePanel extends JPanel {
     
     // 角度输入面板组件
     private JTextField angleInput;
-    private JButton submitAngleButton;
+    private KidButton submitAngleButton;
     private JLabel angleImageLabel;
     private JLabel instructionLabel;
     private JLabel errorLabel;
@@ -39,7 +40,7 @@ public class AnglePanel extends JPanel {
     // 结果面板组件
     private JLabel completionLabel;
     private JLabel scoreLabel;
-    private JButton restartButton;
+    private KidButton restartButton;
     
     /**
      * 构造函数
@@ -48,6 +49,7 @@ public class AnglePanel extends JPanel {
     public AnglePanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         this.angleTask = new Task2();
+        setBackground(new Color(220, 240, 255));
         initComponents();
         setupLayout();
         
@@ -60,7 +62,9 @@ public class AnglePanel extends JPanel {
      */
     private void initComponents() {
         // 创建返回主页按钮
-        homeButton = new JButton("Return Home");
+        homeButton = new KidButton("Home");
+        homeButton.setFont(new Font(FONT_NAME, Font.BOLD, 20));
+        homeButton.setPreferredSize(new Dimension(150, 40));
         homeButton.addActionListener(e -> mainFrame.showCard(MainFrame.HOME_PANEL));
         
         // 初始化各个面板
@@ -75,17 +79,33 @@ public class AnglePanel extends JPanel {
     private void initInputPanel() {
         inputPanel = new JPanel();
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
+        inputPanel.setOpaque(false);
         
         // 角度输入指导标签
-        instructionLabel = new JLabel("Enter an angle (0-360 degrees, multiples of 10 only):");
-        instructionLabel.setFont(new Font(FONT_NAME, Font.BOLD, 16));
+        instructionLabel = new JLabel("Type angle (0-360, x10)", SwingConstants.CENTER);
+        instructionLabel.setFont(new Font(FONT_NAME, Font.BOLD, 22));
+        instructionLabel.setForeground(Color.WHITE);
         instructionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         
         // 角度输入框和提交按钮
         JPanel inputControlPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        inputControlPanel.setOpaque(false);
         angleInput = new JTextField(5);
+        angleInput.setFont(new Font(FONT_NAME, Font.PLAIN, 22));
+        angleInput.setPreferredSize(new Dimension(100, 40));
         angleInput.addActionListener(e -> processAngleInput());
-        submitAngleButton = new JButton("Show Angle");
+        // 添加焦点请求，使面板显示时自动获取焦点
+        angleInput.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorAdded(javax.swing.event.AncestorEvent event) {
+                // 使用SwingUtilities.invokeLater确保组件完全显示后再请求焦点
+                SwingUtilities.invokeLater(() -> angleInput.requestFocusInWindow());
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent event) {}
+            public void ancestorMoved(javax.swing.event.AncestorEvent event) {}
+        });
+        submitAngleButton = new KidButton("Show");
+        submitAngleButton.setFont(new Font(FONT_NAME, Font.BOLD, 20));
+        submitAngleButton.setPreferredSize(new Dimension(120, 40));
         submitAngleButton.addActionListener(e -> processAngleInput());
         
         inputControlPanel.add(angleInput);
@@ -118,33 +138,39 @@ public class AnglePanel extends JPanel {
     private void initQuizPanel() {
         quizPanel = new JPanel();
         quizPanel.setLayout(new BorderLayout(20, 20));
+        quizPanel.setOpaque(false);
         
         // 问题标签
-        questionLabel = new JLabel("What type of angle is this?");
-        questionLabel.setFont(new Font(FONT_NAME, Font.BOLD, 16));
-        questionLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        questionLabel = new JLabel("Type?", SwingConstants.CENTER);
+        questionLabel.setFont(new Font(FONT_NAME, Font.BOLD, 32));
+        questionLabel.setForeground(Color.WHITE);
         
         // 选项面板 - 改为垂直布局且放在右侧
         optionsPanel = new JPanel();
         optionsPanel.setLayout(new BoxLayout(optionsPanel, BoxLayout.Y_AXIS));
-        optionsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        optionsPanel.setBorder(BorderFactory.createEmptyBorder(80, 40, 10, 80)); // 右侧加大内边距
+        optionsPanel.setOpaque(false);
         
         // 尝试次数标签
-        attemptsLabel = new JLabel("Attempts remaining: 3");
-        attemptsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        attemptsLabel = new JLabel("Tries: 3", SwingConstants.CENTER);
+        attemptsLabel.setFont(new Font(FONT_NAME, Font.BOLD, 20));
+        attemptsLabel.setForeground(Color.WHITE);
         
         // 结果标签
         resultLabel = new JLabel("");
-        resultLabel.setFont(new Font(FONT_NAME, Font.BOLD, 14));
+        resultLabel.setFont(new Font(FONT_NAME, Font.BOLD, 20));
         resultLabel.setHorizontalAlignment(SwingConstants.CENTER);
         
         // 创建左侧图像面板
         JPanel leftPanel = new JPanel(new BorderLayout(10, 10));
+        leftPanel.setBorder(BorderFactory.createEmptyBorder(0, 80, 0, 10)); // 左侧加大内边距
+        leftPanel.setOpaque(false);
         leftPanel.add(angleImageLabel, BorderLayout.CENTER);
         
         // 创建底部状态面板
         JPanel statusPanel = new JPanel();
         statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.Y_AXIS));
+        statusPanel.setOpaque(false);
         attemptsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         resultLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         statusPanel.add(attemptsLabel);
@@ -164,19 +190,24 @@ public class AnglePanel extends JPanel {
     private void initResultPanel() {
         resultPanel = new JPanel();
         resultPanel.setLayout(new BoxLayout(resultPanel, BoxLayout.Y_AXIS));
+        resultPanel.setOpaque(false);
         
         // 完成标签
-        completionLabel = new JLabel("Task Completed!");
-        completionLabel.setFont(new Font(FONT_NAME, Font.BOLD, 20));
+        completionLabel = new JLabel("All done!", SwingConstants.CENTER);
+        completionLabel.setFont(new Font(FONT_NAME, Font.BOLD, 38));
+        completionLabel.setForeground(Color.WHITE);
         completionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         
         // 分数标签
-        scoreLabel = new JLabel("You correctly identified X out of X angles!");
-        scoreLabel.setFont(new Font(FONT_NAME, Font.PLAIN, 16));
+        scoreLabel = new JLabel("You got X / X!", SwingConstants.CENTER);
+        scoreLabel.setFont(new Font(FONT_NAME, Font.PLAIN, 34));
+        scoreLabel.setForeground(Color.WHITE);
         scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         
         // 重新开始按钮
-        restartButton = new JButton("Try Again");
+        restartButton = new KidButton("Again");
+        restartButton.setFont(new Font(FONT_NAME, Font.BOLD, 20));
+        restartButton.setPreferredSize(new Dimension(150, 40));
         restartButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         restartButton.addActionListener(e -> restartTask());
         
@@ -199,11 +230,13 @@ public class AnglePanel extends JPanel {
         
         // 顶部导航区域
         JPanel topPanel = new JPanel(new BorderLayout());
-        JLabel titleLabel = new JLabel("Angle Learning and Recognition", SwingConstants.CENTER);
-        titleLabel.setFont(new Font(FONT_NAME, Font.BOLD, 20));
-        topPanel.add(titleLabel, BorderLayout.CENTER);
+        topPanel.setOpaque(false);
+        // JLabel titleLabel = new JLabel("Angle Learning and Recognition", SwingConstants.CENTER);
+        // titleLabel.setFont(new Font(FONT_NAME, Font.BOLD, 20));
+        // topPanel.add(titleLabel, BorderLayout.CENTER);
         
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.setOpaque(false);
         buttonPanel.add(homeButton);
         topPanel.add(buttonPanel, BorderLayout.EAST);
         
@@ -266,9 +299,9 @@ public class AnglePanel extends JPanel {
         }
         
         // 更新结果标签
-        int correctCount = angleTask.getCorrectCount();
-        int requiredTypes = 4;
-        scoreLabel.setText("You correctly identified " + correctCount + " out of " + requiredTypes + " angle types!");
+        // int correctCount = angleTask.getCorrectCount();
+        // int requiredTypes = 4;
+        scoreLabel.setText("You got these angles right!");
         
         // 添加结果面板
         add(resultPanel, BorderLayout.CENTER);
@@ -322,7 +355,6 @@ public class AnglePanel extends JPanel {
             showQuizPanel();
             
         } catch (NumberFormatException e) {
-            errorLabel.setText("Please enter a valid number");
         }
     }
     
@@ -339,22 +371,14 @@ public class AnglePanel extends JPanel {
         // 为每种角度类型创建按钮
         for (String type : angleTypes) {
             String typeName = angleTask.getAngleTypeName(type);
-            JButton optionButton = new JButton(typeName);
-            optionButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    checkAngleType(type);
-                }
-            });
-            
-            // 设置按钮大小和对齐方式
-            optionButton.setPreferredSize(new Dimension(180, 40));
-            optionButton.setMaximumSize(new Dimension(180, 40));
+            KidButton optionButton = new KidButton(typeName);
+            optionButton.setFont(new Font(FONT_NAME, Font.BOLD, 20));
+            optionButton.setPreferredSize(new Dimension(220, 50));
+            optionButton.setMaximumSize(new Dimension(220, 50));
             optionButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-            
-            // 添加到面板，使用垂直间距
+            optionButton.addActionListener(e -> checkAngleType(type));
             optionsPanel.add(optionButton);
-            optionsPanel.add(Box.createVerticalStrut(10));
+            optionsPanel.add(Box.createVerticalStrut(15));
         }
         
         // 重新布局选项面板
@@ -373,9 +397,9 @@ public class AnglePanel extends JPanel {
             int points = User.calScores("Basic", 3 - angleTask.getRemainingAttempts() + 1);
             
             // 创建得分提示弹窗
-            JDialog scoreDialog = new JDialog((Frame)SwingUtilities.getWindowAncestor(this), "Score Alert", true);
+            JDialog scoreDialog = new JDialog((Frame)SwingUtilities.getWindowAncestor(this), "Score", true);
             scoreDialog.setLayout(new BorderLayout(10, 10));
-            scoreDialog.setSize(300, 150);
+            scoreDialog.setSize(400, 220);
             scoreDialog.setLocationRelativeTo(this);
             
             // 创建得分面板
@@ -383,31 +407,33 @@ public class AnglePanel extends JPanel {
             scorePanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
             
             // 添加得分信息
-            JLabel scoreLabel = new JLabel("Congratulations! You earned " + points + " points!", JLabel.CENTER);
-            scoreLabel.setFont(new Font(FONT_NAME, Font.BOLD, 18));
+            JLabel scoreLabel = new JLabel("Score + " + points + " !", SwingConstants.CENTER);
+            scoreLabel.setFont(new Font(FONT_NAME, Font.BOLD, 28));
             scoreLabel.setForeground(new Color(0, 150, 0));
             
             // 确认按钮
-            JButton okButton = new JButton("Continue");
+            KidButton okButton = new KidButton("OK");
+            okButton.setFont(new Font(FONT_NAME, Font.BOLD, 20));
             okButton.addActionListener(e -> scoreDialog.dispose());
+            scoreDialog.getRootPane().setDefaultButton(okButton);
             
             // 组装面板
-            scorePanel.add(scoreLabel, BorderLayout.NORTH);
+            scorePanel.add(scoreLabel, BorderLayout.CENTER);
             scorePanel.add(okButton, BorderLayout.SOUTH);
             
             scoreDialog.add(scorePanel);
             
             // 更新结果标签
-            resultLabel.setText("Correct! Well done!");
+            resultLabel.setText("Great!");
             resultLabel.setForeground(new Color(0, 150, 0));
             
             // 显示得分弹窗
             scoreDialog.setVisible(true);
             
             // 延迟显示下一个问题
-            Timer timer = new Timer(1000, e -> {
+            Timer timer = new Timer(500, e -> {
                 if (angleTask.isTaskCompleted()) {
-                    mainFrame.updateTaskStatus("Task 2", true);
+                    mainFrame.updateTaskStatus("Angles", true);
                     showResultPanel();
                 } else {
                     showInputPanel();
@@ -417,13 +443,14 @@ public class AnglePanel extends JPanel {
             timer.start();
         } else {
             resultLabel.setText("Try again!");
-            resultLabel.setForeground(Color.RED);
+            resultLabel.setForeground(Color.WHITE);
             
             if (angleTask.getRemainingAttempts() <= 0) {
                 // 显示正确答案
-                resultLabel.setText("The correct answer was: " + angleTask.getCurrentAngleType());
+                resultLabel.setText("Answer: " + angleTask.getCurrentAngleType());
                 Timer timer = new Timer(2000, e -> {
                     if (angleTask.isTaskCompleted()) {
+                        mainFrame.updateTaskStatus("Angles", true);
                         showResultPanel();
                     } else {
                         showInputPanel();
@@ -443,7 +470,7 @@ public class AnglePanel extends JPanel {
      */
     private void updateAttemptsLabel() {
         int remaining = angleTask.getRemainingAttempts();
-        attemptsLabel.setText("Attempts remaining: " + remaining);
+        attemptsLabel.setText("Tries: " + remaining);
     }
     
     /**
@@ -482,7 +509,7 @@ public class AnglePanel extends JPanel {
         // 计算中心点和半径
         int centerX = width / 2;
         int centerY = height / 2;
-        int radius = Math.min(width, height) / 3;
+        int radius = (int) (Math.min(width, height) / 1.5);
         
         // 设置线条颜色和宽度
         g2d.setColor(new Color(70, 130, 180)); // 深蓝色箭头

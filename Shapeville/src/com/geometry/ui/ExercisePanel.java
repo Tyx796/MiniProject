@@ -360,7 +360,7 @@ public class ExercisePanel extends JPanel {
         scoreDialog.setVisible(true);
         
         if (task3Service.isAllShapesCompleted()) {
-            mainFrame.updateTaskStatus("Task 3", true);
+            mainFrame.updateTaskStatus("Shape Area", true);
             JOptionPane.showMessageDialog(this, 
                     "Congratulations! You have completed all shape area calculations.", 
                     "Exercise Complete", 
@@ -628,7 +628,7 @@ public class ExercisePanel extends JPanel {
         scoreDialog.setVisible(true);
         
         if (task4Service.isAllCompleted()) {
-            mainFrame.updateTaskStatus("Task 4", true);
+            mainFrame.updateTaskStatus("Circle", true);
             JOptionPane.showMessageDialog(this,
                     "Congratulations! You have completed all circle calculations.",
                     "Exercise Complete",

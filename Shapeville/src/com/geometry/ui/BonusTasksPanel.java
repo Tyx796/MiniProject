@@ -341,7 +341,7 @@ public class BonusTasksPanel extends JPanel {
                     
                     // Check if all questions are completed
                     if (completedQuestions.size() == 9) {
-                        mainFrame.updateTaskStatus("Bonus 1", true);
+                        mainFrame.updateTaskStatus("Compound Area", true);
                         JOptionPane.showMessageDialog(this,
                             "Congratulations! You've completed all questions!",
                             "Complete",
@@ -621,7 +621,7 @@ public class BonusTasksPanel extends JPanel {
                     
                     // Check if all questions are completed
                     if (completedQuestions.size() == 8) {
-                        mainFrame.updateTaskStatus("Bonus 2", true);
+                        mainFrame.updateTaskStatus("Sectors", true);
                         JOptionPane.showMessageDialog(this,
                             "Congratulations! You've completed all questions!",
                             "Complete",
