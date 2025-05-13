@@ -57,15 +57,15 @@ public class Parallelogram {
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
             
             // 设置字体
-            Font titleFont = new Font("Arial", Font.PLAIN, 18);
-            Font formulaFont = new Font("Arial", Font.BOLD, 22);
-            Font labelFont = new Font("Arial", Font.BOLD, 18);
+            Font titleFont = new Font("Comic Sans MS", Font.PLAIN, 18);
+            Font formulaFont = new Font("Comic Sans MS", Font.BOLD, 22);
+            Font labelFont = new Font("Comic Sans MS", Font.BOLD, 18);
             
             // 计算绘图区域
             int padding = 50;
             int diagramWidth = 200;
             int diagramHeight = 150;
-            int centerX = getWidth() / 2 - 50;
+            int centerX = getWidth() / 2 - 70;
             int centerY = getHeight() / 2;
             
             // 绘制标题
@@ -139,7 +139,7 @@ public class Parallelogram {
             g2d.drawString("BASE", (x3 + x4) / 2 - 30, y4 + 40);
             
             // 绘制公式部分
-            int formulaX = x3 + 80;
+            int formulaX = x3 + 50;
             int formulaY = centerY - 20;
             
             // AREA 箭头和标签
@@ -189,13 +189,13 @@ public class Parallelogram {
             
             g2d.drawString(Integer.toString(area), formulaX + 150, formulaY);
             
-            // 底边下划线
+/*             // 底边下划线
             g2d.setColor(new Color(255, 165, 0)); // 橙色
             g2d.drawLine(formulaX + 50, formulaY + 5, formulaX + 60, formulaY + 5);
             
             // 高度下划线
             g2d.setColor(new Color(148, 0, 211)); // 紫色
-            g2d.drawLine(formulaX + 100, formulaY + 5, formulaX + 110, formulaY + 5);
+            g2d.drawLine(formulaX + 100, formulaY + 5, formulaX + 110, formulaY + 5); */
         }
     }
 }

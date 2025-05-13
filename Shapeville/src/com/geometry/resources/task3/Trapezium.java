@@ -30,25 +30,58 @@ public class Trapezium {
         private int bottomLength = 4;   // 下底长(b)
         private int height = 3;         // 高度(h)
         private double area;            // 面积
-        
-        /**
-         * 默认构造函数
-         */
-        public TrapeziumPanel() {
-            this.area = (topLength + bottomLength) * height / 2.0;
-        }
-        
-        /**
-         * 参数化构造函数
-         * @param topLength 上底长
-         * @param bottomLength 下底长
-         * @param height 高度
-         */
-        public TrapeziumPanel(int topLength, int bottomLength, int height) {
-            this.topLength = topLength;
-            this.bottomLength = bottomLength;
-            this.height = height;
-            this.area = (topLength + bottomLength) * height / 2.0;
+        private double normalizedTopLength;
+        private double normalizedBottomLength;
+        private double normalizedHeight;
+                
+                /**
+                 * 默认构造函数
+                 */
+                public TrapeziumPanel() {
+                    this.area = (topLength + bottomLength) * height / 2.0;
+                }
+                
+                /**
+                 * 参数化构造函数
+                 * @param topLength 上底长
+                 * @param bottomLength 下底长
+                 * @param height 高度
+                 */
+                public TrapeziumPanel(int topLength, int bottomLength, int height) {
+                    this.topLength = topLength;
+                    this.bottomLength = bottomLength;
+                    this.height = height;
+                    this.area = (topLength + bottomLength) * height / 2.0;
+                    
+                    // 归一化处理用于绘图
+                    // 确保图形大小适中，避免因为数值过大或过小导致显示问题
+                    // 将数值归一化到合适的范围内（例如1-5）
+                    double maxValue = Math.max(Math.max(topLength, bottomLength), height);
+                    if (maxValue > 10) {
+                        // 如果最大值超过10，进行缩放处理
+                        double scaleFactor = 5.0 / maxValue; // 归一化到最大值为5
+                        this.normalizedTopLength = topLength * scaleFactor;
+                this.normalizedBottomLength = bottomLength * scaleFactor;
+                this.normalizedHeight = height * scaleFactor;
+            } else if (maxValue < 5) {
+                // 如果最大值太小，进行放大处理
+                double scaleFactor = 3.0 / maxValue; // 归一化到最大值为3
+                this.normalizedTopLength = topLength * scaleFactor;
+                this.normalizedBottomLength = bottomLength * scaleFactor;
+                this.normalizedHeight = height * scaleFactor;
+            } else if (Math.min(Math.min(topLength, bottomLength), height) < 3) {
+                // 如果最小值太小，进行放大处理
+                double minValue = Math.min(Math.min(topLength, bottomLength), height);
+                double scaleFactor = 3.0 / minValue; // 确保最小值至少为3
+                this.normalizedTopLength = topLength * scaleFactor;
+                this.normalizedBottomLength = bottomLength * scaleFactor;
+                this.normalizedHeight = height * scaleFactor;
+            } else {
+                // 数值在合适范围内，保持原值
+                this.normalizedTopLength = topLength;
+                this.normalizedBottomLength = bottomLength;
+                this.normalizedHeight = height;
+            }
         }
         
         @Override
@@ -60,9 +93,9 @@ public class Trapezium {
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
             
             // 设置字体
-            Font titleFont = new Font("Arial", Font.PLAIN, 18);
-            Font formulaFont = new Font("Arial", Font.BOLD, 20);
-            Font labelFont = new Font("Arial", Font.BOLD, 16);
+            Font titleFont = new Font("Comic Sans MS", Font.PLAIN, 18);
+            Font formulaFont = new Font("Comic Sans MS", Font.BOLD, 20);
+            Font labelFont = new Font("Comic Sans MS", Font.BOLD, 16);
             
             // 计算绘图区域
             int padding = 50;
@@ -82,18 +115,18 @@ public class Trapezium {
             double scale = 40;
             
             // 计算梯形的四个顶点
-            double topOffset = (bottomLength - topLength) * scale / 2;
+            double topOffset = (normalizedBottomLength - normalizedTopLength) * scale / 2;
             
-            int x1 = (int) (centerX - bottomLength * scale / 2 + topOffset);
+            int x1 = (int) (centerX - normalizedBottomLength * scale / 2 + topOffset);
             int y1 = centerY - diagramHeight / 2;
             
-            int x2 = (int) (centerX + bottomLength * scale / 2 - topOffset);
+            int x2 = (int) (centerX + normalizedBottomLength * scale / 2 - topOffset);
             int y2 = y1;
             
-            int x3 = (int) (centerX + bottomLength * scale / 2);
+            int x3 = (int) (centerX + normalizedBottomLength * scale / 2);
             int y3 = centerY + diagramHeight / 2;
             
-            int x4 = (int) (centerX - bottomLength * scale / 2);
+            int x4 = (int) (centerX - normalizedBottomLength * scale / 2);
             int y4 = y3;
             
             // 创建并绘制梯形路径
@@ -173,7 +206,6 @@ public class Trapezium {
             
             // 上底标签
             g2d.setColor(new Color(199, 21, 133)); // 洋红色
-            g2d.drawString("LENGTH OF TOP SIDE", x1 - 10, y1 - 25);
             g2d.drawString("a", (x1 + x2) / 2 - 10, y1 - 5);
             
             // 高度标签
@@ -200,6 +232,7 @@ public class Trapezium {
             
             // 公式 A = (a + b)/2 × h
             formulaY += 40;
+            formulaX -= 40;
             g2d.setFont(formulaFont);
             g2d.setColor(new Color(150, 150, 150)); // 灰色
             g2d.drawString("A", formulaX, formulaY);
@@ -242,50 +275,70 @@ public class Trapezium {
             
             // 结果值
             formulaY += 50;
-            g2d.setFont(new Font("Arial", Font.BOLD, 16));
+            g2d.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
+            
+            // 计算每个数字的宽度以便动态调整位置
+            FontMetrics fm = g2d.getFontMetrics();
             
             g2d.setColor(new Color(150, 150, 150)); // 灰色
             g2d.drawString("A", formulaX, formulaY);
             
-            g2d.drawString("=", formulaX + 20, formulaY);
+            int currentX = formulaX + fm.stringWidth("A") + 5;
+            g2d.drawString("=", currentX, formulaY);
             
             // 左括号
-            g2d.drawString("(", formulaX + 35, formulaY);
+            currentX += fm.stringWidth("=") + 5;
+            g2d.drawString("(", currentX, formulaY);
             
             // a值
+            int leftParenX = currentX;
+            currentX += fm.stringWidth("(");
             g2d.setColor(new Color(199, 21, 133)); // 洋红色
-            g2d.drawString(Integer.toString(topLength), formulaX + 45, formulaY);
+            String topLengthStr = Integer.toString(topLength);
+            g2d.drawString(topLengthStr, currentX, formulaY);
             
             // +
+            currentX += fm.stringWidth(topLengthStr) + 2;
             g2d.setColor(new Color(150, 150, 150)); // 灰色
-            g2d.drawString("+", formulaX + 55, formulaY);
+            g2d.drawString("+", currentX, formulaY);
             
             // b值
+            currentX += fm.stringWidth("+") + 2;
             g2d.setColor(new Color(255, 165, 0)); // 橙色
-            g2d.drawString(Integer.toString(bottomLength), formulaX + 65, formulaY);
+            String bottomLengthStr = Integer.toString(bottomLength);
+            g2d.drawString(bottomLengthStr, currentX, formulaY);
             
             // 右括号
+            currentX += fm.stringWidth(bottomLengthStr);
             g2d.setColor(new Color(150, 150, 150)); // 灰色
-            g2d.drawString(")", formulaX + 75, formulaY);
+            g2d.drawString(")", currentX, formulaY);
+            int rightParenX = currentX + fm.stringWidth(")");
             
             // 除以2
             lineY = formulaY + 3;
-            g2d.drawLine(formulaX + 35, lineY, formulaX + 75, lineY);
-            g2d.drawString("2", formulaX + 55, formulaY + 15);
+            g2d.drawLine(leftParenX, lineY, rightParenX - 5, lineY);
+            int dividerX = (leftParenX + rightParenX - 5) / 2 - fm.stringWidth("2") / 2;
+            g2d.drawString("2", dividerX, formulaY + 15);
             
             // ×
-            g2d.drawString("×", formulaX + 85, formulaY);
+            currentX = rightParenX + 5;
+            g2d.drawString("×", currentX, formulaY);
             
             // h值
+            currentX += fm.stringWidth("×") + 5;
             g2d.setColor(new Color(148, 0, 211)); // 紫色高度
-            g2d.drawString(Integer.toString(height), formulaX + 95, formulaY);
+            String heightStr = Integer.toString(height);
+            g2d.drawString(heightStr, currentX, formulaY);
             
             // =
+            currentX += fm.stringWidth(heightStr) + 5;
             g2d.setColor(new Color(150, 150, 150)); // 灰色
-            g2d.drawString("=", formulaX + 110, formulaY);
+            g2d.drawString("=", currentX, formulaY);
             
             // 面积结果
-            g2d.drawString(Double.toString(area), formulaX + 125, formulaY);
+            currentX += fm.stringWidth("=") + 5;
+            String areaStr = Double.toString(area);
+            g2d.drawString(areaStr, currentX, formulaY);
         }
     }
 }

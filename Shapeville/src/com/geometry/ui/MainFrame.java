@@ -2,6 +2,7 @@ package com.geometry.ui;
 
 import javax.swing.*;
 
+import com.geometry.entity.User;
 import com.geometry.ui.uiUtils.KidButton;
 import com.geometry.ui.uiUtils.TaskStatusButton;
 
@@ -32,8 +33,11 @@ public class MainFrame extends JFrame {
     public static final String SHAPE_2D_PANEL = "SHAPE_2D";
     public static final String SHAPE_3D_PANEL = "SHAPE_3D";
     public static final String ANGLE_PANEL = "ANGLE";
-    public static final String EXERCISE_PANEL = "EXERCISE";
+    public static final String SHAPE_AREA_PANEL = "SHAPE_AREA";
+    public static final String CIRCLE_PANEL = "CIRCLE";
     public static final String BONUS_PANEL = "BONUS";
+    public static final String BONUS1_PANEL = "BONUS1";
+    public static final String BONUS2_PANEL = "BONUS2";
     public static final String KS1_SELECTION_PANEL = "KS1_SELECTION";
     public static final String KS2_SELECTION_PANEL = "KS2_SELECTION";
     public static final String FONT_NAME = "Comic Sans MS";
@@ -88,8 +92,10 @@ public class MainFrame extends JFrame {
         JPanel shapePanel = new Shape2DPanel(this);
         JPanel shape3DPanel = new Shape3DPanel(this);
         JPanel anglePanel = new AnglePanel(this);
-        JPanel exercisePanel = new ExercisePanel(this);
-        JPanel bonusPanel = new BonusTasksPanel(this);
+        JPanel shapeAreaPanel = new ShapeArea(this);
+        JPanel circlePanel = new Circle(this);
+        JPanel bonus1Panel = new Bonus1(this);
+        JPanel bonus2Panel = new Bonus2(this);
         JPanel ks1SelectionPanel = createKS1SelectionPanel();
         JPanel ks2SelectionPanel = createKS2SelectionPanel();
 
@@ -98,8 +104,10 @@ public class MainFrame extends JFrame {
         shapePanel.setOpaque(false);
         shape3DPanel.setOpaque(false);
         anglePanel.setOpaque(false);
-        exercisePanel.setOpaque(false);
-        bonusPanel.setOpaque(false);
+        shapeAreaPanel.setOpaque(false);
+        circlePanel.setOpaque(false);
+        bonus1Panel.setOpaque(false);
+        bonus2Panel.setOpaque(false);
         ks1SelectionPanel.setOpaque(false);
         ks2SelectionPanel.setOpaque(false);
         
@@ -108,8 +116,10 @@ public class MainFrame extends JFrame {
         cardPanel.add(shapePanel, SHAPE_2D_PANEL);
         cardPanel.add(shape3DPanel, SHAPE_3D_PANEL);
         cardPanel.add(anglePanel, ANGLE_PANEL);
-        cardPanel.add(exercisePanel, EXERCISE_PANEL);
-        cardPanel.add(bonusPanel, BONUS_PANEL);
+        cardPanel.add(shapeAreaPanel, SHAPE_AREA_PANEL);
+        cardPanel.add(circlePanel, CIRCLE_PANEL);
+        cardPanel.add(bonus1Panel, BONUS1_PANEL);
+        cardPanel.add(bonus2Panel, BONUS2_PANEL);
         cardPanel.add(ks1SelectionPanel, KS1_SELECTION_PANEL);
         cardPanel.add(ks2SelectionPanel, KS2_SELECTION_PANEL);
     }
@@ -208,30 +218,30 @@ public class MainFrame extends JFrame {
         JPanel panel = new JPanel(new BorderLayout(20, 20));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JLabel titleLabel = new JLabel("Please select a KS2 task", JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setForeground(new Color(70, 130, 180));
-        panel.add(titleLabel, BorderLayout.NORTH);
-
         JPanel buttonPanel = new JPanel(new GridLayout(2, 2, 30, 30));
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(120, 120, 120, 120));
 
-        JButton task3Button = createMenuButtonKS("Task 3: Shape Area");
-        task3Button.setPreferredSize(new Dimension(180, 80));
-        task3Button.addActionListener(e -> showCard(EXERCISE_PANEL)); // 进入ExercisePanel并自动选中Task3
+        JButton task3Button = createMenuButtonKS("Shape Area");
+        task3Button.setFont(new Font(FONT_NAME, Font.BOLD, 35));
+        task3Button.setPreferredSize(new Dimension(80, 80));
+        task3Button.addActionListener(e -> showCard(SHAPE_AREA_PANEL));
 
-        JButton task4Button = createMenuButtonKS("Task 4: Circle");
+        JButton task4Button = createMenuButtonKS("Circle");
+        task4Button.setFont(new Font(FONT_NAME, Font.BOLD, 35));
         task4Button.setPreferredSize(new Dimension(180, 80));
-        task4Button.addActionListener(e -> showCard(EXERCISE_PANEL)); // 进入ExercisePanel并自动选中Task4
+        task4Button.addActionListener(e -> showCard(CIRCLE_PANEL));
 
-        JButton bonus1Button = createMenuButtonKS("Bonus 1: Compound Area");
+        JButton bonus1Button = createMenuButtonKS("<html><center>Bonus 1:<br>Compound Area</center></html>");
+        bonus1Button.setFont(new Font(FONT_NAME, Font.BOLD, 35));
         bonus1Button.setPreferredSize(new Dimension(180, 80));
-        bonus1Button.addActionListener(e -> showCard(BONUS_PANEL)); // 进入BonusTasksPanel并自动选中Bonus1
+        bonus1Button.addActionListener(e -> showCard(BONUS1_PANEL));
 
-        JButton bonus2Button = createMenuButtonKS("Bonus 2: Sector Area");
+        JButton bonus2Button = createMenuButtonKS("<html><center>Bonus 2:<br>Sector Area</center></html>");
+        bonus2Button.setFont(new Font(FONT_NAME, Font.BOLD, 35));
         bonus2Button.setPreferredSize(new Dimension(180, 80));
-        bonus2Button.addActionListener(e -> showCard(BONUS_PANEL)); // 进入BonusTasksPanel并自动选中Bonus2
+        bonus2Button.addActionListener(e -> showCard(BONUS2_PANEL));
 
+        buttonPanel.setOpaque(false);
         buttonPanel.add(task3Button);
         buttonPanel.add(task4Button);
         buttonPanel.add(bonus1Button);
@@ -239,10 +249,12 @@ public class MainFrame extends JFrame {
 
         panel.add(buttonPanel, BorderLayout.CENTER);
 
-        JButton backButton = new JButton("Home");
+        JButton backButton = new KidButton("Home");
+        backButton.setFont(new Font(FONT_NAME, Font.BOLD, 26));
         backButton.addActionListener(e -> showCard(HOME_PANEL));
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         bottomPanel.add(backButton);
+        bottomPanel.setOpaque(false);
         panel.add(bottomPanel, BorderLayout.SOUTH);
 
         return panel;
@@ -255,8 +267,8 @@ public class MainFrame extends JFrame {
         JButton button = new JButton(title);
         button.setOpaque(false);
         button.setBackground(new Color(255, 255, 255, 100)); 
-        button.setFont(new Font("Comic Sans MS", Font.BOLD, 30));
-        // color: rgb(64, 154, 56)
+        button.setFont(new Font(FONT_NAME, Font.BOLD, 30));
+        // color: rgb(52, 119, 219)
         button.setForeground(new Color(52, 119, 219));
         button.setPreferredSize(new Dimension(250, 100));
         button.setFocusPainted(false);
@@ -265,10 +277,12 @@ public class MainFrame extends JFrame {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent e) {
                 button.setBorder(BorderFactory.createLineBorder(new Color(255, 140, 0), 5));
+                button.setForeground(new Color(255, 140, 0)); // 鼠标悬停时改变字体颜色为橙色
             }
             @Override
             public void mouseExited(java.awt.event.MouseEvent e) {
                 button.setBorder(BorderFactory.createLineBorder(new Color(70, 130, 180), 5));
+                button.setForeground(new Color(52, 119, 219)); // 鼠标离开时恢复原来的字体颜色
             }
         });
         return button;
@@ -279,21 +293,23 @@ public class MainFrame extends JFrame {
     private JButton createMenuButtonKS(String title) {
         JButton button = new JButton(title);
         button.setOpaque(false);
-        // color: rgb(102, 102, 98)
+        // color: rgb(81, 222, 232)
         button.setBackground(new Color(255, 255, 255, 100)); 
-        button.setFont(new Font("Comic Sans MS", Font.BOLD, 30));
-        button.setForeground(new Color(52, 119, 219));
+        button.setFont(new Font(FONT_NAME, Font.BOLD, 30));
+        button.setForeground(new Color(81, 222, 232));
         button.setPreferredSize(new Dimension(250, 100));
         button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createLineBorder(new Color(70, 130, 180), 5));
+        button.setBorder(BorderFactory.createLineBorder(new Color(81, 222, 232), 5));
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent e) {
                 button.setBorder(BorderFactory.createLineBorder(new Color(255, 140, 0), 5));
+                button.setForeground(new Color(255, 140, 0)); // 鼠标悬停时改变字体颜色为橙色
             }
             @Override
             public void mouseExited(java.awt.event.MouseEvent e) {
-                button.setBorder(BorderFactory.createLineBorder(new Color(70, 130, 180), 5));
+                button.setBorder(BorderFactory.createLineBorder(new Color(81, 222, 232), 5));
+                button.setForeground(new Color(81, 222, 232)); // 鼠标离开时恢复原来的字体颜色
             }
         });
         return button;
@@ -383,8 +399,8 @@ public class MainFrame extends JFrame {
             currentTaskStatus.clear();
             updateTaskStatus("Shape Area", false);
             updateTaskStatus("Circle", false);
-            updateTaskStatus("Compound Area", false);
-            updateTaskStatus("Sector Area", false);
+            updateTaskStatus("Bonus 1: Compound Area", false);
+            updateTaskStatus("Bonus 2: Sector Area", false);
             updateTaskStatusPanel();
         }
     }
@@ -392,8 +408,8 @@ public class MainFrame extends JFrame {
     /**
      * 更新分数
      */
-    public void updateScore(int points) {
-        currentScore = points; // 直接设置分数而不是累加
+    public void updateScore() {
+        currentScore = User.getScores(); // 直接设置分数而不是累加
         updateProgress();
     }
     

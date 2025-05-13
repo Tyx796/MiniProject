@@ -56,9 +56,9 @@ public class Rectangle {
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
             
             // 设置字体
-            Font titleFont = new Font("Arial", Font.PLAIN, 18);
-            Font formulaFont = new Font("Arial", Font.BOLD, 22);
-            Font labelFont = new Font("Arial", Font.BOLD, 18);
+            Font titleFont = new Font("Comic Sans MS", Font.PLAIN, 18);
+            Font formulaFont = new Font("Comic Sans MS", Font.BOLD, 22);
+            Font labelFont = new Font("Comic Sans MS", Font.BOLD, 18);
             
             // 计算绘图区域
             int padding = 50;
@@ -154,6 +154,7 @@ public class Rectangle {
             
             // 公式 A = L × W
             formulaY += 50;
+            formulaX -= 50;
             g2d.setFont(formulaFont);
             g2d.setColor(new Color(150, 150, 150)); // 灰色
             g2d.drawString("A", formulaX - 20, formulaY);
@@ -169,10 +170,10 @@ public class Rectangle {
             g2d.setColor(new Color(56, 176, 170)); // 青绿色，宽度
             g2d.drawString("W", formulaX + 75, formulaY);
             
-            // 长度向上箭头
+           /*  // 长度向上箭头
             Polygon lArrow = new Polygon();
-            int lArrowX = formulaX + 30;
-            int lArrowY = formulaY + 15;
+            int lArrowX = formulaX + 38;
+            int lArrowY = formulaY + 13;
             lArrow.addPoint(lArrowX, lArrowY);
             lArrow.addPoint(lArrowX - arrowSize, lArrowY + arrowSize * 2);
             lArrow.addPoint(lArrowX + arrowSize, lArrowY + arrowSize * 2);
@@ -181,13 +182,13 @@ public class Rectangle {
             
             // 宽度向上箭头
             Polygon wArrow = new Polygon();
-            int wArrowX = formulaX + 75;
-            int wArrowY = formulaY + 15;
+            int wArrowX = formulaX + 85;
+            int wArrowY = formulaY + 13;
             wArrow.addPoint(wArrowX, wArrowY);
             wArrow.addPoint(wArrowX - arrowSize, wArrowY + arrowSize * 2);
             wArrow.addPoint(wArrowX + arrowSize, wArrowY + arrowSize * 2);
             g2d.setColor(new Color(56, 176, 170)); // 青绿色
-            g2d.fill(wArrow);
+            g2d.fill(wArrow); */
             
             // 结果值
             formulaY += 50;
@@ -197,7 +198,9 @@ public class Rectangle {
             g2d.drawString("=", formulaX, formulaY);
             
             g2d.setColor(new Color(144, 238, 144)); // 浅绿色，长度
-            g2d.drawString(Integer.toString(length), formulaX + 30, formulaY);
+            String lengthStr = Integer.toString(length);
+            int lengthWidth = g2d.getFontMetrics().stringWidth(lengthStr);
+            g2d.drawString(lengthStr, formulaX + 25 + (15 - lengthWidth/2), formulaY);
             
             g2d.setColor(new Color(150, 150, 150)); // 灰色
             g2d.drawString("×", formulaX + 50, formulaY);

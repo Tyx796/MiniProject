@@ -225,7 +225,7 @@ public class Shape3DPanel extends JPanel {
             scoreDialog.add(scorePanel);
             
             // 更新主窗口分数显示
-            mainFrame.updateScore(shapeTask.getCurrentScore());
+            mainFrame.updateScore();
             
             // 显示得分弹窗
             scoreDialog.setVisible(true);

@@ -183,10 +183,10 @@ public class CompoundArea {
     public String getAnswerImagePath() { return answerImagePath; }
 
     /**
-     * 检查答案是否正确（允许0.01的误差）
+     * 检查答案是否正确（允许0.1的误差）
      */
     public boolean checkAnswer(double userAnswer) {
-        return Math.abs(userAnswer - correctArea) < 0.01;
+        return Math.abs(userAnswer - correctArea) < 0.1;
     }
 
     /**

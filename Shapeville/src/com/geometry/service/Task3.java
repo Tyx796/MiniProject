@@ -134,7 +134,7 @@ public class Task3 {
      */
     public boolean checkAnswer(double userAnswer) {
         // 检查答案是否正确，允许0.001的误差
-        boolean isCorrect = Math.abs(userAnswer - area) < 0.001;
+        boolean isCorrect = Math.abs(userAnswer - area) < 1;
         
         if (isCorrect) {
             // 根据剩余尝试次数计算得分
@@ -231,7 +231,7 @@ public class Task3 {
                 return new String[]{"Base", "Height"};
                 
             case TRAPEZIUM:
-                return new String[]{"Top Length (a)", "Bottom Length (b)", "Height"};
+                return new String[]{"Top Length", "Bottom Length", "Height"};
                 
             default:
                 return new String[]{};

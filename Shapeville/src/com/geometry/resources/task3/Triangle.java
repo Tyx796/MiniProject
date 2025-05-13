@@ -57,15 +57,15 @@ public class Triangle {
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
             
             // 设置字体
-            Font titleFont = new Font("Arial", Font.PLAIN, 18);
-            Font formulaFont = new Font("Arial", Font.BOLD, 22);
-            Font labelFont = new Font("Arial", Font.BOLD, 18);
+            Font titleFont = new Font("Comic Sans MS", Font.PLAIN, 18);
+            Font formulaFont = new Font("Comic Sans MS", Font.BOLD, 22);
+            Font labelFont = new Font("Comic Sans MS", Font.BOLD, 18);
             
             // 计算绘图区域
             int padding = 50;
             int diagramWidth = 220;
             int diagramHeight = 160;
-            int centerX = getWidth() / 3;
+            int centerX = getWidth() / 3 - 30;
             int centerY = getHeight() / 2;
             
             // 绘制标题
@@ -152,7 +152,7 @@ public class Triangle {
             g2d.drawString("BASE", centerX - 20, y1 + 40);
             
             // 绘制公式部分
-            int formulaX = centerX + 180;
+            int formulaX = centerX + 150;
             int formulaY = centerY - 50;
             
             // AREA 箭头和标签
@@ -192,22 +192,29 @@ public class Triangle {
             g2d.setColor(new Color(148, 0, 211)); // 紫色高度
             g2d.drawString("h", formulaX + 140, formulaY);
             
-            // 高度h的下划线
-            g2d.drawLine(formulaX + 140, formulaY + 5, formulaX + 150, formulaY + 5);
+/*             // h向上箭头
+            int hArrowX = formulaX + 145;
+            int hArrowY = formulaY + 10;
+            Polygon hArrow = new Polygon();
+            hArrow.addPoint(hArrowX, hArrowY);
+            hArrow.addPoint(hArrowX - arrowSize, hArrowY + arrowSize * 2);
+            hArrow.addPoint(hArrowX + arrowSize, hArrowY + arrowSize * 2);
+            g2d.setColor(new Color(148, 0, 211)); // 紫色
+            g2d.fill(hArrow);
             
             // 底边向上箭头
-            int bArrowX = formulaX + 90;
-            int bArrowY = formulaY - 25;
+            int bArrowX = formulaX + 100;
+            int bArrowY = formulaY + 10;
             Polygon bArrow = new Polygon();
             bArrow.addPoint(bArrowX, bArrowY);
             bArrow.addPoint(bArrowX - arrowSize, bArrowY + arrowSize * 2);
             bArrow.addPoint(bArrowX + arrowSize, bArrowY + arrowSize * 2);
             g2d.setColor(new Color(255, 165, 0)); // 橙色
-            g2d.fill(bArrow);
+            g2d.fill(bArrow); */
             
             // 结果值
             formulaY += 50;
-            g2d.setFont(new Font("Arial", Font.BOLD, 18));
+            g2d.setFont(new Font("Comic Sans MS", Font.BOLD, 18));
             
             g2d.setColor(new Color(150, 150, 150)); // 灰色
             g2d.drawString("A", formulaX, formulaY);

@@ -84,7 +84,7 @@ public class Bonus2 {
         
         if (currentQuestion.checkAnswer(userAnswer)) {
             // 根据剩余尝试次数计算得分
-            int attemptsUsed = MAX_ATTEMPTS - (MAX_ATTEMPTS - attempts) + 1;
+            int attemptsUsed = MAX_ATTEMPTS - (MAX_ATTEMPTS - attempts);
             com.geometry.entity.User.addScores("Advanced", attemptsUsed); // Bonus任务使用Advanced级别的分数
             
             remainingQuestions.remove(0);

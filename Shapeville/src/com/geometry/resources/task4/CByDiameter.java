@@ -27,6 +27,8 @@ public class CByDiameter {
         // 圆参数
         private int diameter = 10; // 直径
         private double circumference;
+        private static final String FONT_NAME = "Comic Sans MS";
+
 
         /**
          * 默认构造函数
@@ -53,14 +55,14 @@ public class CByDiameter {
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
             // 设置字体
-            Font titleFont = new Font("Arial", Font.PLAIN, 18);
-            Font formulaFont = new Font("Arial", Font.BOLD, 22);
-            Font labelFont = new Font("Arial", Font.BOLD, 18);
+            Font titleFont = new Font(FONT_NAME, Font.PLAIN, 18);
+            Font formulaFont = new Font(FONT_NAME, Font.BOLD, 22);
+            Font labelFont = new Font(FONT_NAME, Font.BOLD, 18);
 
             // 计算绘图区域
             int padding = 50;
             int diagramRadius = 80;
-            int centerX = getWidth() / 3;
+            int centerX = getWidth() / 3 - 50;
             int centerY = getHeight() / 2;
 
             // 绘制标题
@@ -105,7 +107,7 @@ public class CByDiameter {
             g2d.drawString("d", centerX - 10, centerY + 30);
 
             // 绘制公式部分
-            int formulaX = centerX + 180;
+            int formulaX = centerX + 100;
             int formulaY = centerY - 40;
 
             // C 箭头和标签
@@ -140,7 +142,7 @@ public class CByDiameter {
             g2d.setColor(new Color(255, 99, 71)); // 番茄红
             g2d.drawString(Integer.toString(diameter), formulaX + 120, formulaY);
             g2d.setColor(new Color(150, 150, 150)); // 灰色
-            g2d.drawString("=", formulaX + 150, formulaY);
+            g2d.drawString("=", formulaX + 155, formulaY);
             g2d.drawString(String.format("%.2f", circumference), formulaX + 170, formulaY);
         }
     }
