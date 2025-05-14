@@ -76,7 +76,7 @@ public class Bonus1 extends JPanel {
         // Top navigation area
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setOpaque(false);
-        topPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+        topPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.setOpaque(false);
@@ -84,7 +84,7 @@ public class Bonus1 extends JPanel {
         topPanel.add(buttonPanel, BorderLayout.EAST);
         
         JLabel titleLabel = new JLabel(
-                "<html><h3 style='font-family: " + FONT_NAME + "; font-size: 24px; color: rgb(52, 119, 219);'>" +
+                "<html><h3 style='font-family: " + FONT_NAME + "; font-size: 24px; color: rgb(220, 224, 228);'>" +
                 "Compound Shape Area Calculation</h3>");
         topPanel.add(titleLabel, BorderLayout.CENTER);
         
@@ -206,6 +206,16 @@ public class Bonus1 extends JPanel {
         answerField = new JTextField(10);
         answerField.setFont(new Font(FONT_NAME, Font.PLAIN, 20));
         answerField.setPreferredSize(new Dimension(100, 40));
+        // 添加焦点请求，使面板显示时自动获取焦点
+        answerField.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorAdded(javax.swing.event.AncestorEvent event) {
+                // 使用SwingUtilities.invokeLater确保组件完全显示后再请求焦点
+                SwingUtilities.invokeLater(() -> answerField.requestFocusInWindow());
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent event) {}
+            public void ancestorMoved(javax.swing.event.AncestorEvent event) {}
+        });
+        
         
         unitComboBox = new JComboBox<>(new String[]{"cm2", "m2"});
         unitComboBox.setFont(new Font(FONT_NAME, Font.PLAIN, 18));

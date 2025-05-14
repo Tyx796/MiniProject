@@ -83,6 +83,7 @@ public class MainFrame extends JFrame {
         progressBar.setPreferredSize(new Dimension(progressBar.getPreferredSize().width, 40));
         progressBar.setFont(new Font(FONT_NAME, Font.BOLD, 18));
         
+        
         endSessionButton = new KidButton("End");
         endSessionButton.setFont(new Font(FONT_NAME, Font.BOLD, 26));
         
@@ -319,20 +320,12 @@ public class MainFrame extends JFrame {
         button.setPreferredSize(new Dimension(250, 100));
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(ColorScheme.getColor(ColorScheme.BORDER_PRIMARY), 5));
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent e) {
-                button.setBorder(BorderFactory.createLineBorder(ColorScheme.getColor(ColorScheme.WARNING), 5));
-                button.setForeground(ColorScheme.getColor(ColorScheme.WARNING)); // 鼠标悬停时改变字体颜色
-            }
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent e) {
-                button.setBorder(BorderFactory.createLineBorder(ColorScheme.getColor(ColorScheme.BORDER_PRIMARY), 5));
-                button.setForeground(ColorScheme.getColor(ColorScheme.PRIMARY)); // 鼠标离开时恢复原来的字体颜色
-            }
-        });
+        
+        // 统一使用updateButtonColor方法设置按钮颜色和事件处理
+        updateButtonColor(button);
         return button;
     }
+    
     /**
      * 创建菜单按钮
      */
@@ -345,18 +338,9 @@ public class MainFrame extends JFrame {
         button.setPreferredSize(new Dimension(250, 100));
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(ColorScheme.getColor(ColorScheme.SECONDARY), 5));
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent e) {
-                button.setBorder(BorderFactory.createLineBorder(ColorScheme.getColor(ColorScheme.WARNING), 5));
-                button.setForeground(ColorScheme.getColor(ColorScheme.WARNING)); // 鼠标悬停时改变字体颜色为橙色
-            }
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent e) {
-                button.setBorder(BorderFactory.createLineBorder(ColorScheme.getColor(ColorScheme.SECONDARY), 5));
-                button.setForeground(ColorScheme.getColor(ColorScheme.SECONDARY)); // 鼠标离开时恢复原来的字体颜色
-            }
-        });
+        
+        // 统一使用updateButtonColor方法设置按钮颜色和事件处理
+        updateButtonColor(button);
         return button;
     }
     
@@ -540,7 +524,7 @@ public class MainFrame extends JFrame {
         // 更新任务状态面板
         updateTaskStatusPanel();
         
-        // 要求所有子面板更新颜色
+        // 递归更新所有组件的颜色
         refreshAllPanels();
         
         // 重绘整个窗口
@@ -572,11 +556,155 @@ public class MainFrame extends JFrame {
      * 刷新所有面板，强制它们更新颜色
      */
     private void refreshAllPanels() {
-        // 这里可以添加通知各个面板更新颜色的逻辑
-        Component[] components = cardPanel.getComponents();
-        for (Component component : components) {
-            if (component instanceof JPanel) {
-                component.repaint();
+        // 递归更新所有组件的颜色
+        updateAllComponentsRecursively(this);
+    }
+    
+    /**
+     * 递归更新所有组件的颜色
+     * @param container 要处理的容器
+     */
+    private void updateAllComponentsRecursively(Container container) {
+        // 处理当前容器中的所有组件
+        for (Component component : container.getComponents()) {
+            // 更新按钮颜色
+            if (component instanceof JButton) {
+                updateButtonColor((JButton)component);
+            }
+            
+            // 如果是容器，则递归处理其子组件
+            if (component instanceof Container) {
+                updateAllComponentsRecursively((Container)component);
+            }
+        }
+    }
+    
+    /**
+     * 更新按钮颜色
+     * @param button 要更新颜色的按钮
+     */
+    private void updateButtonColor(JButton button) {
+        if (button instanceof KidButton) {
+            // KidButton已有自己的颜色更新逻辑
+            KidButton kidButton = (KidButton) button;
+            kidButton.setNormalColor(ColorScheme.getColor(ColorScheme.BUTTON_NORMAL));
+            kidButton.setHoverColor(ColorScheme.getColor(ColorScheme.BUTTON_HOVER));
+            kidButton.setPressedColor(ColorScheme.getColor(ColorScheme.BUTTON_PRESSED));
+        } else {
+            // 检查按钮是否为主菜单按钮
+            boolean isHomeButton = button.getText().equals("Key Stage 1") || 
+                                   button.getText().equals("Key Stage 2");
+            
+            // 检查按钮是否为KS菜单按钮
+            boolean isKSButton = button.getText().equals("2D Shapes") ||
+                                 button.getText().equals("3D Shapes") ||
+                                 button.getText().equals("Angles") ||
+                                 button.getText().equals("Shape Area") ||
+                                 button.getText().equals("Circle") ||
+                                 button.getText().contains("Bonus");
+            
+            // 更新按钮外观
+            if (isHomeButton) {
+                // 主页按钮样式
+                button.setForeground(ColorScheme.getColor(ColorScheme.PRIMARY));
+                button.setBorder(BorderFactory.createLineBorder(ColorScheme.getColor(ColorScheme.BORDER_PRIMARY), 5));
+                
+                // 移除旧的鼠标监听器
+                removeCustomMouseListeners(button);
+                
+                // 添加新的鼠标监听器
+                button.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        button.setForeground(ColorScheme.getColor(ColorScheme.WARNING));
+                        button.setBorder(BorderFactory.createLineBorder(ColorScheme.getColor(ColorScheme.WARNING), 5));
+                    }
+                    
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        button.setForeground(ColorScheme.getColor(ColorScheme.PRIMARY));
+                        button.setBorder(BorderFactory.createLineBorder(ColorScheme.getColor(ColorScheme.BORDER_PRIMARY), 5));
+                    }
+                });
+            } else if (isKSButton) {
+                // KS按钮样式
+                button.setForeground(ColorScheme.getColor(ColorScheme.SECONDARY));
+                button.setBorder(BorderFactory.createLineBorder(ColorScheme.getColor(ColorScheme.SECONDARY), 5));
+                
+                // 移除旧的鼠标监听器
+                removeCustomMouseListeners(button);
+                
+                // 添加新的鼠标监听器
+                button.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        button.setForeground(ColorScheme.getColor(ColorScheme.WARNING));
+                        button.setBorder(BorderFactory.createLineBorder(ColorScheme.getColor(ColorScheme.WARNING), 5));
+                    }
+                    
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        button.setForeground(ColorScheme.getColor(ColorScheme.SECONDARY));
+                        button.setBorder(BorderFactory.createLineBorder(ColorScheme.getColor(ColorScheme.SECONDARY), 5));
+                    }
+                });
+            } else {
+                // 普通JButton
+                button.setForeground(ColorScheme.getColor(ColorScheme.TEXT_PRIMARY));
+                button.setBackground(ColorScheme.getColor(ColorScheme.BUTTON_NORMAL));
+                
+                // 如果按钮有边框且边框是LineBorder类型，则更新边框颜色
+                if (button.getBorder() instanceof javax.swing.border.LineBorder) {
+                    Color borderColor = ColorScheme.getColor(ColorScheme.BORDER_PRIMARY);
+                    int thickness = ((javax.swing.border.LineBorder)button.getBorder()).getThickness();
+                    button.setBorder(BorderFactory.createLineBorder(borderColor, thickness));
+                }
+                
+                // 移除旧的鼠标监听器
+                removeCustomMouseListeners(button);
+                
+                // 添加新的鼠标监听器
+                button.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        button.setForeground(ColorScheme.getColor(ColorScheme.WARNING));
+                        if (button.getBorder() instanceof javax.swing.border.LineBorder) {
+                            int thickness = ((javax.swing.border.LineBorder)button.getBorder()).getThickness();
+                            button.setBorder(BorderFactory.createLineBorder(
+                                ColorScheme.getColor(ColorScheme.WARNING), thickness));
+                        }
+                    }
+                    
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        button.setForeground(ColorScheme.getColor(ColorScheme.TEXT_PRIMARY));
+                        if (button.getBorder() instanceof javax.swing.border.LineBorder) {
+                            int thickness = ((javax.swing.border.LineBorder)button.getBorder()).getThickness();
+                            button.setBorder(BorderFactory.createLineBorder(
+                                ColorScheme.getColor(ColorScheme.BORDER_PRIMARY), thickness));
+                        }
+                    }
+                });
+            }
+        }
+        
+        // 强制重绘按钮
+        button.revalidate();
+        button.repaint();
+    }
+    
+    /**
+     * 移除所有非系统的鼠标监听器
+     * @param component 要处理的组件
+     */
+    private void removeCustomMouseListeners(Component component) {
+        MouseListener[] listeners = component.getMouseListeners();
+        for (MouseListener listener : listeners) {
+            if (listener.getClass().getEnclosingClass() == MainFrame.class ||
+                (listener.getClass().getName() != null && 
+                !listener.getClass().getName().startsWith("javax.swing") && 
+                !listener.getClass().getName().startsWith("java.awt"))) {
+                component.removeMouseListener(listener);
             }
         }
     }

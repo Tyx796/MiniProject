@@ -114,7 +114,7 @@ public class ShapeArea extends JPanel {
         
         // Task description
         JLabel descriptionLabel = new JLabel(
-                "<html><h3 style='font-family: " + FONT_NAME + "; font-size: 24px; color: rgb(52, 119, 219);'>" +
+                "<html><h3 style='font-family: " + FONT_NAME + "; font-size: 24px; color: white;'>" +
                 "Shape Area Calculation</h3>" +
                 "<p style='font-family: " + FONT_NAME + "; font-size: 18px; color: white;'>" +
                 "You have 3 tries and 3 minutes for each question.</p></html>");
@@ -138,16 +138,17 @@ public class ShapeArea extends JPanel {
         }
         
         // Create control panel
+        // color: rgb(154, 156, 159)
         task3ControlPanel = new JPanel();
         task3ControlPanel.setLayout(new BoxLayout(task3ControlPanel, BoxLayout.Y_AXIS));
         task3ControlPanel.setOpaque(false);
         task3ControlPanel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(new Color(52, 119, 219), 2),
+                BorderFactory.createLineBorder(new Color(154, 156, 159), 2),
                 "Exercise Control",
                 TitledBorder.CENTER,
                 TitledBorder.TOP,
                 new Font(FONT_NAME, Font.BOLD, 20),
-                new Color(52, 119, 219)
+                new Color(154, 156, 159)
         ));
         
         // Parameter display panel
@@ -218,12 +219,12 @@ public class ShapeArea extends JPanel {
         task3DisplayPanel = new JPanel(new BorderLayout());
         task3DisplayPanel.setOpaque(false);
         task3DisplayPanel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(new Color(52, 119, 219), 2),
+                BorderFactory.createLineBorder(new Color(154, 156, 159), 2),
                 "Shape Display",
                 TitledBorder.CENTER,
                 TitledBorder.TOP,
                 new Font(FONT_NAME, Font.BOLD, 20),
-                new Color(52, 119, 219)
+                new Color(154, 156, 159)
         ));
         JLabel placeholderLabel = new JLabel(
                 "<html><p style='font-family: " + FONT_NAME + "; font-size: 18px; color: white;'>" +
@@ -279,7 +280,7 @@ public class ShapeArea extends JPanel {
         submitButton.setEnabled(true);
         
         // 更新状态和尝试次数
-        statusLabel.setText("Please calculate the area of " + shape);
+        statusLabel.setText("Please calculate the area");
         attemptsLabel.setText("Tries: " + task3Service.getRemainingAttempts());
         
         // 启动3分钟计时器
@@ -355,7 +356,6 @@ public class ShapeArea extends JPanel {
                     noAttemptsLeftForTask3();
                 } else {
                     statusLabel.setText("Incorrect answer, please try again");
-                    statusLabel.setForeground(Color.RED);
                     answerField.setText("");
                 }
             }
@@ -377,7 +377,7 @@ public class ShapeArea extends JPanel {
         
         // 当时间不足30秒时，显示红色
         if (secondsRemaining <= 30) {
-            timerLabel.setForeground(Color.RED);
+            timerLabel.setForeground(Color.WHITE);    
         } else {
             timerLabel.setForeground(Color.WHITE);
         }
@@ -424,8 +424,6 @@ public class ShapeArea extends JPanel {
         
         scoreDialog.add(scorePanel);
         
-        // 更新主窗口分数显示
-        mainFrame.updateScore();
         
         // 显示得分弹窗
         scoreDialog.setVisible(true);
@@ -486,7 +484,7 @@ public class ShapeArea extends JPanel {
      */
     private void timeUpForTask3() {
         statusLabel.setText("Time's up!");
-        statusLabel.setForeground(Color.RED);
+        statusLabel.setForeground(Color.WHITE);
         
         answerField.setEditable(false);
         submitButton.setEnabled(false);
@@ -503,7 +501,7 @@ public class ShapeArea extends JPanel {
         }
         
         statusLabel.setText("No attempts remaining");
-        statusLabel.setForeground(Color.RED);
+        statusLabel.setForeground(Color.WHITE);
         
         answerField.setEditable(false);
         submitButton.setEnabled(false);

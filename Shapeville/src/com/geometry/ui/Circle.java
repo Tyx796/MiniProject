@@ -109,7 +109,7 @@ public class Circle extends JPanel {
         panel.setBorder(BorderFactory.createEmptyBorder(0, 18, 0, 18));
         
         JLabel descriptionLabel = new JLabel(
-                "<html><h3 style='font-family: " + FONT_NAME + "; font-size: 24px; color: rgb(52, 119, 219);'>" +
+                "<html><h3 style='font-family: " + FONT_NAME + "; font-size: 24px; color: white;'>" +
                 "Circle Area and Circumference</h3>" +
                 "<p style='font-family: " + FONT_NAME + "; font-size: 18px; color: white;'>" +
                 "You have 3 tries and 3 minutes for each question.</p></html>");
@@ -137,12 +137,12 @@ public class Circle extends JPanel {
         task4ControlPanel.setLayout(new BoxLayout(task4ControlPanel, BoxLayout.Y_AXIS));
         task4ControlPanel.setOpaque(false);
         task4ControlPanel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(new Color(52, 119, 219), 2),
+                BorderFactory.createLineBorder(new Color(154, 156, 159), 2),
                 "Exercise Control",
                 TitledBorder.CENTER,
                 TitledBorder.TOP,
                 new Font(FONT_NAME, Font.BOLD, 20),
-                new Color(52, 119, 219)
+                new Color(154, 156, 159)
         ));
         
         // Parameter display
@@ -216,12 +216,12 @@ public class Circle extends JPanel {
         task4DisplayPanel = new JPanel(new BorderLayout());
         task4DisplayPanel.setOpaque(false);
         task4DisplayPanel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(new Color(52, 119, 219), 2),
+                BorderFactory.createLineBorder(new Color(154, 156, 159), 2),
                 "Circle Display",
                 TitledBorder.CENTER,
                 TitledBorder.TOP,
                 new Font(FONT_NAME, Font.BOLD, 20),
-                new Color(52, 119, 219)
+                new Color(154, 156, 159)
         ));
         
         JLabel placeholderLabel = new JLabel(
@@ -261,6 +261,10 @@ public class Circle extends JPanel {
         answerField.setText("");
         answerField.setEditable(true);
         submitButton.setEnabled(true);
+        
+        // 重置状态标签文本
+        statusLabel.setText("Please select a shape");
+        
         attemptsLabel.setText("Tries: " + task4Service.getRemainingAttempts());
         secondsRemaining = 180;
         updateTimerDisplay();
@@ -299,7 +303,7 @@ public class Circle extends JPanel {
             
             JLabel piTip = new JLabel("(Use π = 3.14 for calculations)");
             piTip.setFont(new Font(FONT_NAME, Font.PLAIN, 20));
-            piTip.setForeground(new Color(70, 130, 180));
+            piTip.setForeground(new Color(154, 156, 159));
             piTip.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
             paramsPanel.add(piTip);
             
@@ -321,7 +325,6 @@ public class Circle extends JPanel {
                     noAttemptsLeft();
                 } else {
                     statusLabel.setText("Incorrect answer, please try again");
-                    statusLabel.setForeground(Color.RED);
                     answerField.setText("");
                 }
             }
@@ -438,7 +441,6 @@ public class Circle extends JPanel {
     
     private void timeUp() {
         statusLabel.setText("Time's up!");
-        statusLabel.setForeground(Color.RED);
         answerField.setEditable(false);
         submitButton.setEnabled(false);
         showResult();
@@ -449,7 +451,6 @@ public class Circle extends JPanel {
             task4Timer.stop();
         }
         statusLabel.setText("No attempts remaining");
-        statusLabel.setForeground(Color.RED);
         answerField.setEditable(false);
         submitButton.setEnabled(false);
         showResult();
