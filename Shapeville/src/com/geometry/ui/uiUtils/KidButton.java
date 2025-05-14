@@ -13,25 +13,28 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 public class KidButton extends JButton{
-    // color: rgb(197, 197, 193)
-    private Color normal = new Color(197, 197, 193);
-    private Color hover = new Color(255, 140, 150);
-    private Color pressed = new Color(230, 80, 100);
+    // 默认使用ColorScheme中定义的颜色
+    private Color normal = ColorScheme.getColor(ColorScheme.BUTTON_NORMAL);
+    private Color hover = ColorScheme.getColor(ColorScheme.BUTTON_HOVER);
+    private Color pressed = ColorScheme.getColor(ColorScheme.BUTTON_PRESSED);
     
     
     public void setNormalColor(Color normalColor) {
         this.normalColor = normalColor;
+        repaint();
     }
 
     public void setHoverColor(Color hoverColor) {
         this.hoverColor = hoverColor;
+        repaint();
     }
 
     public void setPressedColor(Color pressedColor) {
         this.pressedColor = pressedColor;
+        repaint();
     }
 
-    // 当前颜色状态
+    // 当前颜色状态 - 初始化为ColorScheme默认颜色
     private Color normalColor = normal;
     private Color hoverColor = hover;
     private Color pressedColor = pressed;
@@ -65,7 +68,7 @@ public class KidButton extends JButton{
         setContentAreaFilled(false);
         setBorderPainted(false);
         setFocusPainted(false);
-        setForeground(Color.WHITE);
+        setForeground(ColorScheme.getColor(ColorScheme.TEXT_PRIMARY));
         setFont(new Font("Comic Sans MS", Font.BOLD, 16));
         
         // 鼠标监听设置
@@ -111,6 +114,9 @@ public class KidButton extends JButton{
     
     @Override
     protected void paintComponent(Graphics g) {
+        // 更新颜色以适应可能的颜色方案变化
+        updateColors();
+        
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
@@ -154,6 +160,25 @@ public class KidButton extends JButton{
         // 绘制文本（考虑图标偏移）
         super.paintComponent(g2);
         g2.dispose();
+    }
+    
+    /**
+     * 更新颜色以适应当前ColorScheme
+     */
+    private void updateColors() {
+        // 如果没有设置过自定义颜色，则使用ColorScheme中的默认值
+        if (normalColor.equals(normal)) {
+            normalColor = ColorScheme.getColor(ColorScheme.BUTTON_NORMAL);
+        }
+        if (hoverColor.equals(hover)) {
+            hoverColor = ColorScheme.getColor(ColorScheme.BUTTON_HOVER);
+        }
+        if (pressedColor.equals(pressed)) {
+            pressedColor = ColorScheme.getColor(ColorScheme.BUTTON_PRESSED);
+        }
+        
+        // 更新文本颜色
+        setForeground(ColorScheme.getColor(ColorScheme.TEXT_PRIMARY));
     }
     
     private int getTextWidth() {
