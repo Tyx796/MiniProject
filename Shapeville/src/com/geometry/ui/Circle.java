@@ -16,14 +16,15 @@ import com.geometry.ui.uiUtils.KidButton;
 
 /**
  * Circle Area and Circumference Calculation interface
- * Task 4: Circle Area and Circumference Calculation
+ * Task 4: Provides interactive exercises for students to calculate circle area and circumference
+ * using both radius and diameter measurements.
  */
 public class Circle extends JPanel {
     private MainFrame mainFrame;
     private KidButton homeButton;
     private static final String FONT_NAME = "Comic Sans MS";
     
-    // Task 4相关组件
+    // Task 4 related components
     private Task4 task4Service;
     private JPanel task4ControlPanel;
     private JPanel task4DisplayPanel;
@@ -36,13 +37,13 @@ public class Circle extends JPanel {
     private KidButton submitButton;
     
     /**
-     * 构造函数
-     * @param mainFrame 主窗口引用
+     * Constructor for the Circle panel
+     * @param mainFrame Reference to the main application frame
      */
     public Circle(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         
-        // 初始化业务逻辑
+        // Initialize business logic
         task4Service = new Task4();
         
         initComponents();
@@ -50,7 +51,7 @@ public class Circle extends JPanel {
     }
     
     /**
-     * 初始化组件
+     * Initialize UI components
      */
     private void initComponents() {
         // Create return to home button
@@ -68,7 +69,7 @@ public class Circle extends JPanel {
     }
     
     /**
-     * 设置布局
+     * Set up the panel layout
      */
     private void setupLayout() {
         setBorder(BorderFactory.createCompoundBorder(
@@ -101,7 +102,8 @@ public class Circle extends JPanel {
     }
     
     /**
-     * 创建主面板 - 圆的面积和周长计算
+     * Create the main panel - Circle area and circumference calculation
+     * @return The configured main panel
      */
     private JPanel createMainPanel() {
         JPanel panel = new JPanel(new BorderLayout(10, 20));
@@ -126,7 +128,7 @@ public class Circle extends JPanel {
             btn.setPreferredSize(new Dimension(200, 50));
             btn.addActionListener(e -> {
                 startTask4WithType(type);
-                // 点击类型按钮后，让答案输入框自动获取焦点
+                // After clicking type button, automatically focus answer input field
                 answerField.requestFocusInWindow();
             });
             typePanel.add(btn);
@@ -174,7 +176,7 @@ public class Circle extends JPanel {
         submitButton.setEnabled(false);
         answerPanel.add(submitButton);
         
-        // 添加回车键监听器，使回车键也能触发答案检查
+        // Add enter key listener to also trigger answer checking
         answerField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -238,11 +240,11 @@ public class Circle extends JPanel {
         JPanel horizontalPanel = new JPanel(new BorderLayout());
         horizontalPanel.setOpaque(false);
         
-        // 左侧控制面板，固定宽度300
+        // Left control panel, fixed width 300
         task4ControlPanel.setPreferredSize(new Dimension(300, task4ControlPanel.getPreferredSize().height));
         horizontalPanel.add(task4ControlPanel, BorderLayout.WEST);
         
-        // 右侧显示面板
+        // Right display panel
         horizontalPanel.add(task4DisplayPanel, BorderLayout.CENTER);
         
         centerPanel.add(horizontalPanel, BorderLayout.CENTER);
@@ -251,6 +253,10 @@ public class Circle extends JPanel {
         return panel;
     }
     
+    /**
+     * Start Task 4 with the selected calculation type
+     * @param type The calculation type (area by radius, area by diameter, etc.)
+     */
     private void startTask4WithType(String type) {
         if (task4Timer != null && task4Timer.isRunning()) {
             task4Timer.stop();
@@ -262,7 +268,7 @@ public class Circle extends JPanel {
         answerField.setEditable(true);
         submitButton.setEnabled(true);
         
-        // 重置状态标签文本
+        // Reset status label text
         statusLabel.setText("Please select a shape");
         
         attemptsLabel.setText("Tries: " + task4Service.getRemainingAttempts());
@@ -284,6 +290,9 @@ public class Circle extends JPanel {
         task4DisplayPanel.repaint();
     }
     
+    /**
+     * Update the parameters display area
+     */
     private void updateParamsDisplay() {
         Component[] components = task4ControlPanel.getComponents();
         if (components.length > 0 && components[0] instanceof JPanel) {
@@ -312,6 +321,9 @@ public class Circle extends JPanel {
         }
     }
     
+    /**
+     * Check the user's answer against the expected result
+     */
     private void checkAnswer() {
         try {
             double userAnswer = Double.parseDouble(answerField.getText().trim());
@@ -329,9 +341,13 @@ public class Circle extends JPanel {
                 }
             }
         } catch (NumberFormatException e) {
+            // Handle invalid numeric input
         }
     }
     
+    /**
+     * Update the timer display
+     */
     private void updateTimerDisplay() {
         int minutes = secondsRemaining / 60;
         int seconds = secondsRemaining % 60;
@@ -343,6 +359,9 @@ public class Circle extends JPanel {
         }
     }
     
+    /**
+     * Handle the case when the answer is correct
+     */
     private void answerCorrect() {
         if (task4Timer != null && task4Timer.isRunning()) {
             task4Timer.stop();
@@ -350,42 +369,42 @@ public class Circle extends JPanel {
         
         mainFrame.updateScore();
         
-        // 计算得分
+        // Calculate points
         int points = User.calScores("Basic", 3 - task4Service.getRemainingAttempts() + 1);
         
-        // 创建得分提示弹窗
+        // Create score dialog
         JDialog scoreDialog = new JDialog((Frame)SwingUtilities.getWindowAncestor(this), "Score", true);
         scoreDialog.setLayout(new BorderLayout(10, 10));
         scoreDialog.setSize(400, 220);
         scoreDialog.setLocationRelativeTo(this);
         
-        // 创建得分面板
+        // Create score panel
         JPanel scorePanel = new JPanel(new BorderLayout(10, 10));
         scorePanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         
-        // 添加得分信息
+        // Add score information
         JLabel scoreLabel = new JLabel("Score + " + points + " !", SwingConstants.CENTER);
         scoreLabel.setFont(new Font(FONT_NAME, Font.BOLD, 28));
         scoreLabel.setForeground(new Color(0, 150, 0));
         
-        // 确认按钮
+        // Confirm button
         KidButton okButton = new KidButton("OK");
         okButton.setFont(new Font(FONT_NAME, Font.BOLD, 20));
         okButton.addActionListener(e -> scoreDialog.dispose());
         
-        // 添加键盘回车监听
+        // Add keyboard enter listener
         scoreDialog.getRootPane().setDefaultButton(okButton);
         
-        // 组装面板
+        // Assemble panel
         scorePanel.add(scoreLabel, BorderLayout.CENTER);
         scorePanel.add(okButton, BorderLayout.SOUTH);
         
         scoreDialog.add(scorePanel);
         
-        // 更新主窗口分数显示
+        // Update main window score display
         mainFrame.updateScore();
         
-        // 显示得分弹窗
+        // Show score dialog
         scoreDialog.setVisible(true);
         
         showResult();
@@ -396,49 +415,55 @@ public class Circle extends JPanel {
         }
     }
     
+    /**
+     * Display the task completion dialog and update the UI state
+     */
     public void completeTask() {
-        // 清除组件
+        // Clear components
         answerField.setEditable(false);
         submitButton.setEnabled(false);
         
-        // 创建完成任务弹窗
+        // Create task completion dialog
         JDialog completionDialog = new JDialog((Frame)SwingUtilities.getWindowAncestor(this), "Completion", true);
         completionDialog.setLayout(new BorderLayout(10, 10));
         completionDialog.setSize(400, 220);
         completionDialog.setLocationRelativeTo(this);
         
-        // 创建完成面板
+        // Create completion panel
         JPanel completionPanel = new JPanel(new BorderLayout(10, 10));
         completionPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         
-        // 添加完成信息
+        // Add completion information
         JLabel scoreLabel = new JLabel("You got all circles!", SwingConstants.CENTER);
         scoreLabel.setFont(new Font(FONT_NAME, Font.BOLD, 28));
         scoreLabel.setForeground(new Color(0, 150, 0));
         
-        // 确认按钮
+        // Confirm button
         KidButton okButton = new KidButton("OK");
         okButton.setFont(new Font(FONT_NAME, Font.BOLD, 20));
         okButton.addActionListener(e -> completionDialog.dispose());
         
-        // 添加键盘回车监听
+        // Add keyboard enter listener
         completionDialog.getRootPane().setDefaultButton(okButton);
         
-        // 组装面板
+        // Assemble panel
         completionPanel.add(scoreLabel, BorderLayout.CENTER);
         completionPanel.add(okButton, BorderLayout.SOUTH);
         
         completionDialog.add(completionPanel);
         
-        // 显示完成弹窗
+        // Show completion dialog
         completionDialog.setVisible(true);
         
-        // 清理界面
+        // Clean up the interface
         task4DisplayPanel.removeAll();
         revalidate();
         repaint();
     }
     
+    /**
+     * Handle the case when time runs out
+     */
     private void timeUp() {
         statusLabel.setText("Time's up!");
         answerField.setEditable(false);
@@ -446,6 +471,9 @@ public class Circle extends JPanel {
         showResult();
     }
     
+    /**
+     * Handle the case when user has no attempts left
+     */
     private void noAttemptsLeft() {
         if (task4Timer != null && task4Timer.isRunning()) {
             task4Timer.stop();
@@ -456,6 +484,9 @@ public class Circle extends JPanel {
         showResult();
     }
     
+    /**
+     * Show the result with the correct answer
+     */
     private void showResult() {
         task4DisplayPanel.removeAll();
         JPanel resultPanel = task4Service.createDisplayPanel();

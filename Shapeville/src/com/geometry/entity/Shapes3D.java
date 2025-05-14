@@ -5,13 +5,16 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 3D shapes data entity
+ * Entity class for 3D geometric shapes.
+ * Manages the collection of 3D shapes and their image resources.
  */
 public class Shapes3D {
+    // Map to store the relationship between 3D shape names and their image paths
     private static final Map<String, String> shapes = new HashMap<>();
+    // Base path for 3D shape image resources
     private static final String RESOURCES_PATH = "com/geometry/resources/task1_3D/";
 
-    // map shape name to the imgs in the resources folder
+    // Static initialization block to map 3D shape names to their image paths
     static {
         shapes.put("cube", RESOURCES_PATH + "cube.png");
         shapes.put("cuboid", RESOURCES_PATH + "cuboid.png");
@@ -24,9 +27,9 @@ public class Shapes3D {
     }
 
     /**
-     * Get the image path of the shape
-     * @param shapeName name of the 3D shape
-     * @return path to the shape image
+     * Get the image path for a specific 3D shape
+     * @param shapeName Name of the 3D shape
+     * @return Path to the shape's image resource
      */
     public static String getShapeImg(String shapeName) {
         return shapes.get(shapeName);
@@ -34,7 +37,7 @@ public class Shapes3D {
     
     /**
      * Get all available 3D shape names
-     * @return set of all available 3D shape names
+     * @return Set of all available 3D shape names
      */
     public static Set<String> getAvailableShapes() {
         return shapes.keySet();

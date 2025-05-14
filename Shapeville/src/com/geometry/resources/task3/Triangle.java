@@ -6,12 +6,15 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 
 /**
- * 三角形面积计算示意图
+ * Visual representation for calculating the area of a Triangle
+ * This class provides a graphical illustration of how to calculate the area of a triangle
+ * with labeled dimensions and formulas.
  */
 public class Triangle {
     
     /**
-     * 主方法，用于测试绘图功能
+     * Main method for testing the drawing functionality
+     * @param args command line arguments (not used)
      */
     public static void main(String[] args) {
         JFrame frame = new JFrame("Area of Triangle");
@@ -22,25 +25,29 @@ public class Triangle {
     }
     
     /**
-     * 三角形面积计算面板
+     * Panel for displaying the triangle area calculation visualization
+     * Shows a graphical representation of a triangle with its dimensions and area formula
      */
     public static class TrianglePanel extends JPanel {
-        // 三角形参数
-        private int base = 5;     // 底边长(b)
-        private int height = 3;   // 高度(h)
-        private double area;      // 面积
+        // Triangle parameters
+        private int base = 5;     // Base length (b)
+        private int height = 3;   // Height (h)
+        private double area;      // Area
         
         /**
-         * 默认构造函数
+         * Default constructor
+         * Initializes a triangle with default dimensions and calculates its area
          */
         public TrianglePanel() {
             this.area = base * height / 2.0;
         }
         
         /**
-         * 参数化构造函数
-         * @param base 底边长
-         * @param height 高度
+         * Parameterized constructor
+         * Creates a triangle with specified dimensions and calculates its area
+         * 
+         * @param base the length of the base
+         * @param height the height of the triangle
          */
         public TrianglePanel(int base, int height) {
             this.base = base;
@@ -56,25 +63,25 @@ public class Triangle {
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
             
-            // 设置字体
+            // Set fonts for different elements
             Font titleFont = new Font("Comic Sans MS", Font.PLAIN, 18);
             Font formulaFont = new Font("Comic Sans MS", Font.BOLD, 22);
             Font labelFont = new Font("Comic Sans MS", Font.BOLD, 18);
             
-            // 计算绘图区域
+            // Calculate drawing area dimensions
             int padding = 50;
             int diagramWidth = 220;
             int diagramHeight = 160;
             int centerX = getWidth() / 3 - 30;
             int centerY = getHeight() / 2;
             
-            // 绘制标题
+            // Draw title
             g2d.setFont(titleFont);
-            g2d.setColor(new Color(150, 150, 150)); // 灰色
+            g2d.setColor(new Color(150, 150, 150)); // Gray color
             String title = "AREA OF TRIANGLE:";
             g2d.drawString(title, padding, padding);
             
-            // 计算三角形的三个顶点
+            // Calculate the three vertices of the triangle
             int x1 = centerX - diagramWidth / 2;
             int y1 = centerY + diagramHeight / 2;
             
@@ -84,95 +91,95 @@ public class Triangle {
             int x3 = centerX;
             int y3 = centerY - diagramHeight / 2;
             
-            // 创建并绘制三角形路径
+            // Create and draw triangle path
             Path2D path = new Path2D.Double();
             path.moveTo(x1, y1);
             path.lineTo(x2, y2);
             path.lineTo(x3, y3);
             path.closePath();
             
-            g2d.setColor(new Color(230, 230, 230)); // 浅灰色填充
+            g2d.setColor(new Color(230, 230, 230)); // Light gray fill
             g2d.fill(path);
-            g2d.setColor(new Color(180, 180, 180)); // 灰色边框
+            g2d.setColor(new Color(180, 180, 180)); // Gray border
             g2d.setStroke(new BasicStroke(2));
             g2d.draw(path);
             
-            // 绘制高度线
-            g2d.setColor(new Color(148, 0, 211)); // 紫色
+            // Draw height line
+            g2d.setColor(new Color(148, 0, 211)); // Purple color
             g2d.setStroke(new BasicStroke(2));
             Line2D heightLine = new Line2D.Double(x3, y3, x3, y1);
             g2d.draw(heightLine);
             
-            // 高度线箭头
+            // Height line arrows
             int arrowSize = 8;
-            // 上箭头
+            // Upper arrow
             Polygon upArrow = new Polygon();
             upArrow.addPoint(x3, y3);
             upArrow.addPoint(x3 - arrowSize, y3 + arrowSize * 2);
             upArrow.addPoint(x3 + arrowSize, y3 + arrowSize * 2);
             g2d.fill(upArrow);
             
-            // 下箭头
+            // Lower arrow
             Polygon downArrow = new Polygon();
             downArrow.addPoint(x3, y1);
             downArrow.addPoint(x3 - arrowSize, y1 - arrowSize * 2);
             downArrow.addPoint(x3 + arrowSize, y1 - arrowSize * 2);
             g2d.fill(downArrow);
             
-            // 绘制底边线
-            g2d.setColor(new Color(255, 165, 0)); // 橙色
+            // Draw base line
+            g2d.setColor(new Color(255, 165, 0)); // Orange color
             g2d.setStroke(new BasicStroke(2));
             Line2D baseLine = new Line2D.Double(x1, y1 + 15, x2, y2 + 15);
             g2d.draw(baseLine);
             
-            // 底边线箭头
-            // 左箭头
+            // Base line arrows
+            // Left arrow
             Polygon leftArrow = new Polygon();
             leftArrow.addPoint(x1, y1 + 15);
             leftArrow.addPoint(x1 + arrowSize * 2, y1 + 15 - arrowSize);
             leftArrow.addPoint(x1 + arrowSize * 2, y1 + 15 + arrowSize);
             g2d.fill(leftArrow);
             
-            // 右箭头
+            // Right arrow
             Polygon rightArrow = new Polygon();
             rightArrow.addPoint(x2, y2 + 15);
             rightArrow.addPoint(x2 - arrowSize * 2, y2 + 15 - arrowSize);
             rightArrow.addPoint(x2 - arrowSize * 2, y2 + 15 + arrowSize);
             g2d.fill(rightArrow);
             
-            // 绘制标签
+            // Draw labels
             g2d.setFont(labelFont);
             
-            // HEIGHT 标签
-            g2d.setColor(new Color(148, 0, 211)); // 紫色
+            // HEIGHT label
+            g2d.setColor(new Color(148, 0, 211)); // Purple color
             g2d.drawString("HEIGHT", x3 + 10, (y1 + y3) / 2);
             
-            // BASE 标签
-            g2d.setColor(new Color(255, 165, 0)); // 橙色
+            // BASE label
+            g2d.setColor(new Color(255, 165, 0)); // Orange color
             g2d.drawString("BASE", centerX - 20, y1 + 40);
             
-            // 绘制公式部分
+            // Draw formula section
             int formulaX = centerX + 150;
             int formulaY = centerY - 50;
             
-            // AREA 箭头和标签
-            g2d.setColor(new Color(150, 150, 150)); // 灰色
+            // AREA arrow and label
+            g2d.setColor(new Color(150, 150, 150)); // Gray color
             g2d.drawString("AREA", formulaX, formulaY);
             
-            // 绘制向下箭头
+            // Draw down arrow
             g2d.drawLine(formulaX + 30, formulaY + 10, formulaX + 30, formulaY + 30);
             g2d.drawLine(formulaX + 30, formulaY + 30, formulaX + 25, formulaY + 25);
             g2d.drawLine(formulaX + 30, formulaY + 30, formulaX + 35, formulaY + 25);
             
-            // 公式 A = 1/2 × b × h
+            // Formula A = 1/2 × b × h
             formulaY += 50;
             g2d.setFont(formulaFont);
-            g2d.setColor(new Color(150, 150, 150)); // 灰色
+            g2d.setColor(new Color(150, 150, 150)); // Gray color
             g2d.drawString("A", formulaX, formulaY);
             
             g2d.drawString("=", formulaX + 20, formulaY);
             
-            // 分数 1/2
+            // Fraction 1/2
             g2d.drawString("1", formulaX + 45, formulaY - 10);
             g2d.drawLine(formulaX + 40, formulaY, formulaX + 55, formulaY);
             g2d.drawString("2", formulaX + 45, formulaY + 20);
@@ -181,15 +188,15 @@ public class Triangle {
             g2d.drawString("×", formulaX + 65, formulaY);
             
             // b
-            g2d.setColor(new Color(255, 165, 0)); // 橙色底边
+            g2d.setColor(new Color(255, 165, 0)); // Orange color for base
             g2d.drawString("b", formulaX + 90, formulaY);
             
             // ×
-            g2d.setColor(new Color(150, 150, 150)); // 灰色
+            g2d.setColor(new Color(150, 150, 150)); // Gray color
             g2d.drawString("×", formulaX + 115, formulaY);
             
             // h
-            g2d.setColor(new Color(148, 0, 211)); // 紫色高度
+            g2d.setColor(new Color(148, 0, 211)); // Purple color for height
             g2d.drawString("h", formulaX + 140, formulaY);
             
 /*             // h向上箭头
@@ -212,16 +219,16 @@ public class Triangle {
             g2d.setColor(new Color(255, 165, 0)); // 橙色
             g2d.fill(bArrow); */
             
-            // 结果值
+            // Result values
             formulaY += 50;
             g2d.setFont(new Font("Comic Sans MS", Font.BOLD, 18));
             
-            g2d.setColor(new Color(150, 150, 150)); // 灰色
+            g2d.setColor(new Color(150, 150, 150)); // Gray color
             g2d.drawString("A", formulaX, formulaY);
             
             g2d.drawString("=", formulaX + 20, formulaY);
             
-            // 分数 1/2
+            // Fraction 1/2
             g2d.drawString("1", formulaX + 45, formulaY - 10);
             g2d.drawLine(formulaX + 40, formulaY, formulaX + 55, formulaY);
             g2d.drawString("2", formulaX + 45, formulaY + 20);
@@ -229,23 +236,23 @@ public class Triangle {
             // ×
             g2d.drawString("×", formulaX + 65, formulaY);
             
-            // base值
-            g2d.setColor(new Color(255, 165, 0)); // 橙色底边
+            // Base value
+            g2d.setColor(new Color(255, 165, 0)); // Orange color for base
             g2d.drawString(Integer.toString(base), formulaX + 85, formulaY);
             
             // ×
-            g2d.setColor(new Color(150, 150, 150)); // 灰色
+            g2d.setColor(new Color(150, 150, 150)); // Gray color
             g2d.drawString("×", formulaX + 100, formulaY);
             
-            // height值
-            g2d.setColor(new Color(148, 0, 211)); // 紫色高度
+            // Height value
+            g2d.setColor(new Color(148, 0, 211)); // Purple color for height
             g2d.drawString(Integer.toString(height), formulaX + 120, formulaY);
             
             // =
-            g2d.setColor(new Color(150, 150, 150)); // 灰色
+            g2d.setColor(new Color(150, 150, 150)); // Gray color
             g2d.drawString("=", formulaX + 140, formulaY);
             
-            // 面积结果
+            // Area result
             g2d.drawString(Double.toString(area), formulaX + 160, formulaY);
         }
     }

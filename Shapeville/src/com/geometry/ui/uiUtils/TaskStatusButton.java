@@ -9,57 +9,87 @@ import java.awt.RenderingHints;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+/**
+ * A specialized button component for displaying task status in the application.
+ * This button has a fixed appearance that doesn't change on hover or press,
+ * but still maintains the child-friendly aesthetic with rounded corners and
+ * can adapt to different color schemes for accessibility.
+ */
 public class TaskStatusButton extends JButton{
-    // 默认使用ColorScheme中定义的颜色
+    // Default colors from ColorScheme - these will update when color scheme changes
     private Color normal = ColorScheme.getColor(ColorScheme.BUTTON_NORMAL);
     private Color hover = ColorScheme.getColor(ColorScheme.BUTTON_HOVER);
     private Color pressed = ColorScheme.getColor(ColorScheme.BUTTON_PRESSED);
     
-    
+    /**
+     * Set the normal state color for this button.
+     * @param normalColor The color to display when button is in normal state
+     */
     public void setNormalColor(Color normalColor) {
         this.normalColor = normalColor;
         repaint();
     }
 
+    /**
+     * Set the hover state color for this button.
+     * @param hoverColor The color to display when button is being hovered over
+     */
     public void setHoverColor(Color hoverColor) {
         this.hoverColor = hoverColor;
         repaint();
     }
 
+    /**
+     * Set the pressed state color for this button.
+     * @param pressedColor The color to display when button is being pressed
+     */
     public void setPressedColor(Color pressedColor) {
         this.pressedColor = pressedColor;
         repaint();
     }
 
-    // 当前颜色状态
+    // Current colors for different button states
     private Color normalColor = normal;
     private Color hoverColor = hover;
     private Color pressedColor = pressed;
     
-    // 图标相关
+    // Icon-related fields
     private ImageIcon icon;
-    private int iconTextGap = 10;
+    private int iconTextGap = 10; // Space between icon and text
     
-    // 动画相关
-    private float scale = 1.0f;
+    // Animation-related fields
+    private float scale = 1.0f;   // Current scale factor for animation
     private boolean enableAnimation = true;
     
-    // 圆角半径
-    private int cornerRadius = 20;
+    // Visual properties
+    private int cornerRadius = 20; // Radius for rounded corners
     
+    /**
+     * Creates a TaskStatusButton with the specified text.
+     * @param text The text to display on the button
+     */
     public TaskStatusButton(String text) {
         super(text);
         initButton();
     }
     
+    /**
+     * Creates a TaskStatusButton with the specified text and icon.
+     * @param text The text to display on the button
+     * @param icon The icon to display on the button
+     */
     public TaskStatusButton(String text, ImageIcon icon) {
         super(text);
         this.icon = icon;
         initButton();
     }
     
+    /**
+     * Initialize button properties and appearance.
+     * Sets up basic visual properties for the task status display.
+     */
     private void initButton() {
-        // 基础设置
+        // Basic settings for appearance
         setOpaque(false);
         setContentAreaFilled(false);
         setBorderPainted(false);
@@ -68,15 +98,21 @@ public class TaskStatusButton extends JButton{
         setFont(new Font("Comic Sans MS", Font.BOLD, 16));
     }
     
+    /**
+     * Custom painting for the button component.
+     * Unlike KidButton, this implementation uses a fixed appearance regardless of state.
+     * 
+     * @param g The Graphics context to use for painting
+     */
     @Override
     protected void paintComponent(Graphics g) {
-        // 更新颜色以适应可能的颜色方案变化
+        // Update colors to adapt to possible color scheme changes
         updateColors();
         
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
-        // 应用缩放变换
+        // Apply scaling transformation for animation effect
         if (enableAnimation) {
             int width = getWidth();
             int height = getHeight();
@@ -88,31 +124,32 @@ public class TaskStatusButton extends JButton{
             g2.scale(scale, scale);
         }
         
-        // 绘制圆角背景
+        // Draw rounded rectangle background (always uses normalColor)
         g2.setColor(normalColor);
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), cornerRadius, cornerRadius);
         
-        // 绘制内阴影
+        // Draw inner shadow effect
         g2.setColor(new Color(0, 0, 0, 20));
         g2.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, cornerRadius, cornerRadius);
         
-        // 绘制图标
+        // Draw icon if present
         if (icon != null) {
             int iconX = (getWidth() - (icon.getIconWidth() + getTextWidth() + iconTextGap)) / 2;
             int iconY = (getHeight() - icon.getIconHeight()) / 2;
             icon.paintIcon(this, g2, iconX, iconY);
         }
         
-        // 绘制文本（考虑图标偏移）
+        // Draw text using parent implementation (with icon offset consideration)
         super.paintComponent(g2);
         g2.dispose();
     }
     
     /**
-     * 更新颜色以适应当前ColorScheme
+     * Update colors to match current ColorScheme.
+     * This ensures the button adapts to colorblind modes when they're activated.
      */
     private void updateColors() {
-        // 如果没有设置过自定义颜色，则使用ColorScheme中的默认值
+        // If custom colors haven't been set, use ColorScheme defaults
         if (normalColor.equals(normal)) {
             normalColor = ColorScheme.getColor(ColorScheme.BUTTON_NORMAL);
         }
@@ -123,16 +160,26 @@ public class TaskStatusButton extends JButton{
             pressedColor = ColorScheme.getColor(ColorScheme.BUTTON_PRESSED);
         }
         
-        // 更新文本颜色
+        // Update text color from ColorScheme
         setForeground(ColorScheme.getColor(ColorScheme.TEXT_PRIMARY));
     }
     
+    /**
+     * Calculate the width of the button text.
+     * @return The width of the text in pixels
+     */
     private int getTextWidth() {
         return getFontMetrics(getFont()).stringWidth(getText());
     }
     
+    /**
+     * Custom border painting (disabled).
+     * This button uses custom rounded corners instead of standard borders.
+     * 
+     * @param g The Graphics context
+     */
     @Override
     protected void paintBorder(Graphics g) {
-        // 无边框
+        // No border - using custom rounded rectangle instead
     }
 }

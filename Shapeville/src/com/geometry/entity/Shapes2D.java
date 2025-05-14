@@ -4,11 +4,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Entity class for 2D geometric shapes.
+ * Manages the collection of 2D shapes and their image resources.
+ */
 public class Shapes2D {
+    // Map to store the relationship between shape names and their image paths
     private static final Map<String, String> shapes = new HashMap<>();
+    // Base path for 2D shape image resources
     private static final String RESOURCES_PATH = "com/geometry/resources/task1_2D/";
 
-    // map shape name to the imgs in the resources folder
+    // Static initialization block to map shape names to their image paths
     static {
         shapes.put("circle", RESOURCES_PATH + "circle.png");
         shapes.put("heptagon", RESOURCES_PATH + "heptagon.png");
@@ -23,14 +29,18 @@ public class Shapes2D {
         shapes.put("triangle", RESOURCES_PATH + "triangle.png");
     }
 
-    // get the img path of the shape
+    /**
+     * Get the image path for a specific 2D shape
+     * @param shapeName Name of the 2D shape
+     * @return Path to the shape's image resource
+     */
     public static String getShapeImg(String shapeName) {
         return shapes.get(shapeName);
     }
     
     /**
-     * Get all available shape names
-     * @return set of all available shape names
+     * Get all available 2D shape names
+     * @return Set of all available 2D shape names
      */
     public static Set<String> getAvailableShapes() {
         return shapes.keySet();

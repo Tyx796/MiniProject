@@ -22,14 +22,14 @@ public class MainFrame extends JFrame {
     private int choiceKS1 = 0;
     private int choiceKS2 = 0;
     
-    // 当前得分
+    // Current score
     private int currentScore = 0;
     
-    // 新增任务完成情况
+    // Task completion status tracking
     private JPanel taskStatusPanel;
     private java.util.Map<String, Boolean> currentTaskStatus = new java.util.LinkedHashMap<>();
     
-    // 界面名称常量
+    // Interface name constants
     public static final String HOME_PANEL = "HOME";
     public static final String SHAPE_2D_PANEL = "SHAPE_2D";
     public static final String SHAPE_3D_PANEL = "SHAPE_3D";
@@ -43,37 +43,37 @@ public class MainFrame extends JFrame {
     public static final String KS2_SELECTION_PANEL = "KS2_SELECTION";
     public static final String FONT_NAME = "Comic Sans MS";
     
-    // 在MainFrame中保存BackgroundPanel引用
+    // Store BackgroundPanel reference in MainFrame
     private BackgroundPanel bgPanel;
     
-    // 颜色切换按钮
+    // Color mode toggle button
     private JButton colorModeButton;
     
     /**
-     * 构造函数
+     * Constructor
      */
     public MainFrame() {
         initComponents();
-        initColorModeButton(); // 初始化颜色模式按钮
+        initColorModeButton(); // Initialize color mode button
         setupLayout();
         setupListeners();
         
-        // 初始化背景图
+        // Initialize background image
         updateBackground(true);
         
-        // 设置窗口属性
+        // Set window properties
         setTitle("Shapeville");
         setSize(1000, 800);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // 居中显示
+        setLocationRelativeTo(null); // Center on screen
         setResizable(true);
     }
     
     /**
-     * 初始化组件
+     * Initialize components
      */
     private void initComponents() {
-        // 创建主要组件
+        // Create main components
         levelInfoLabel = createLevelInfoLabel();
         
         progressBar = new JProgressBar(0, 100);
@@ -87,19 +87,19 @@ public class MainFrame extends JFrame {
         endSessionButton = new KidButton("End");
         endSessionButton.setFont(new Font(FONT_NAME, Font.BOLD, 26));
         
-        // 创建颜色切换按钮
+        // Create color mode toggle button
         colorModeButton = new KidButton("Color Mode");
         colorModeButton.setFont(new Font(FONT_NAME, Font.BOLD, 16));
         colorModeButton.setToolTipText("Change color scheme for colorblind users");
         
-        // 创建卡片布局面板
+        // Create card layout panel
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
         
-        // 创建主页面
+        // Create home panel
         JPanel homePanel = createHomePanel();
         
-        // 创建其他功能面板
+        // Create other functional panels
         JPanel shapePanel = new Shape2DPanel(this);
         JPanel shape3DPanel = new Shape3DPanel(this);
         JPanel anglePanel = new AnglePanel(this);
@@ -122,7 +122,7 @@ public class MainFrame extends JFrame {
         ks1SelectionPanel.setOpaque(false);
         ks2SelectionPanel.setOpaque(false);
         
-        // 添加到卡片布局
+        // Add to card layout
         cardPanel.add(homePanel, HOME_PANEL);
         cardPanel.add(shapePanel, SHAPE_2D_PANEL);
         cardPanel.add(shape3DPanel, SHAPE_3D_PANEL);
@@ -136,7 +136,7 @@ public class MainFrame extends JFrame {
     }
     
     /**
-     * 创建关卡信息标签
+     * Create level information label
      */
     private JLabel createLevelInfoLabel() {
         String primaryColorHex = String.format("#%02x%02x%02x", 
@@ -152,7 +152,7 @@ public class MainFrame extends JFrame {
     }
     
     /**
-     * 更新关卡信息标签的颜色
+     * Update level information label colors
      */
     private void updateLevelInfoLabel() {
         String primaryColorHex = String.format("#%02x%02x%02x", 
@@ -167,7 +167,7 @@ public class MainFrame extends JFrame {
     }
     
     /**
-     * 创建主页面
+     * Create home panel
      */
     private JPanel createHomePanel() {
         JPanel panel = new JPanel(new BorderLayout(20, 20));
@@ -176,7 +176,7 @@ public class MainFrame extends JFrame {
         
         // Content section
         JPanel contentPanel = new JPanel(new BorderLayout(15, 15));
-        // 创建一个包含levelInfoLabel的面板，并添加上边距
+        // Create a panel containing levelInfoLabel with top margin
         JPanel levelInfoPanel = new JPanel(new BorderLayout());
         levelInfoPanel.setBorder(BorderFactory.createEmptyBorder(100, 0, 0, 0));
         levelInfoPanel.add(levelInfoLabel, BorderLayout.CENTER);
@@ -185,7 +185,7 @@ public class MainFrame extends JFrame {
         
         // Create menu buttons
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 100, 0)); // 使用FlowLayout并设置水平间距为100
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 100, 0)); // Use FlowLayout with horizontal gap of 100
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
         
         JButton ks1Button = createMenuButtonHome("Key Stage 1");
@@ -198,7 +198,7 @@ public class MainFrame extends JFrame {
         buttonPanel.add(ks2Button);
         buttonPanel.setOpaque(false);
 
-        // 添加颜色模式切换按钮
+        // Add color mode toggle button
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         topPanel.add(colorModeButton);
         topPanel.setOpaque(false);
@@ -213,16 +213,16 @@ public class MainFrame extends JFrame {
     }
     
     /**
-     * 创建KS1选择面板
+     * Create KS1 selection panel
      */
     private JPanel createKS1SelectionPanel() {
         JPanel panel = new JPanel(new BorderLayout(20, 20));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         
         
-        // 内容部分 - 按钮面板
-        JPanel centerPanel = new JPanel(new GridBagLayout()); // 使用GridBagLayout实现居中
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 0)); // 减小水平间距为30
+        // Content section - button panel
+        JPanel centerPanel = new JPanel(new GridBagLayout()); // Use GridBagLayout for centering
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 0)); // Reduce horizontal gap to 30
         
         JButton shapeButton = createMenuButtonKS("2D Shapes");
         shapeButton.setPreferredSize(new Dimension(200, 100));
@@ -241,13 +241,13 @@ public class MainFrame extends JFrame {
         buttonPanel.add(angleButton);
         buttonPanel.setOpaque(false);
         
-        // 将按钮面板添加到居中面板
+        // Add button panel to center panel
         centerPanel.add(buttonPanel);
         centerPanel.setOpaque(false);
         
         panel.add(centerPanel, BorderLayout.CENTER);
         
-        // 返回按钮
+        // Back button
         JButton btn = new KidButton("Home");
         btn.setFont(new Font(FONT_NAME, Font.BOLD, 26));
         btn.addActionListener(e -> showCard(HOME_PANEL));
@@ -260,7 +260,7 @@ public class MainFrame extends JFrame {
     }
     
     /**
-     * 创建KS2选择面板
+     * Create KS2 selection panel
      */
     private JPanel createKS2SelectionPanel() {
         JPanel panel = new JPanel(new BorderLayout(20, 20));
@@ -309,7 +309,7 @@ public class MainFrame extends JFrame {
     }
     
     /**
-     * 创建菜单按钮
+     * Create menu button for home screen
      */
     private JButton createMenuButtonHome(String title) {
         JButton button = new JButton(title);
@@ -321,13 +321,13 @@ public class MainFrame extends JFrame {
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(ColorScheme.getColor(ColorScheme.BORDER_PRIMARY), 5));
         
-        // 统一使用updateButtonColor方法设置按钮颜色和事件处理
+        // Use updateButtonColor method to set button colors and event handling
         updateButtonColor(button);
         return button;
     }
     
     /**
-     * 创建菜单按钮
+     * Create menu button for Key Stage screens
      */
     private JButton createMenuButtonKS(String title) {
         JButton button = new JButton(title);
@@ -339,16 +339,16 @@ public class MainFrame extends JFrame {
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(ColorScheme.getColor(ColorScheme.SECONDARY), 5));
         
-        // 统一使用updateButtonColor方法设置按钮颜色和事件处理
+        // Use updateButtonColor method to set button colors and event handling
         updateButtonColor(button);
         return button;
     }
     
     /**
-     * 设置布局
+     * Set up layout
      */
     private void setupLayout() {
-        // 设置底部状态栏
+        // Set up bottom status bar
         JPanel statusPanel = new JPanel(new BorderLayout(10, 0));
         statusPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
@@ -358,7 +358,7 @@ public class MainFrame extends JFrame {
         progressPanel.add(progressLabel, BorderLayout.WEST);
         progressPanel.add(progressBar, BorderLayout.CENTER);
         
-        // 新增任务完成情况面板
+        // Add task status panel
         taskStatusPanel = new JPanel();
         taskStatusPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
         updateTaskStatusPanel();
@@ -372,7 +372,7 @@ public class MainFrame extends JFrame {
         statusPanel.add(progressAndTaskPanel, BorderLayout.CENTER);
         statusPanel.add(endSessionButton, BorderLayout.EAST);
         
-        // 主布局
+        // Main layout
         setLayout(new BorderLayout());
         bgPanel = new BackgroundPanel();
         bgPanel.add(cardPanel, BorderLayout.CENTER);
@@ -380,28 +380,28 @@ public class MainFrame extends JFrame {
         add(bgPanel, BorderLayout.CENTER);
 
         
-        // 默认显示主页
+        // Show home panel by default
         cardLayout.show(cardPanel, HOME_PANEL);
     }
     
     /**
-     * 设置事件监听器
+     * Set up event listeners
      */
     private void setupListeners() {
         endSessionButton.addActionListener(e -> endSession());
         
-        // 设置颜色模式切换按钮的监听器
+        // Set up color mode toggle button listener
         colorModeButton.addActionListener(e -> cycleColorScheme());
     }
     
     /**
-     * 显示指定卡片
+     * Show specified card
      */
     public void showCard(String cardName) {
         cardLayout.show(cardPanel, cardName);
         if (bgPanel != null) {
             if (HOME_PANEL.equals(cardName)) {
-                // 根据当前颜色方案选择对应的背景图
+                // Choose background image based on current color scheme
                 updateBackground(true);
             } else {
                 bgPanel.setBackgroundImage("/com/geometry/ui/imgs/bg3.png");
@@ -428,13 +428,13 @@ public class MainFrame extends JFrame {
     }
     
     /**
-     * 更新背景图以匹配当前颜色方案
+     * Update background image to match current color scheme
      */
     private void updateBackground(boolean isHomePage) {
         if (bgPanel == null) return;
         
         if (isHomePage) {
-            // 根据当前颜色方案选择主页背景
+            // Choose home background based on current color scheme
             int scheme = ColorScheme.getCurrentScheme();
             switch (scheme) {
                 case ColorScheme.RED_GREEN_COLORBLIND:
@@ -449,38 +449,38 @@ public class MainFrame extends JFrame {
                     break;
             }
         } else {
-            // 非主页使用通用背景
+            // Use generic background for non-home pages
             bgPanel.setBackgroundImage("/com/geometry/ui/imgs/bg3.png");
         }
     }
     
     /**
-     * 循环切换颜色方案
+     * Cycle through color schemes
      */
     private void cycleColorScheme() {
         int currentScheme = ColorScheme.getCurrentScheme();
-        int nextScheme = (currentScheme + 1) % 3; // 循环在0, 1, 2之间切换
+        int nextScheme = (currentScheme + 1) % 3; // Cycle between 0, 1, 2
         
         ColorScheme.setColorScheme(nextScheme);
         
-        // 更新按钮显示的文本，显示当前方案名称
+        // Update button text to show current scheme name
         colorModeButton.setText(ColorScheme.getSchemeName(nextScheme));
         
-        // 更新背景图以匹配新的颜色方案
+        // Update background image to match new color scheme
         String currentCard = getCurrentVisibleCard();
         
-        // 更新背景图
+        // Update background image
         updateBackground(HOME_PANEL.equals(currentCard));
         
-        // 更新所有UI元素的颜色
+        // Update colors of all UI elements
         updateUIColors();
     }
     
     /**
-     * 获取当前可见的卡片名称
+     * Get the name of the currently visible card
      */
     private String getCurrentVisibleCard() {
-        // 查找可见的卡片组件
+        // Find visible card component
         Component visibleComp = null;
         for (Component c : cardPanel.getComponents()) {
             if (c.isVisible()) {
@@ -490,14 +490,14 @@ public class MainFrame extends JFrame {
         }
         
         if (visibleComp == null) {
-            return HOME_PANEL; // 默认返回主页
+            return HOME_PANEL; // Default to home panel
         }
 
-        // 查找当前可见卡片对应的名称
+        // Find name of current visible card
         for (Component comp : cardPanel.getComponents()) {
             if (comp == visibleComp) {
-                // 检查是否是主页面
-                if (comp == cardPanel.getComponent(0)) { // 假设主页是第一个添加的组件
+                // Check if it's the home panel
+                if (comp == cardPanel.getComponent(0)) { // Assuming home panel is the first added component
                     return HOME_PANEL;
                 } else {
                     return "OTHER";
@@ -505,37 +505,37 @@ public class MainFrame extends JFrame {
             }
         }
         
-        return HOME_PANEL; // 默认返回主页
+        return HOME_PANEL; // Default to home panel
     }
     
     /**
-     * 更新UI元素的颜色
+     * Update colors of UI elements
      */
     private void updateUIColors() {
-        // 更新主要按钮颜色
+        // Update main button colors
         updateButtonColors();
         
-        // 更新关卡信息标签颜色
+        // Update level info label colors
         updateLevelInfoLabel();
         
-        // 更新进度条颜色
+        // Update progress bar color
         progressBar.setForeground(ColorScheme.getColor(ColorScheme.SUCCESS));
         
-        // 更新任务状态面板
+        // Update task status panel
         updateTaskStatusPanel();
         
-        // 递归更新所有组件的颜色
+        // Recursively update all component colors
         refreshAllPanels();
         
-        // 重绘整个窗口
+        // Repaint entire window
         repaint();
     }
     
     /**
-     * 更新按钮颜色
+     * Update button colors
      */
     private void updateButtonColors() {
-        // 更新结束会话按钮
+        // Update end session button
         if (endSessionButton instanceof KidButton) {
             KidButton kidButton = (KidButton) endSessionButton;
             kidButton.setNormalColor(ColorScheme.getColor(ColorScheme.BUTTON_NORMAL));
@@ -543,7 +543,7 @@ public class MainFrame extends JFrame {
             kidButton.setPressedColor(ColorScheme.getColor(ColorScheme.BUTTON_PRESSED));
         }
         
-        // 更新颜色模式按钮
+        // Update color mode button
         if (colorModeButton instanceof KidButton) {
             KidButton kidButton = (KidButton) colorModeButton;
             kidButton.setNormalColor(ColorScheme.getColor(ColorScheme.BUTTON_NORMAL));
@@ -553,26 +553,26 @@ public class MainFrame extends JFrame {
     }
     
     /**
-     * 刷新所有面板，强制它们更新颜色
+     * Refresh all panels to force color updates
      */
     private void refreshAllPanels() {
-        // 递归更新所有组件的颜色
+        // Recursively update colors of all components
         updateAllComponentsRecursively(this);
     }
     
     /**
-     * 递归更新所有组件的颜色
-     * @param container 要处理的容器
+     * Recursively update colors of all components
+     * @param container Container to process
      */
     private void updateAllComponentsRecursively(Container container) {
-        // 处理当前容器中的所有组件
+        // Process all components in current container
         for (Component component : container.getComponents()) {
-            // 更新按钮颜色
+            // Update button colors
             if (component instanceof JButton) {
                 updateButtonColor((JButton)component);
             }
             
-            // 如果是容器，则递归处理其子组件
+            // If component is a container, recursively process its children
             if (component instanceof Container) {
                 updateAllComponentsRecursively((Container)component);
             }
@@ -580,22 +580,22 @@ public class MainFrame extends JFrame {
     }
     
     /**
-     * 更新按钮颜色
-     * @param button 要更新颜色的按钮
+     * Update button color
+     * @param button Button to update colors for
      */
     private void updateButtonColor(JButton button) {
         if (button instanceof KidButton) {
-            // KidButton已有自己的颜色更新逻辑
+            // KidButton has its own color update logic
             KidButton kidButton = (KidButton) button;
             kidButton.setNormalColor(ColorScheme.getColor(ColorScheme.BUTTON_NORMAL));
             kidButton.setHoverColor(ColorScheme.getColor(ColorScheme.BUTTON_HOVER));
             kidButton.setPressedColor(ColorScheme.getColor(ColorScheme.BUTTON_PRESSED));
         } else {
-            // 检查按钮是否为主菜单按钮
+            // Check if button is a main menu button
             boolean isHomeButton = button.getText().equals("Key Stage 1") || 
                                    button.getText().equals("Key Stage 2");
             
-            // 检查按钮是否为KS菜单按钮
+            // Check if button is a KS menu button
             boolean isKSButton = button.getText().equals("2D Shapes") ||
                                  button.getText().equals("3D Shapes") ||
                                  button.getText().equals("Angles") ||
@@ -603,16 +603,16 @@ public class MainFrame extends JFrame {
                                  button.getText().equals("Circle") ||
                                  button.getText().contains("Bonus");
             
-            // 更新按钮外观
+            // Update button appearance
             if (isHomeButton) {
-                // 主页按钮样式
+                // Home button style
                 button.setForeground(ColorScheme.getColor(ColorScheme.PRIMARY));
                 button.setBorder(BorderFactory.createLineBorder(ColorScheme.getColor(ColorScheme.BORDER_PRIMARY), 5));
                 
-                // 移除旧的鼠标监听器
+                // Remove old mouse listeners
                 removeCustomMouseListeners(button);
                 
-                // 添加新的鼠标监听器
+                // Add new mouse listener
                 button.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseEntered(MouseEvent e) {
@@ -627,14 +627,14 @@ public class MainFrame extends JFrame {
                     }
                 });
             } else if (isKSButton) {
-                // KS按钮样式
+                // KS button style
                 button.setForeground(ColorScheme.getColor(ColorScheme.SECONDARY));
                 button.setBorder(BorderFactory.createLineBorder(ColorScheme.getColor(ColorScheme.SECONDARY), 5));
                 
-                // 移除旧的鼠标监听器
+                // Remove old mouse listeners
                 removeCustomMouseListeners(button);
                 
-                // 添加新的鼠标监听器
+                // Add new mouse listener
                 button.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseEntered(MouseEvent e) {
@@ -649,21 +649,21 @@ public class MainFrame extends JFrame {
                     }
                 });
             } else {
-                // 普通JButton
+                // Regular JButton
                 button.setForeground(ColorScheme.getColor(ColorScheme.TEXT_PRIMARY));
                 button.setBackground(ColorScheme.getColor(ColorScheme.BUTTON_NORMAL));
                 
-                // 如果按钮有边框且边框是LineBorder类型，则更新边框颜色
+                // If button has a border and it's a LineBorder, update border color
                 if (button.getBorder() instanceof javax.swing.border.LineBorder) {
                     Color borderColor = ColorScheme.getColor(ColorScheme.BORDER_PRIMARY);
                     int thickness = ((javax.swing.border.LineBorder)button.getBorder()).getThickness();
                     button.setBorder(BorderFactory.createLineBorder(borderColor, thickness));
                 }
                 
-                // 移除旧的鼠标监听器
+                // Remove old mouse listeners
                 removeCustomMouseListeners(button);
                 
-                // 添加新的鼠标监听器
+                // Add new mouse listener
                 button.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseEntered(MouseEvent e) {
@@ -688,14 +688,14 @@ public class MainFrame extends JFrame {
             }
         }
         
-        // 强制重绘按钮
+        // Force button repaint
         button.revalidate();
         button.repaint();
     }
     
     /**
-     * 移除所有非系统的鼠标监听器
-     * @param component 要处理的组件
+     * Remove all non-system mouse listeners
+     * @param component Component to process
      */
     private void removeCustomMouseListeners(Component component) {
         MouseListener[] listeners = component.getMouseListeners();
@@ -710,25 +710,25 @@ public class MainFrame extends JFrame {
     }
     
     /**
-     * 结束会话
+     * End the session
      */
     private void endSession() {
-        // 创建对话框
+        // Create dialog
         JDialog scoreDialog = new JDialog(this, "Session Ended", true);
         scoreDialog.setLayout(new BorderLayout(10, 10));
         scoreDialog.setSize(400, 220);
         scoreDialog.setLocationRelativeTo(this);
         
-        // 创建消息面板
+        // Create message panel
         JPanel messagePanel = new JPanel(new BorderLayout(10, 10));
         messagePanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         
-        // 添加得分信息
+        // Add score information
         JLabel messageLabel = new JLabel("<html><div style='text-align: center;'>You scored " + currentScore + " points.<br>Goodbye!</div></html>", SwingConstants.CENTER);
         messageLabel.setFont(new Font(FONT_NAME, Font.BOLD, 24));
         messageLabel.setForeground(ColorScheme.getColor(ColorScheme.SUCCESS));
         
-        // 确认按钮
+        // Confirm button
         KidButton okButton = new KidButton("OK");
         okButton.setFont(new Font(FONT_NAME, Font.BOLD, 20));
         okButton.addActionListener(e -> {
@@ -736,10 +736,10 @@ public class MainFrame extends JFrame {
             System.exit(0);
         });
         
-        // 添加键盘回车监听
+        // Add keyboard enter listener
         scoreDialog.getRootPane().setDefaultButton(okButton);
         
-        // 组装面板
+        // Assemble panel
         messagePanel.add(messageLabel, BorderLayout.CENTER);
         messagePanel.add(okButton, BorderLayout.SOUTH);
         
@@ -749,24 +749,26 @@ public class MainFrame extends JFrame {
     }
     
     /**
-     * 更新分数
+     * Update the score
      */
     public void updateScore() {
-        currentScore = User.getScores(); // 直接设置分数而不是累加
+        currentScore = User.getScores(); // Directly set the score instead of accumulating
         updateProgress();
     }
     
     /**
-     * 更新进度条
+     * Update the progress bar
      */
     private void updateProgress() {
-        // 这里简单假设100分为满分
+        // Simply assume 100 points is the maximum score
         int progress = Math.min(currentScore, 100);
         progressBar.setValue(progress);
         progressBar.setString("Current Score: " + progress);
     }
     
-    // 新增：更新任务完成情况面板
+    /**
+     * Update the task status panel
+     */
     private void updateTaskStatusPanel() {
         taskStatusPanel.removeAll();
         if (!currentTaskStatus.isEmpty()) {
@@ -775,7 +777,7 @@ public class MainFrame extends JFrame {
                 boolean done = entry.getValue();
                 TaskStatusButton taskButton = new TaskStatusButton(taskName);
                 
-                // 设置按钮颜色
+                // Set button color
                 if (done) {
                     taskButton.setNormalColor(ColorScheme.getColor(ColorScheme.SUCCESS));
                 } else {
@@ -789,23 +791,30 @@ public class MainFrame extends JFrame {
         taskStatusPanel.repaint();
     }
     
-    // 新增：只需传入任务名和完成状态
+    /**
+     * Update task status with task name and completion status
+     * @param taskName The name of the task
+     * @param done Whether the task is completed
+     */
     public void updateTaskStatus(String taskName, boolean done) {
         this.currentTaskStatus.put(taskName, done);
         updateTaskStatusPanel();
     }
     
-    // 获取当前颜色方案
+    /**
+     * Get the current color scheme
+     * @return The current color scheme index
+     */
     public int getCurrentColorScheme() {
         return ColorScheme.getCurrentScheme();
     }
     
     /**
-     * 主方法
+     * Main method
      */
     public static void main(String[] args) {
         try {
-            // 设置本地系统外观
+            // Set system look and feel
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
@@ -817,14 +826,20 @@ public class MainFrame extends JFrame {
         });
     }
     
-    // 1. 新增内部类BackgroundPanel
+    /**
+     * Custom panel that displays a background image
+     */
     class BackgroundPanel extends JPanel {
         private Image bg;
         private String currentBgPath;
         public BackgroundPanel() {
             setLayout(new BorderLayout());
-            // 不直接设置背景图，由updateBackground方法统一处理
+            // Don't set background image directly, let updateBackground method handle it
         }
+        /**
+         * Set the background image
+         * @param path Path to the image resource
+         */
         public void setBackgroundImage(String path) {
             if (path != null && path.equals(currentBgPath)) return;
             try {
@@ -847,13 +862,13 @@ public class MainFrame extends JFrame {
     }
     
     /**
-     * 初始化颜色模式按钮
+     * Initialize the color mode button
      */
     private void initColorModeButton() {
-        // 更新按钮显示当前颜色模式名称
+        // Update button to display current color mode name
         colorModeButton.setText(ColorScheme.getSchemeName(ColorScheme.getCurrentScheme()));
         
-        // 确保按钮使用正确的颜色
+        // Ensure button uses correct colors
         if (colorModeButton instanceof KidButton) {
             KidButton kidButton = (KidButton) colorModeButton;
             kidButton.setNormalColor(ColorScheme.getColor(ColorScheme.BUTTON_NORMAL));

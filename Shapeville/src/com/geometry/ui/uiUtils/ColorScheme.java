@@ -5,40 +5,42 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Color scheme manager for the application
+ * Color scheme manager for the application.
  * Supports normal vision, red-green colorblind, and blue-yellow colorblind modes
+ * to ensure accessibility for users with different visual abilities.
+ * This class provides centralized color definitions that are used throughout the application UI.
  */
 public class ColorScheme {
-    // Scheme types
+    // Scheme type constants - used to identify different vision modes
     public static final int NORMAL_VISION = 0;
     public static final int RED_GREEN_COLORBLIND = 1;
     public static final int BLUE_YELLOW_COLORBLIND = 2;
     
-    // Named colors for use throughout the application
-    public static final String PRIMARY = "primary";
-    public static final String SECONDARY = "secondary";
-    public static final String SUCCESS = "success";
-    public static final String WARNING = "warning";
-    public static final String DANGER = "danger";
-    public static final String INFO = "info";
-    public static final String BACKGROUND = "background";
-    public static final String BUTTON_NORMAL = "buttonNormal";
-    public static final String BUTTON_HOVER = "buttonHover";
-    public static final String BUTTON_PRESSED = "buttonPressed";
-    public static final String TEXT_PRIMARY = "textPrimary";
-    public static final String TEXT_SECONDARY = "textSecondary";
-    public static final String BORDER_PRIMARY = "borderPrimary";
+    // Named color constants - semantic color identifiers for consistent UI theming
+    public static final String PRIMARY = "primary";           // Main application color
+    public static final String SECONDARY = "secondary";       // Supporting color 
+    public static final String SUCCESS = "success";           // Positive feedback color
+    public static final String WARNING = "warning";           // Alert/caution color
+    public static final String DANGER = "danger";             // Error/negative feedback color
+    public static final String INFO = "info";                 // Informational color
+    public static final String BACKGROUND = "background";     // Main background color
+    public static final String BUTTON_NORMAL = "buttonNormal"; // Default button state
+    public static final String BUTTON_HOVER = "buttonHover";   // Button hover state
+    public static final String BUTTON_PRESSED = "buttonPressed"; // Button pressed state
+    public static final String TEXT_PRIMARY = "textPrimary";    // Main text color
+    public static final String TEXT_SECONDARY = "textSecondary"; // Secondary text color
+    public static final String BORDER_PRIMARY = "borderPrimary"; // Main border color
     
-    // The current active color scheme
+    // Tracks the currently active color scheme
     private static int currentScheme = NORMAL_VISION;
     
-    // Color maps for each scheme
+    // Color maps for each vision mode - store actual Color objects keyed by semantic names
     private static final Map<String, Color> normalColors = new HashMap<>();
     private static final Map<String, Color> redGreenColorblindColors = new HashMap<>();
     private static final Map<String, Color> blueYellowColorblindColors = new HashMap<>();
     
     static {
-        // Initialize normal vision colors
+        // Initialize normal vision colors - standard color palette for users with typical color vision
         normalColors.put(PRIMARY, new Color(52, 119, 219));       // Blue
         normalColors.put(SECONDARY, new Color(81, 222, 232));     // Cyan
         normalColors.put(SUCCESS, new Color(0, 150, 0));          // Green
@@ -53,7 +55,7 @@ public class ColorScheme {
         normalColors.put(TEXT_SECONDARY, Color.BLACK);            // Black text
         normalColors.put(BORDER_PRIMARY, new Color(70, 130, 180));// SteelBlue border
         
-        // Initialize red-green colorblind friendly colors
+        // Initialize red-green colorblind friendly colors - avoids relying on red/green distinction
         redGreenColorblindColors.put(PRIMARY, new Color(0, 105, 180));      // Blue
         redGreenColorblindColors.put(SECONDARY, new Color(0, 170, 230));    // Lighter blue
         redGreenColorblindColors.put(SUCCESS, new Color(0, 114, 178));      // Blue instead of green
@@ -68,7 +70,7 @@ public class ColorScheme {
         redGreenColorblindColors.put(TEXT_SECONDARY, Color.BLACK);             // Black text
         redGreenColorblindColors.put(BORDER_PRIMARY, new Color(0, 114, 178));  // Blue border
         
-        // Initialize blue-yellow colorblind friendly colors
+        // Initialize blue-yellow colorblind friendly colors - avoids blue/yellow confusion
         blueYellowColorblindColors.put(PRIMARY, new Color(148, 103, 189));     // Purple
         blueYellowColorblindColors.put(SECONDARY, new Color(188, 128, 189));   // Lighter purple
         blueYellowColorblindColors.put(SUCCESS, new Color(23, 190, 187));      // Teal instead of green
@@ -85,9 +87,11 @@ public class ColorScheme {
     }
     
     /**
-     * Get color from current scheme
-     * @param colorName The name of the color to retrieve
-     * @return The Color object
+     * Get color from current scheme by its semantic name.
+     * This method returns the appropriate color based on the active color scheme.
+     * 
+     * @param colorName The semantic name of the color to retrieve (e.g., PRIMARY, SUCCESS)
+     * @return The Color object corresponding to the name in the current scheme
      */
     public static Color getColor(String colorName) {
         Map<String, Color> currentColorMap = getCurrentColorMap();
@@ -96,8 +100,10 @@ public class ColorScheme {
     }
     
     /**
-     * Get the current color map based on active scheme
-     * @return Map of color names to Color objects
+     * Get the current color map based on active scheme.
+     * This is a helper method that selects the appropriate color map.
+     * 
+     * @return Map of color names to Color objects for the active scheme
      */
     private static Map<String, Color> getCurrentColorMap() {
         switch (currentScheme) {
@@ -112,8 +118,10 @@ public class ColorScheme {
     }
     
     /**
-     * Set the active color scheme
-     * @param schemeType The scheme type to activate
+     * Set the active color scheme.
+     * Changes the application's color scheme to accommodate different visual needs.
+     * 
+     * @param schemeType The scheme type to activate (NORMAL_VISION, RED_GREEN_COLORBLIND, or BLUE_YELLOW_COLORBLIND)
      */
     public static void setColorScheme(int schemeType) {
         if (schemeType >= NORMAL_VISION && schemeType <= BLUE_YELLOW_COLORBLIND) {
@@ -122,17 +130,20 @@ public class ColorScheme {
     }
     
     /**
-     * Get the current scheme type
-     * @return The active scheme type
+     * Get the current scheme type.
+     * 
+     * @return The active scheme type (NORMAL_VISION, RED_GREEN_COLORBLIND, or BLUE_YELLOW_COLORBLIND)
      */
     public static int getCurrentScheme() {
         return currentScheme;
     }
     
     /**
-     * Get scheme name from type
-     * @param schemeType The scheme type
-     * @return The scheme name
+     * Get scheme name from type.
+     * Converts the numeric scheme type to a human-readable string.
+     * 
+     * @param schemeType The scheme type (NORMAL_VISION, RED_GREEN_COLORBLIND, or BLUE_YELLOW_COLORBLIND)
+     * @return The scheme name as a descriptive string
      */
     public static String getSchemeName(int schemeType) {
         switch (schemeType) {

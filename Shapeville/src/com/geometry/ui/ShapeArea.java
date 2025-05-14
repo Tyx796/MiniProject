@@ -17,13 +17,15 @@ import com.geometry.ui.uiUtils.KidButton;
 /**
  * Shape Area Calculation interface
  * Task 3: Shape Area Calculation
+ * This panel provides an interactive interface for students to practice
+ * calculating areas of various 2D shapes.
  */
 public class ShapeArea extends JPanel {
     private MainFrame mainFrame;
     private KidButton homeButton;
     private static final String FONT_NAME = "Comic Sans MS";
     
-    // Task 3相关组件
+    // Task 3 related components
     private Task3 task3Service;
     private JPanel task3ControlPanel;
     private JPanel task3DisplayPanel;
@@ -36,13 +38,13 @@ public class ShapeArea extends JPanel {
     private KidButton submitButton;
     
     /**
-     * 构造函数
-     * @param mainFrame 主窗口引用
+     * Constructor
+     * @param mainFrame Reference to the main window
      */
     public ShapeArea(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         
-        // 初始化业务逻辑
+        // Initialize business logic
         task3Service = new Task3();
         
         initComponents();
@@ -50,7 +52,7 @@ public class ShapeArea extends JPanel {
     }
     
     /**
-     * 初始化组件
+     * Initialize components
      */
     private void initComponents() {
         // Create return to home button
@@ -69,7 +71,7 @@ public class ShapeArea extends JPanel {
     }
     
     /**
-     * 设置布局
+     * Set up the layout
      */
     private void setupLayout() {
         setBorder(BorderFactory.createCompoundBorder(
@@ -105,7 +107,8 @@ public class ShapeArea extends JPanel {
     }
     
     /**
-     * 创建主面板 - 图形面积计算
+     * Create the main panel - Shape area calculation
+     * @return The configured main panel
      */
     private JPanel createMainPanel() {
         JPanel panel = new JPanel(new BorderLayout(10, 20));
@@ -131,7 +134,7 @@ public class ShapeArea extends JPanel {
             shapeButton.setPreferredSize(new Dimension(180, 50));
             shapeButton.addActionListener(e -> {
                 startTask3WithShape(shape);
-                // 点击形状按钮后，让答案输入框自动获取焦点
+                // Automatically focus answer input field after clicking shape button
                 answerField.requestFocusInWindow();
             });
             shapeSelectionPanel.add(shapeButton);
@@ -180,7 +183,7 @@ public class ShapeArea extends JPanel {
         submitButton.setEnabled(false);
         answerPanel.add(submitButton);
         
-        // 添加回车键监听器，使回车键也能触发答案检查
+        // Add Enter key listener to also trigger answer checking
         answerField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -241,11 +244,11 @@ public class ShapeArea extends JPanel {
         JPanel horizontalPanel = new JPanel(new BorderLayout());
         horizontalPanel.setOpaque(false);
         
-        // 左侧控制面板，固定宽度300
+        // Left control panel, fixed width 300
         task3ControlPanel.setPreferredSize(new Dimension(300, task3ControlPanel.getPreferredSize().height));
         horizontalPanel.add(task3ControlPanel, BorderLayout.WEST);
         
-        // 右侧显示面板
+        // Right display panel
         horizontalPanel.add(task3DisplayPanel, BorderLayout.CENTER);
         
         centerPanel.add(horizontalPanel, BorderLayout.CENTER);
@@ -256,35 +259,35 @@ public class ShapeArea extends JPanel {
     }
     
     /**
-     * 使用选定的图形启动任务3
-     * @param shape 图形类型
+     * Start Task3 with the selected shape
+     * @param shape Shape type
      */
     private void startTask3WithShape(String shape) {
-        // 重置之前的计时器（如果存在）
+        // Reset previous timer (if exists)
         if (task3Timer != null && task3Timer.isRunning()) {
             task3Timer.stop();
         }
         
-        // 清空显示面板
+        // Clear display panel
         task3DisplayPanel.removeAll();
         
-        // 通过Task3服务选择图形并生成参数
+        // Select shape and generate parameters through Task3 service
         task3Service.selectShape(shape);
         
-        // 更新参数显示
+        // Update parameter display
         updateTask3ParamsDisplay();
         
-        // 清空答案字段
+        // Clear answer field
         answerField.setText("");
         answerField.setEditable(true);
         submitButton.setEnabled(true);
         
-        // 更新状态和尝试次数
+        // Update status and attempts
         statusLabel.setText("Please calculate the area");
         attemptsLabel.setText("Tries: " + task3Service.getRemainingAttempts());
         
-        // 启动3分钟计时器
-        secondsRemaining = 180; // 3分钟 = 180秒
+        // Start 3-minute timer
+        secondsRemaining = 180; // 3 minutes = 180 seconds
         updateTimerDisplay();
         
         task3Timer = new Timer(1000, new ActionListener() {
@@ -294,7 +297,7 @@ public class ShapeArea extends JPanel {
                 updateTimerDisplay();
                 
                 if (secondsRemaining <= 0) {
-                    // 时间到，停止计时器
+                    // Time's up, stop timer
                     task3Timer.stop();
                     timeUpForTask3();
                 }
@@ -302,20 +305,20 @@ public class ShapeArea extends JPanel {
         });
         task3Timer.start();
         
-        // 刷新UI
+        // Refresh UI
         task3DisplayPanel.revalidate();
         task3DisplayPanel.repaint();
     }
     
     /**
-     * 更新任务3的参数显示
+     * Update Task3 parameter display
      */
     private void updateTask3ParamsDisplay() {
-        // 获取参数名称和值
+        // Get parameter names and values
         String[] paramNames = task3Service.getParameterNames();
         int[] paramValues = task3Service.getParameters();
         
-        // 清空参数面板并重新创建
+        // Clear parameter panel and recreate
         Component[] components = task3ControlPanel.getComponents();
         if (components.length > 0 && components[0] instanceof JPanel) {
             JPanel paramsPanel = (JPanel) components[0];
@@ -326,7 +329,7 @@ public class ShapeArea extends JPanel {
             paramTitleLabel.setForeground(Color.WHITE);
             paramsPanel.add(paramTitleLabel);
             
-            // 添加每个参数
+            // Add each parameter
             for (int i = 0; i < paramNames.length; i++) {
                 JLabel paramLabel = new JLabel(paramNames[i] + ": " + paramValues[i]);
                 paramLabel.setFont(new Font(FONT_NAME, Font.BOLD, 18));
@@ -341,7 +344,7 @@ public class ShapeArea extends JPanel {
     }
     
     /**
-     * 检查任务3的答案
+     * Check Task3 answer
      */
     private void checkTask3Answer() {
         try {
@@ -368,14 +371,14 @@ public class ShapeArea extends JPanel {
     }
     
     /**
-     * 更新计时器显示
+     * Update timer display
      */
     private void updateTimerDisplay() {
         int minutes = secondsRemaining / 60;
         int seconds = secondsRemaining % 60;
         timerLabel.setText(String.format("Time: %d:%02d", minutes, seconds));
         
-        // 当时间不足30秒时，显示红色
+        // Show in red when less than 30 seconds remaining
         if (secondsRemaining <= 30) {
             timerLabel.setForeground(Color.WHITE);    
         } else {
@@ -384,7 +387,7 @@ public class ShapeArea extends JPanel {
     }
     
     /**
-     * 任务3答案正确时的处理
+     * Handle correct answer for Task3
      */
     private void answerCorrectForTask3() {
         if (task3Timer != null && task3Timer.isRunning()) {
@@ -392,40 +395,40 @@ public class ShapeArea extends JPanel {
         }
         mainFrame.updateScore();
         
-        // 计算得分
+        // Calculate points
         int points = User.calScores("Basic", 3 - task3Service.getRemainingAttempts() + 1);
             
-        // 创建得分提示弹窗
+        // Create score dialog
         JDialog scoreDialog = new JDialog((Frame)SwingUtilities.getWindowAncestor(this), "Score", true);
         scoreDialog.setLayout(new BorderLayout(10, 10));
         scoreDialog.setSize(400, 220);
         scoreDialog.setLocationRelativeTo(this);
         
-        // 创建得分面板
+        // Create score panel
         JPanel scorePanel = new JPanel(new BorderLayout(10, 10));
         scorePanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         
-        // 添加得分信息
+        // Add score information
         JLabel scoreLabel = new JLabel("Score + " + points + " !", SwingConstants.CENTER);
         scoreLabel.setFont(new Font(FONT_NAME, Font.BOLD, 28));
         scoreLabel.setForeground(new Color(0, 150, 0));
         
-        // 确认按钮
+        // Confirm button
         KidButton okButton = new KidButton("OK");
         okButton.setFont(new Font(FONT_NAME, Font.BOLD, 20));
         okButton.addActionListener(e -> scoreDialog.dispose());
         
-        // 添加键盘回车监听
+        // Add keyboard enter listener
         scoreDialog.getRootPane().setDefaultButton(okButton);
         
-        // 组装面板
+        // Assemble panel
         scorePanel.add(scoreLabel, BorderLayout.CENTER);
         scorePanel.add(okButton, BorderLayout.SOUTH);
         
         scoreDialog.add(scorePanel);
         
         
-        // 显示得分弹窗
+        // Show score dialog
         scoreDialog.setVisible(true);
 
         showTask3Result();
@@ -436,51 +439,54 @@ public class ShapeArea extends JPanel {
         }
     }
 
+    /**
+     * Display task completion dialog and update UI state
+     */
     public void completeTask() {
-        // 清除组件
+        // Clear components
         answerField.setEditable(false);
         submitButton.setEnabled(false);
         
-        // 创建完成任务弹窗
+        // Create completion dialog
         JDialog completionDialog = new JDialog((Frame)SwingUtilities.getWindowAncestor(this), "Completion", true);
         completionDialog.setLayout(new BorderLayout(10, 10));
         completionDialog.setSize(400, 220);
         completionDialog.setLocationRelativeTo(this);
         
-        // 创建完成面板
+        // Create completion panel
         JPanel completionPanel = new JPanel(new BorderLayout(10, 10));
         completionPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         
-        // 添加完成信息
+        // Add completion information
         JLabel scoreLabel = new JLabel("You got all areas!", SwingConstants.CENTER);
         scoreLabel.setFont(new Font(FONT_NAME, Font.BOLD, 28));
         scoreLabel.setForeground(new Color(0, 150, 0));
         
-        // 确认按钮
+        // Confirm button
         KidButton okButton = new KidButton("OK");
         okButton.setFont(new Font(FONT_NAME, Font.BOLD, 20));
         okButton.addActionListener(e -> completionDialog.dispose());
         
-        // 添加键盘回车监听
+        // Add keyboard enter listener
         completionDialog.getRootPane().setDefaultButton(okButton);
         
-        // 组装面板
+        // Assemble panel
         completionPanel.add(scoreLabel, BorderLayout.CENTER);
         completionPanel.add(okButton, BorderLayout.SOUTH);
         
         completionDialog.add(completionPanel);
         
-        // 显示完成弹窗
+        // Show completion dialog
         completionDialog.setVisible(true);
         
-        // 清理界面
+        // Clean up the interface
         task3DisplayPanel.removeAll();
         revalidate();
         repaint();
     }
     
     /**
-     * 任务3超时时的处理
+     * Handle timeout for Task3
      */
     private void timeUpForTask3() {
         statusLabel.setText("Time's up!");
@@ -493,7 +499,7 @@ public class ShapeArea extends JPanel {
     }
     
     /**
-     * 任务3尝试次数用完时的处理
+     * Handle when no attempts remain for Task3
      */
     private void noAttemptsLeftForTask3() {
         if (task3Timer != null && task3Timer.isRunning()) {
@@ -510,7 +516,7 @@ public class ShapeArea extends JPanel {
     }
     
     /**
-     * 显示任务3的结果（带有面积公式和计算的图形）
+     * Show Task3 result (with shape drawn and area formula)
      */
     private void showTask3Result() {
         task3DisplayPanel.removeAll();

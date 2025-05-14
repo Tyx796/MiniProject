@@ -5,42 +5,55 @@ import javax.swing.Timer;
 import java.util.*;
 
 /**
- * Bonus1任务的业务逻辑类
+ * Business logic for Bonus1 - Compound Area Calculation Challenge.
+ * This class manages a timed challenge where students solve complex area problems
+ * involving compound shapes. Features include time limits, multiple attempts,
+ * unit conversion awareness, and progressive scoring.
  */
 public class Bonus1 {
-    private List<Integer> remainingQuestions;  // 剩余未完成的题目
-    private CompoundArea currentQuestion;      // 当前题目
-    private int attempts;                      // 当前题目的尝试次数
-    private Timer timer;                       // 计时器
-    private int timeRemaining;                 // 剩余时间（秒）
-    private static final int TIME_LIMIT = 300; // 时间限制（5分钟）
-    private static final int MAX_ATTEMPTS = 3; // 最大尝试次数
+    // List of remaining question numbers to be solved
+    private List<Integer> remainingQuestions;
+    // Current compound area question being solved
+    private CompoundArea currentQuestion;
+    // Number of attempts made for current question
+    private int attempts;
+    // Timer for tracking time limit per question
+    private Timer timer;
+    // Remaining time in seconds
+    private int timeRemaining;
+    // Time limit per question (5 minutes = 300 seconds)
+    private static final int TIME_LIMIT = 300;
+    // Maximum attempts allowed per question
+    private static final int MAX_ATTEMPTS = 3;
 
     /**
-     * 构造函数
+     * Constructor for Bonus1 task.
+     * Initializes the question pool with randomized order.
      */
     public Bonus1() {
         initializeQuestions();
     }
 
     /**
-     * 初始化题目列表
+     * Initialize the question pool with numbers 1-9.
+     * Shuffles the questions to create a random sequence.
      */
     private void initializeQuestions() {
         remainingQuestions = new ArrayList<>();
         for (int i = 1; i <= 9; i++) {
             remainingQuestions.add(i);
         }
-        Collections.shuffle(remainingQuestions); // 随机打乱题目顺序
+        Collections.shuffle(remainingQuestions); // Randomize question order
     }
 
     /**
-     * 设置当前题目
-     * @param questionNumber 题目编号（1-9）
+     * Set a specific question as the current challenge.
+     * @param questionNumber Question number (1-9)
+     * @throws IllegalArgumentException if question number is out of valid range
      */
     public void setCurrentQuestion(int questionNumber) {
         if (questionNumber < 1 || questionNumber > 9) {
-            throw new IllegalArgumentException("题目编号必须在1-9之间");
+            throw new IllegalArgumentException("Question number must be between 1 and 9");
         }
         currentQuestion = new CompoundArea(questionNumber);
         attempts = 0;
@@ -48,8 +61,9 @@ public class Bonus1 {
     }
 
     /**
-     * 开始新的题目
-     * @return 如果还有未完成的题目返回true，否则返回false
+     * Start a new question from the remaining pool.
+     * Initializes the question and starts the timer.
+     * @return true if there are questions remaining, false if all questions are completed
      */
     public boolean startNewQuestion() {
         if (remainingQuestions.isEmpty()) {
@@ -64,15 +78,18 @@ public class Bonus1 {
     }
 
     /**
-     * 检查用户答案
-     * @param userAnswer 用户输入的答案
-     * @param unit 用户输入的单位（"cm2"或"m2"）
-     * @return 返回检查结果（正确/错误/已达到最大尝试次数）
+     * Check the user's answer for correctness.
+     * Validates both the numerical value and the unit.
+     * Awards points based on remaining attempts if correct.
+     * 
+     * @param userAnswer User's numerical answer
+     * @param unit User's unit choice ("cm2" or "m2")
+     * @return Result enum indicating CORRECT, INCORRECT, or MAX_ATTEMPTS_REACHED
      */
     public Result checkAnswer(double userAnswer, String unit) {
         attempts++;
         
-        // 检查单位是否正确
+        // Check if unit matches expected unit
         if (!unit.equals(currentQuestion.getUnit())) {
             if (attempts >= MAX_ATTEMPTS) {
                 remainingQuestions.remove(0);
@@ -83,9 +100,9 @@ public class Bonus1 {
         }
         
         if (currentQuestion.checkAnswer(userAnswer)) {
-            // 根据剩余尝试次数计算得分
+            // Award points based on attempts used (Advanced level scoring)
             int attemptsUsed = MAX_ATTEMPTS - (MAX_ATTEMPTS - attempts);
-            com.geometry.entity.User.addScores("Advanced", attemptsUsed); // Bonus任务使用Advanced级别的分数
+            com.geometry.entity.User.addScores("Advanced", attemptsUsed);
             
             remainingQuestions.remove(0);
             stopTimer();
@@ -102,7 +119,9 @@ public class Bonus1 {
     }
 
     /**
-     * 开始计时器
+     * Start the countdown timer for the current question.
+     * Timer runs for TIME_LIMIT seconds, updating every second.
+     * Question is automatically skipped when time runs out.
      */
     private void startTimer() {
         timeRemaining = TIME_LIMIT;
@@ -120,7 +139,7 @@ public class Bonus1 {
     }
 
     /**
-     * 停止计时器
+     * Stop the current timer if running.
      */
     public void stopTimer() {
         if (timer != null) {
@@ -129,7 +148,8 @@ public class Bonus1 {
     }
 
     /**
-     * 获取剩余时间的格式化字符串
+     * Get remaining time formatted as "MM:SS".
+     * @return Formatted time string (e.g., "04:30" for 4 minutes 30 seconds)
      */
     public String getTimeRemainingFormatted() {
         int minutes = timeRemaining / 60;
@@ -138,49 +158,58 @@ public class Bonus1 {
     }
 
     /**
-     * 获取当前题目
+     * Get the current compound area question.
+     * @return Current CompoundArea object
      */
     public CompoundArea getCurrentQuestion() {
         return currentQuestion;
     }
 
     /**
-     * 获取剩余时间（秒）
+     * Get remaining time in seconds.
+     * @return Seconds remaining for current question
      */
     public int getTimeRemaining() {
         return timeRemaining;
     }
 
     /**
-     * 获取当前尝试次数
+     * Get number of attempts made for current question.
+     * @return Current attempt count
      */
     public int getAttempts() {
         return attempts;
     }
 
     /**
-     * 获取剩余题目数量
+     * Get count of remaining questions.
+     * @return Number of questions left to solve
      */
     public int getRemainingQuestionsCount() {
         return remainingQuestions.size();
     }
 
     /**
-     * 获取当前题目的正确答案（带单位）
+     * Get formatted correct answer for current question.
+     * @return Formatted area string with unit, or empty string if no current question
      */
     public String getCurrentQuestionFormattedArea() {
         return currentQuestion != null ? currentQuestion.getFormattedArea() : "";
     }
 
     /**
-     * 获取当前题目的单位
+     * Get the expected unit for current question.
+     * @return Unit string ("cm2" or "m2"), or empty string if no current question
      */
     public String getCurrentQuestionUnit() {
         return currentQuestion != null ? currentQuestion.getUnit() : "";
     }
 
     /**
-     * 答题结果枚举
+     * Enumeration of possible answer check results.
+     * CORRECT: Answer matches expected value
+     * INCORRECT: Answer does not match but attempts remain
+     * MAX_ATTEMPTS_REACHED: No more attempts allowed for current question
      */
     public enum Result {
         CORRECT,

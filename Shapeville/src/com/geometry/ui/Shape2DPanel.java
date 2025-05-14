@@ -13,7 +13,9 @@ import com.geometry.entity.Shapes2D;
 import com.geometry.entity.User;
 
 /**
- * 图形学习与识别界面
+ * 2D Shape Learning and Recognition Interface
+ * This panel provides an interactive interface for students to learn and identify
+ * different 2D geometric shapes.
  */
 public class Shape2DPanel extends JPanel {
     private MainFrame mainFrame;
@@ -21,7 +23,7 @@ public class Shape2DPanel extends JPanel {
     private KidButton submitButton;
     private JLabel progressLabel;
     
-    // 图形识别练习组件
+    // Shape recognition exercise components
     private JPanel recognitionPanel;
     private JLabel shapeImageLabel;
     private JLabel attemptsLabel;
@@ -31,31 +33,31 @@ public class Shape2DPanel extends JPanel {
     private static final String FONT_NAME = "Comic Sans MS";
     
     /**
-     * 构造函数
-     * @param mainFrame 主窗口引用
+     * Constructor
+     * @param mainFrame Reference to the main window
      */
     public Shape2DPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         this.shapeTask = new Task12D();
-        setBackground(new Color(220, 240, 255)); // 柔和背景色
+        setBackground(new Color(220, 240, 255)); // Soft background color
         initComponents();
         setupLayout();
         
-        // 显示初始图形
+        // Display initial shape
         showCurrentShape();
     }
     
     /**
-     * 初始化组件
+     * Initialize components
      */
     private void initComponents() {
-        // 创建返回主页按钮
+        // Create return to home button
         homeButton = new KidButton("Home");
         homeButton.setFont(new Font(FONT_NAME, Font.BOLD, 20));
         homeButton.setPreferredSize(new Dimension(150, 40));
         homeButton.addActionListener(e -> mainFrame.showCard(MainFrame.HOME_PANEL));
         
-        // 创建提交按钮
+        // Create submit button
         submitButton = new KidButton("OK");
         // color: rgb(236, 243, 232)
         submitButton.setNormalColor(Color.WHITE);
@@ -64,12 +66,12 @@ public class Shape2DPanel extends JPanel {
         submitButton.setPreferredSize(new Dimension(120, 40));
         submitButton.addActionListener(e -> checkAnswer());
         
-        // 创建进度标签
+        // Create progress label
         progressLabel = new JLabel("");
         progressLabel.setFont(new Font(FONT_NAME, Font.BOLD, 22));
         updateProgressLabel();
         
-        // 初始化识别练习组件
+        // Initialize recognition exercise components
         recognitionPanel = new JPanel(new BorderLayout(15, 15));
         recognitionPanel.setOpaque(false);
         shapeImageLabel = new JLabel();
@@ -88,10 +90,10 @@ public class Shape2DPanel extends JPanel {
         answerField.setFont(new Font(FONT_NAME, Font.PLAIN, 22));
         answerField.setPreferredSize(new Dimension(100, 40));
         answerField.addActionListener(e -> checkAnswer());
-        // 添加焦点请求，使面板显示时自动获取焦点
+        // Add focus request to automatically focus the input field when panel is shown
         answerField.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent event) {
-                // 使用SwingUtilities.invokeLater确保组件完全显示后再请求焦点
+                // Use SwingUtilities.invokeLater to ensure component is fully displayed before requesting focus
                 SwingUtilities.invokeLater(() -> answerField.requestFocusInWindow());
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent event) {}
@@ -100,13 +102,13 @@ public class Shape2DPanel extends JPanel {
     }
     
     /**
-     * 设置布局
+     * Set up the layout
      */
     private void setupLayout() {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         
-        // 顶部导航区域
+        // Top navigation area
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setOpaque(false);
 
@@ -117,7 +119,7 @@ public class Shape2DPanel extends JPanel {
         topPanel.add(buttonPanel, BorderLayout.EAST);
         // topPanel.add(progressLabel, BorderLayout.WEST);
         
-        // 设置识别练习面板
+        // Set up recognition exercise panel
         JPanel imagePanel = new JPanel(new BorderLayout(10, 10));
         imagePanel.setOpaque(false);
         imagePanel.add(shapeImageLabel, BorderLayout.CENTER);
@@ -147,20 +149,20 @@ public class Shape2DPanel extends JPanel {
         resultPanel.add(resultLabel);
         inputPanel.add(resultPanel);
         
-        // 添加到主面板
+        // Add to main panel
         add(topPanel, BorderLayout.NORTH);
         add(imagePanel, BorderLayout.CENTER);
         add(inputPanel, BorderLayout.SOUTH);
     }
     
     /**
-     * 显示当前图形
+     * Display the current shape
      */
     private void showCurrentShape() {
         String shapeName = shapeTask.getCurrentShape();
         
         if (shapeName != null) {
-            // 设置图形图像
+            // Set shape image
             ImageIcon icon = createShapeIcon(shapeName, 300, 300);
             if (icon != null) {
                 shapeImageLabel.setIcon(icon);
@@ -169,22 +171,22 @@ public class Shape2DPanel extends JPanel {
                 shapeImageLabel.setText("No image");
             }
             
-            // 更新标签
+            // Update labels
             updateProgressLabel();
             updateAttemptsLabel();
             
-            // 清空结果和输入
+            // Clear result and input
             resultLabel.setText("");
             answerField.setText("");
             answerField.requestFocus();
         } else {
-            // 任务完成
+            // Task completed
             completeTask();
         }
     }
     
     /**
-     * 检查答案
+     * Check the answer
      */
     private void checkAnswer() {
         String answer = answerField.getText().trim();
@@ -202,45 +204,45 @@ public class Shape2DPanel extends JPanel {
             resultLabel.setText("Great!");
             resultLabel.setForeground(new Color(0, 128, 0));
             
-            // 计算得分
+            // Calculate score
             int points = User.calScores("Basic", 3 - shapeTask.getRemainingAttempts() + 1);
             
-            // 创建得分提示弹窗
+            // Create score dialog
             JDialog scoreDialog = new JDialog((Frame)SwingUtilities.getWindowAncestor(this), "Score", true);
             scoreDialog.setLayout(new BorderLayout(10, 10));
             scoreDialog.setSize(400, 220);
             scoreDialog.setLocationRelativeTo(this);
             
-            // 创建得分面板
+            // Create score panel
             JPanel scorePanel = new JPanel(new BorderLayout(10, 10));
             scorePanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
             
-            // 添加得分信息
+            // Add score information
             JLabel scoreLabel = new JLabel("Score + " + points + " !", SwingConstants.CENTER);
             scoreLabel.setFont(new Font(FONT_NAME, Font.BOLD, 28));
             scoreLabel.setForeground(new Color(0, 150, 0));
             
-            // 确认按钮
+            // Confirm button
             KidButton okButton = new KidButton("OK");
             okButton.setFont(new Font(FONT_NAME, Font.BOLD, 20));
             okButton.addActionListener(e -> scoreDialog.dispose());
             
-            // 添加键盘回车监听
+            // Add keyboard enter listener
             scoreDialog.getRootPane().setDefaultButton(okButton);
             
-            // 组装面板
+            // Assemble panel
             scorePanel.add(scoreLabel, BorderLayout.CENTER);
             scorePanel.add(okButton, BorderLayout.SOUTH);
             
             scoreDialog.add(scorePanel);
             
-            // 更新主窗口分数显示
+            // Update main window score display
             mainFrame.updateScore();
             
-            // 显示得分弹窗
+            // Show score dialog
             scoreDialog.setVisible(true);
             
-            // 显示下一个图形 (延迟一秒)
+            // Show next shape (delayed by 0.5 seconds)
             Timer timer = new Timer(500, e -> {
                 if (shapeTask.isTaskCompleted()) {
                     mainFrame.updateTaskStatus("2D Shapes", true);
@@ -259,11 +261,11 @@ public class Shape2DPanel extends JPanel {
             
             if (shapeTask.getAttempts() == 0) {
                 attemptsLabel.setText("Tries: 0");
-                // 展示正确答案
+                // Show the correct answer
                 String correctAnswer = shapeTask.getPreviousShape();
                 resultLabel.setText("Answer: " + correctAnswer);
                 
-                // 显示下一个图形 (延迟两秒)
+                // Show next shape (delayed by 2 seconds)
                 Timer timer = new Timer(2000, e -> {
                     if (shapeTask.isTaskCompleted()) {
                         mainFrame.updateTaskStatus("2D Shapes", true);
@@ -281,15 +283,15 @@ public class Shape2DPanel extends JPanel {
     }
     
     /**
-     * 完成任务
+     * Complete the task
      */
     private void completeTask() {
-        // 清除组件
+        // Clear components
         shapeImageLabel.setIcon(null);
         answerField.setEnabled(false);
         submitButton.setEnabled(false);
         
-        // 显示最终结果
+        // Display final results
         int correctCount = shapeTask.getCorrectCount();
         int totalShapes = shapeTask.getTotalShapes();
         
@@ -321,7 +323,7 @@ public class Shape2DPanel extends JPanel {
         completionPanel.add(restartButton);
         completionPanel.add(Box.createVerticalGlue());
         
-        // 替换中央组件
+        // Replace center component
         remove(shapeImageLabel.getParent());
         add(completionPanel, BorderLayout.CENTER);
         revalidate();
@@ -329,17 +331,17 @@ public class Shape2DPanel extends JPanel {
     }
     
     /**
-     * 重新开始任务
+     * Restart the task
      */
     private void restartTask() {
-        // 重新初始化任务
+        // Reinitialize the task
         shapeTask = new Task12D();
         
-        // 重新设置UI组件
+        // Reset UI components
         answerField.setEnabled(true);
         submitButton.setEnabled(true);
         
-        // 移除完成面板
+        // Remove completion panel
         Component centerComponent = ((BorderLayout)getLayout()).getLayoutComponent(BorderLayout.CENTER);
         if (centerComponent != shapeImageLabel.getParent()) {
             remove(centerComponent);
@@ -350,14 +352,14 @@ public class Shape2DPanel extends JPanel {
             add(imagePanel, BorderLayout.CENTER);
         }
         
-        // 显示初始图形
+        // Show initial shape
         showCurrentShape();
         revalidate();
         repaint();
     }
     
     /**
-     * 更新进度标签
+     * Update the progress label
      */
     private void updateProgressLabel() {
         int current = shapeTask.getCurrentShapeIndex() + 1;
@@ -366,7 +368,7 @@ public class Shape2DPanel extends JPanel {
     }
     
     /**
-     * 更新尝试次数标签
+     * Update the attempts label
      */
     private void updateAttemptsLabel() {
         int remaining = shapeTask.getRemainingAttempts();
@@ -374,31 +376,31 @@ public class Shape2DPanel extends JPanel {
     }
     
     /**
-     * 创建图形图标
+     * Create shape icon
      */
     private ImageIcon createShapeIcon(String shapeName, int width, int height) {
         ImageIcon icon = null;
         
         try {
-            // 从Shapes2D获取图片路径
+            // Get image path from Shapes2D
             String imagePath = Shapes2D.getShapeImg(shapeName);
             if (imagePath == null) {
                 return null;
             }
             
-            // 加载图片资源
+            // Load image resource
             java.net.URL imageURL = getClass().getClassLoader().getResource(imagePath);
             if (imageURL != null) {
-                // 读取图片
+                // Read image
                 Image originalImage = new ImageIcon(imageURL).getImage();
                 
-                // 调整图片大小
+                // Resize image
                 Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
                 icon = new ImageIcon(scaledImage);
             } else {
                 System.err.println("Cannot find image: " + imagePath);
                 
-                // 如果找不到图片，使用默认绘制的图形作为后备方案
+                // If image not found, use default drawn shape as a fallback
                 return createDefaultShapeIcon(shapeName, width, height);
             }
         } catch (Exception e) {
@@ -410,34 +412,34 @@ public class Shape2DPanel extends JPanel {
     }
     
     /**
-     * 创建默认图形图标（当无法加载图片时使用）
+     * Create a default shape icon (when image cannot be loaded)
      */
     private ImageIcon createDefaultShapeIcon(String shapeName, int width, int height) {
-        // 简单绘制基本图形作为后备方案
+        // Simple drawing of basic shapes as a fallback
         ImageIcon icon = null;
         
         try {
-            // 创建图像
+            // Create image
             Image image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2d = (Graphics2D) image.getGraphics();
             
-            // 设置抗锯齿
+            // Set anti-aliasing
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             
-            // 设置边框和填充颜色
+            // Set border and fill colors
             g2d.setColor(Color.WHITE);
             g2d.fillRect(0, 0, width, height);
             g2d.setColor(Color.BLACK);
             g2d.setStroke(new BasicStroke(2));
             
-            // 绘制图形
+            // Draw shape
             int padding = 40;
             int shapeWidth = width - 2 * padding;
             int shapeHeight = height - 2 * padding;
             
             switch (shapeName) {
                 case "circle":
-                    g2d.setColor(new Color(255, 200, 200)); // 浅红色填充
+                    g2d.setColor(new Color(255, 200, 200)); // Light red fill
                     g2d.fillOval(padding, padding, shapeWidth, shapeHeight);
                     g2d.setColor(Color.BLACK);
                     g2d.drawOval(padding, padding, shapeWidth, shapeHeight);
@@ -446,21 +448,21 @@ public class Shape2DPanel extends JPanel {
                 case "triangle":
                     int[] xPoints = {width / 2, padding, width - padding};
                     int[] yPoints = {padding, height - padding, height - padding};
-                    g2d.setColor(new Color(200, 255, 200)); // 浅绿色填充
+                    g2d.setColor(new Color(200, 255, 200)); // Light green fill
                     g2d.fillPolygon(xPoints, yPoints, 3);
                     g2d.setColor(Color.BLACK);
                     g2d.drawPolygon(xPoints, yPoints, 3);
                     break;
                     
                 case "square":
-                    g2d.setColor(new Color(200, 200, 255)); // 浅蓝色填充
+                    g2d.setColor(new Color(200, 200, 255)); // Light blue fill
                     g2d.fillRect(padding, padding, shapeWidth, shapeWidth);
                     g2d.setColor(Color.BLACK);
                     g2d.drawRect(padding, padding, shapeWidth, shapeWidth);
                     break;
                     
                 case "rectangle":
-                    g2d.setColor(new Color(255, 255, 200)); // 浅黄色填充
+                    g2d.setColor(new Color(255, 255, 200)); // Light yellow fill
                     g2d.fillRect(padding, padding + shapeHeight/4, shapeWidth, shapeHeight/2);
                     g2d.setColor(Color.BLACK);
                     g2d.drawRect(padding, padding + shapeHeight/4, shapeWidth, shapeHeight/2);
@@ -477,7 +479,7 @@ public class Shape2DPanel extends JPanel {
                         pentX[i] = centerX + (int)(radius * Math.cos(angle));
                         pentY[i] = centerY + (int)(radius * Math.sin(angle));
                     }
-                    g2d.setColor(new Color(255, 200, 255)); // 浅紫色填充
+                    g2d.setColor(new Color(255, 200, 255)); // Light purple fill
                     g2d.fillPolygon(pentX, pentY, 5);
                     g2d.setColor(Color.BLACK);
                     g2d.drawPolygon(pentX, pentY, 5);
@@ -494,7 +496,7 @@ public class Shape2DPanel extends JPanel {
                         hexX[i] = centerX + (int)(radius * Math.cos(angle));
                         hexY[i] = centerY + (int)(radius * Math.sin(angle));
                     }
-                    g2d.setColor(new Color(200, 255, 255)); // 浅青色填充
+                    g2d.setColor(new Color(200, 255, 255)); // Light cyan fill
                     g2d.fillPolygon(hexX, hexY, 6);
                     g2d.setColor(Color.BLACK);
                     g2d.drawPolygon(hexX, hexY, 6);
@@ -511,7 +513,7 @@ public class Shape2DPanel extends JPanel {
                         heptX[i] = centerX + (int)(radius * Math.cos(angle));
                         heptY[i] = centerY + (int)(radius * Math.sin(angle));
                     }
-                    g2d.setColor(new Color(255, 230, 200)); // 浅橙色填充
+                    g2d.setColor(new Color(255, 230, 200)); // Light orange fill
                     g2d.fillPolygon(heptX, heptY, 7);
                     g2d.setColor(Color.BLACK);
                     g2d.drawPolygon(heptX, heptY, 7);
@@ -528,14 +530,14 @@ public class Shape2DPanel extends JPanel {
                         octX[i] = centerX + (int)(radius * Math.cos(angle));
                         octY[i] = centerY + (int)(radius * Math.sin(angle));
                     }
-                    g2d.setColor(new Color(220, 220, 255)); // 浅蓝紫色填充
+                    g2d.setColor(new Color(220, 220, 255)); // Light blue-purple fill
                     g2d.fillPolygon(octX, octY, 8);
                     g2d.setColor(Color.BLACK);
                     g2d.drawPolygon(octX, octY, 8);
                     break;
                     
                 case "oval":
-                    g2d.setColor(new Color(255, 220, 220)); // 浅粉色填充
+                    g2d.setColor(new Color(255, 220, 220)); // Light pink fill
                     g2d.fillOval(padding, padding + shapeHeight/4, shapeWidth, shapeHeight/2);
                     g2d.setColor(Color.BLACK);
                     g2d.drawOval(padding, padding + shapeHeight/4, shapeWidth, shapeHeight/2);
@@ -544,7 +546,7 @@ public class Shape2DPanel extends JPanel {
                 case "rhombus":
                     int[] rhombX = {width/2, padding, width/2, width - padding};
                     int[] rhombY = {padding, height/2, height - padding, height/2};
-                    g2d.setColor(new Color(220, 255, 220)); // 浅绿色填充
+                    g2d.setColor(new Color(220, 255, 220)); // Light green fill
                     g2d.fillPolygon(rhombX, rhombY, 4);
                     g2d.setColor(Color.BLACK);
                     g2d.drawPolygon(rhombX, rhombY, 4);
@@ -553,7 +555,7 @@ public class Shape2DPanel extends JPanel {
                 case "kite":
                     int[] kiteX = {width/2, width/2 - shapeWidth/4, width/2, width/2 + shapeWidth/4};
                     int[] kiteY = {padding, height/2, height - padding, height/2};
-                    g2d.setColor(new Color(255, 255, 220)); // 浅黄色填充
+                    g2d.setColor(new Color(255, 255, 220)); // Light yellow fill
                     g2d.fillPolygon(kiteX, kiteY, 4);
                     g2d.setColor(Color.BLACK);
                     g2d.drawPolygon(kiteX, kiteY, 4);

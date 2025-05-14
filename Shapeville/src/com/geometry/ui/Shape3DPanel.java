@@ -11,7 +11,9 @@ import com.geometry.entity.User;
 import com.geometry.ui.uiUtils.KidButton;
 
 /**
- * 3D图形学习与识别界面
+ * 3D Shape Learning and Recognition Interface
+ * This panel provides an interactive environment for students to learn and 
+ * identify different three-dimensional geometric shapes.
  */
 public class Shape3DPanel extends JPanel {
     private MainFrame mainFrame;
@@ -19,7 +21,7 @@ public class Shape3DPanel extends JPanel {
     private KidButton submitButton;
     private JLabel progressLabel;
     
-    // 图形识别练习组件
+    // Shape recognition exercise components
     private JPanel recognitionPanel;
     private JLabel shapeImageLabel;
     private JLabel attemptsLabel;
@@ -29,8 +31,8 @@ public class Shape3DPanel extends JPanel {
     private static final String FONT_NAME = "Comic Sans MS";
     
     /**
-     * 构造函数
-     * @param mainFrame 主窗口引用
+     * Constructor
+     * @param mainFrame Reference to the main window
      */
     public Shape3DPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -39,21 +41,21 @@ public class Shape3DPanel extends JPanel {
         initComponents();
         setupLayout();
         
-        // 显示初始图形
+        // Display initial shape
         showCurrentShape();
     }
     
     /**
-     * 初始化组件
+     * Initialize components
      */
     private void initComponents() {
-        // 创建返回主页按钮
+        // Create return to home button
         homeButton = new KidButton("Home");
         homeButton.setFont(new Font(FONT_NAME, Font.BOLD, 20));
         homeButton.setPreferredSize(new Dimension(150, 40));
         homeButton.addActionListener(e -> mainFrame.showCard(MainFrame.HOME_PANEL));
         
-        // 创建提交按钮
+        // Create submit button
         submitButton = new KidButton("OK");
         submitButton.setNormalColor(Color.WHITE);
         submitButton.setForeground(Color.BLACK);
@@ -61,12 +63,12 @@ public class Shape3DPanel extends JPanel {
         submitButton.setPreferredSize(new Dimension(120, 40));
         submitButton.addActionListener(e -> checkAnswer());
         
-        // 创建进度标签
+        // Create progress label
         progressLabel = new JLabel("");
         progressLabel.setFont(new Font(FONT_NAME, Font.BOLD, 22));
         updateProgressLabel();
         
-        // 初始化识别练习组件
+        // Initialize recognition exercise components
         recognitionPanel = new JPanel(new BorderLayout(15, 15));
         recognitionPanel.setOpaque(false);
         shapeImageLabel = new JLabel();
@@ -84,10 +86,10 @@ public class Shape3DPanel extends JPanel {
         answerField.setFont(new Font(FONT_NAME, Font.PLAIN, 22));
         answerField.setPreferredSize(new Dimension(100, 40));
         answerField.addActionListener(e -> checkAnswer());
-        // 添加焦点请求，使面板显示时自动获取焦点
+        // Add focus request to automatically focus the input field when panel is shown
         answerField.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent event) {
-                // 使用SwingUtilities.invokeLater确保组件完全显示后再请求焦点
+                // Use SwingUtilities.invokeLater to ensure component is fully displayed before requesting focus
                 SwingUtilities.invokeLater(() -> answerField.requestFocusInWindow());
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent event) {}
@@ -96,13 +98,13 @@ public class Shape3DPanel extends JPanel {
     }
     
     /**
-     * 设置布局
+     * Set up the layout
      */
     private void setupLayout() {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         
-        // 顶部导航区域
+        // Top navigation area
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setOpaque(false);
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -110,7 +112,7 @@ public class Shape3DPanel extends JPanel {
         buttonPanel.add(homeButton);
         topPanel.add(buttonPanel, BorderLayout.EAST);
         
-        // 设置识别练习面板
+        // Set up recognition exercise panel
         JPanel imagePanel = new JPanel(new BorderLayout(10, 10));
         imagePanel.setOpaque(false);
         imagePanel.add(shapeImageLabel, BorderLayout.CENTER);
@@ -139,20 +141,20 @@ public class Shape3DPanel extends JPanel {
         resultPanel.add(resultLabel);
         inputPanel.add(resultPanel);
         
-        // 添加到主面板
+        // Add to main panel
         add(topPanel, BorderLayout.NORTH);
         add(imagePanel, BorderLayout.CENTER);
         add(inputPanel, BorderLayout.SOUTH);
     }
     
     /**
-     * 显示当前图形
+     * Display the current shape
      */
     private void showCurrentShape() {
         String shapeName = shapeTask.getCurrentShape();
         
         if (shapeName != null) {
-            // 设置图形图像
+            // Set shape image
             ImageIcon icon = createShapeIcon(shapeName, 300, 300);
             if (icon != null) {
                 shapeImageLabel.setIcon(icon);
@@ -161,22 +163,22 @@ public class Shape3DPanel extends JPanel {
                 shapeImageLabel.setText("No image");
             }
             
-            // 更新标签
+            // Update labels
             updateProgressLabel();
             updateAttemptsLabel();
             
-            // 清空结果和输入
+            // Clear result and input
             resultLabel.setText("");
             answerField.setText("");
             answerField.requestFocus();
         } else {
-            // 任务完成
+            // Task completed
             completeTask();
         }
     }
     
     /**
-     * 检查答案
+     * Check the answer
      */
     private void checkAnswer() {
         String answer = answerField.getText().trim();
@@ -194,43 +196,43 @@ public class Shape3DPanel extends JPanel {
             resultLabel.setText("Great!");
             resultLabel.setForeground(new Color(0, 128, 0));
             
-            // 计算得分
+            // Calculate score
             int points = User.calScores("Basic", 3 - shapeTask.getRemainingAttempts() + 1);
             
-            // 创建得分提示弹窗
+            // Create score dialog
             JDialog scoreDialog = new JDialog((Frame)SwingUtilities.getWindowAncestor(this), "Score", true);
             scoreDialog.setLayout(new BorderLayout(10, 10));
             scoreDialog.setSize(400, 220);
             scoreDialog.setLocationRelativeTo(this);
             
-            // 创建得分面板
+            // Create score panel
             JPanel scorePanel = new JPanel(new BorderLayout(10, 10));
             scorePanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
             
-            // 添加得分信息
+            // Add score information
             JLabel scoreLabel = new JLabel("Score + " + points + " !", SwingConstants.CENTER);
             scoreLabel.setFont(new Font(FONT_NAME, Font.BOLD, 28));
             scoreLabel.setForeground(new Color(0, 150, 0));
             
-            // 确认按钮
+            // Confirm button
             KidButton okButton = new KidButton("OK");
             okButton.setFont(new Font(FONT_NAME, Font.BOLD, 20));
             okButton.addActionListener(e -> scoreDialog.dispose());
             scoreDialog.getRootPane().setDefaultButton(okButton);
             
-            // 组装面板
+            // Assemble panel
             scorePanel.add(scoreLabel, BorderLayout.CENTER);
             scorePanel.add(okButton, BorderLayout.SOUTH);
             
             scoreDialog.add(scorePanel);
             
-            // 更新主窗口分数显示
+            // Update main window score display
             mainFrame.updateScore();
             
-            // 显示得分弹窗
+            // Show score dialog
             scoreDialog.setVisible(true);
             
-            // 显示下一个图形 (延迟一秒)
+            // Show next shape (delayed by 0.5 seconds)
             Timer timer = new Timer(500, e -> {
                 if (shapeTask.isTaskCompleted()) {
                     mainFrame.updateTaskStatus("3D Shapes", true);
@@ -249,11 +251,11 @@ public class Shape3DPanel extends JPanel {
             
             if (shapeTask.getAttempts() == 0) {
                 attemptsLabel.setText("Tries: 0");
-                // 展示正确答案
+                // Show the correct answer
                 String correctAnswer = shapeTask.getPreviousShape();
                 resultLabel.setText("Answer: " + correctAnswer);
                 
-                // 显示下一个图形 (延迟两秒)
+                // Show next shape (delayed by 2 seconds)
                 Timer timer = new Timer(2000, e -> {
                     if (shapeTask.isTaskCompleted()) {
                         mainFrame.updateTaskStatus("3D Shapes", true);
@@ -271,15 +273,15 @@ public class Shape3DPanel extends JPanel {
     }
     
     /**
-     * 完成任务
+     * Complete the task
      */
     private void completeTask() {
-        // 清除组件
+        // Clear components
         shapeImageLabel.setIcon(null);
         answerField.setEnabled(false);
         submitButton.setEnabled(false);
         
-        // 显示最终结果
+        // Display final results
         int correctCount = shapeTask.getCorrectCount();
         int totalShapes = shapeTask.getTotalShapes();
         
@@ -311,7 +313,7 @@ public class Shape3DPanel extends JPanel {
         completionPanel.add(restartButton);
         completionPanel.add(Box.createVerticalGlue());
         
-        // 替换中央组件
+        // Replace center component
         remove(shapeImageLabel.getParent());
         add(completionPanel, BorderLayout.CENTER);
         revalidate();
@@ -319,17 +321,17 @@ public class Shape3DPanel extends JPanel {
     }
     
     /**
-     * 重新开始任务
+     * Restart the task
      */
     private void restartTask() {
-        // 重新初始化任务
+        // Reinitialize the task
         shapeTask = new Task13D();
         
-        // 重新设置UI组件
+        // Reset UI components
         answerField.setEnabled(true);
         submitButton.setEnabled(true);
         
-        // 移除完成面板
+        // Remove completion panel
         Component centerComponent = ((BorderLayout)getLayout()).getLayoutComponent(BorderLayout.CENTER);
         if (centerComponent != shapeImageLabel.getParent()) {
             remove(centerComponent);
@@ -340,14 +342,14 @@ public class Shape3DPanel extends JPanel {
             add(imagePanel, BorderLayout.CENTER);
         }
         
-        // 显示初始图形
+        // Show initial shape
         showCurrentShape();
         revalidate();
         repaint();
     }
     
     /**
-     * 更新进度标签
+     * Update the progress label
      */
     private void updateProgressLabel() {
         int current = shapeTask.getCurrentShapeIndex() + 1;
@@ -356,7 +358,7 @@ public class Shape3DPanel extends JPanel {
     }
     
     /**
-     * 更新尝试次数标签
+     * Update the attempts label
      */
     private void updateAttemptsLabel() {
         int remaining = shapeTask.getRemainingAttempts();
@@ -364,31 +366,31 @@ public class Shape3DPanel extends JPanel {
     }
     
     /**
-     * 创建图形图标
+     * Create shape icon
      */
     private ImageIcon createShapeIcon(String shapeName, int width, int height) {
         ImageIcon icon = null;
         
         try {
-            // 从Shapes3D获取图片路径
+            // Get image path from Shapes3D
             String imagePath = Shapes3D.getShapeImg(shapeName);
             if (imagePath == null) {
                 return null;
             }
             
-            // 加载图片资源
+            // Load image resource
             java.net.URL imageURL = getClass().getClassLoader().getResource(imagePath);
             if (imageURL != null) {
-                // 读取图片
+                // Read image
                 Image originalImage = new ImageIcon(imageURL).getImage();
                 
-                // 调整图片大小
+                // Resize image
                 Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
                 icon = new ImageIcon(scaledImage);
             } else {
                 System.err.println("Cannot find image: " + imagePath);
                 
-                // 如果找不到图片，使用默认绘制的图形作为后备方案
+                // If image not found, use default drawn shape as a fallback
                 return createDefaultShapeIcon(shapeName, width, height);
             }
         } catch (Exception e) {
@@ -400,27 +402,27 @@ public class Shape3DPanel extends JPanel {
     }
     
     /**
-     * 创建默认图形图标（当无法加载图片时使用）
+     * Create a default shape icon (when image cannot be loaded)
      */
     private ImageIcon createDefaultShapeIcon(String shapeName, int width, int height) {
-        // 简单绘制基本图形作为后备方案
+        // Simple drawing of basic shapes as a fallback
         ImageIcon icon = null;
         
         try {
-            // 创建图像
+            // Create image
             Image image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2d = (Graphics2D) image.getGraphics();
             
-            // 设置抗锯齿
+            // Set anti-aliasing
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             
-            // 设置边框和填充颜色
+            // Set border and fill colors
             g2d.setColor(Color.WHITE);
             g2d.fillRect(0, 0, width, height);
             g2d.setColor(Color.BLACK);
             g2d.setStroke(new BasicStroke(2));
             
-            // 绘制图形
+            // Draw shape
             int padding = 40;
             int shapeWidth = width - 2 * padding;
             int shapeHeight = height - 2 * padding;
@@ -463,19 +465,19 @@ public class Shape3DPanel extends JPanel {
         return icon;
     }
     
-    // 3D绘图方法
+    // 3D drawing methods
     
     private void draw3DCube(Graphics2D g, int x, int y, int width, int height) {
         int size = Math.min(width, height);
         int depth = size / 4;
         
-        // 正面
+        // Front face
         g.setColor(new Color(200, 200, 255));
         g.fillRect(x, y, size, size);
         g.setColor(Color.BLACK);
         g.drawRect(x, y, size, size);
         
-        // 顶面
+        // Top face
         int[] xPoints = {x, x + depth, x + size + depth, x + size};
         int[] yPoints = {y, y - depth, y - depth, y};
         g.setColor(new Color(220, 220, 255));
@@ -483,7 +485,7 @@ public class Shape3DPanel extends JPanel {
         g.setColor(Color.BLACK);
         g.drawPolygon(xPoints, yPoints, 4);
         
-        // 侧面
+        // Side face
         int[] xPoints2 = {x + size, x + size + depth, x + size + depth, x + size};
         int[] yPoints2 = {y, y - depth, y - depth + size, y + size};
         g.setColor(new Color(180, 180, 255));
@@ -496,13 +498,13 @@ public class Shape3DPanel extends JPanel {
         int depth = width / 4;
         int cuboidHeight = height / 2;
         
-        // 正面
+        // Front face
         g.setColor(new Color(255, 200, 200));
         g.fillRect(x, y, width, cuboidHeight);
         g.setColor(Color.BLACK);
         g.drawRect(x, y, width, cuboidHeight);
         
-        // 顶面
+        // Top face
         int[] xPoints = {x, x + depth, x + width + depth, x + width};
         int[] yPoints = {y, y - depth, y - depth, y};
         g.setColor(new Color(255, 220, 220));
@@ -510,7 +512,7 @@ public class Shape3DPanel extends JPanel {
         g.setColor(Color.BLACK);
         g.drawPolygon(xPoints, yPoints, 4);
         
-        // 侧面
+        // Side face
         int[] xPoints2 = {x + width, x + width + depth, x + width + depth, x + width};
         int[] yPoints2 = {y, y - depth, y - depth + cuboidHeight, y + cuboidHeight};
         g.setColor(new Color(255, 180, 180));
@@ -523,27 +525,27 @@ public class Shape3DPanel extends JPanel {
         int cylinderWidth = width;
         int cylinderHeight = height;
         
-        // 顶部椭圆
+        // Top ellipse
         g.setColor(new Color(200, 255, 200));
         g.fillOval(x, y, cylinderWidth, cylinderWidth / 3);
         g.setColor(Color.BLACK);
         g.drawOval(x, y, cylinderWidth, cylinderWidth / 3);
         
-        // 底部椭圆
+        // Bottom ellipse
         g.setColor(new Color(180, 255, 180));
         g.fillOval(x, y + cylinderHeight - cylinderWidth / 3, cylinderWidth, cylinderWidth / 3);
         g.setColor(Color.BLACK);
         g.drawOval(x, y + cylinderHeight - cylinderWidth / 3, cylinderWidth, cylinderWidth / 3);
         
-        // 连接线
+        // Connection lines
         g.drawLine(x, y + cylinderWidth / 6, x, y + cylinderHeight - cylinderWidth / 6);
         g.drawLine(x + cylinderWidth, y + cylinderWidth / 6, x + cylinderWidth, y + cylinderHeight - cylinderWidth / 6);
         
-        // 矩形主体
+        // Rectangular body
         g.setColor(new Color(220, 255, 220));
         g.fillRect(x, y + cylinderWidth / 6, cylinderWidth, cylinderHeight - cylinderWidth / 3);
         
-        // 再次绘制连接线以确保可见
+        // Redraw connection lines to ensure visibility
         g.setColor(Color.BLACK);
         g.drawLine(x, y + cylinderWidth / 6, x, y + cylinderHeight - cylinderWidth / 6);
         g.drawLine(x + cylinderWidth, y + cylinderWidth / 6, x + cylinderWidth, y + cylinderHeight - cylinderWidth / 6);
@@ -552,11 +554,11 @@ public class Shape3DPanel extends JPanel {
     private void draw3DSphere(Graphics2D g, int x, int y, int width, int height) {
         int size = Math.min(width, height);
         
-        // 绘制圆形并添加阴影以呈现3D效果
+        // Draw circle and add shading for 3D effect
         g.setColor(new Color(255, 200, 255));
         g.fillOval(x, y, size, size);
         
-        // 添加高光
+        // Add highlight
         g.setColor(new Color(255, 230, 255));
         g.fillOval(x + size/4, y + size/4, size/5, size/5);
         
@@ -568,17 +570,17 @@ public class Shape3DPanel extends JPanel {
         int coneDiameter = width;
         int coneHeight = height;
         
-        // 底部椭圆
+        // Bottom ellipse
         g.setColor(new Color(255, 230, 200));
         g.fillOval(x, y + coneHeight - coneDiameter / 4, coneDiameter, coneDiameter / 4);
         
-        // 圆锥体
+        // Cone body
         int[] xPoints = {x + coneDiameter / 2, x, x + coneDiameter};
         int[] yPoints = {y, y + coneHeight - coneDiameter / 8, y + coneHeight - coneDiameter / 8};
         g.setColor(new Color(255, 200, 150));
         g.fillPolygon(xPoints, yPoints, 3);
         
-        // 边框
+        // Border
         g.setColor(Color.BLACK);
         g.drawPolygon(xPoints, yPoints, 3);
         g.drawOval(x, y + coneHeight - coneDiameter / 4, coneDiameter, coneDiameter / 4);
@@ -587,19 +589,19 @@ public class Shape3DPanel extends JPanel {
     private void draw3DTetrahedron(Graphics2D g, int x, int y, int width, int height) {
         int size = Math.min(width, height);
         
-        // 前面的三角形
+        // Front triangle
         int[] xPoints1 = {x + size / 2, x, x + size};
         int[] yPoints1 = {y, y + size, y + size};
         g.setColor(new Color(200, 255, 255));
         g.fillPolygon(xPoints1, yPoints1, 3);
         
-        // 侧面三角形
+        // Side triangle
         int[] xPoints2 = {x + size / 2, x + size, x + size + size / 4};
         int[] yPoints2 = {y, y + size, y + size / 2};
         g.setColor(new Color(180, 255, 255));
         g.fillPolygon(xPoints2, yPoints2, 3);
         
-        // 边框
+        // Border
         g.setColor(Color.BLACK);
         g.drawPolygon(xPoints1, yPoints1, 3);
         g.drawPolygon(xPoints2, yPoints2, 3);
@@ -611,31 +613,31 @@ public class Shape3DPanel extends JPanel {
         int prismHeight = height;
         int depth = prismWidth / 4;
         
-        // 前面的三角形
+        // Front triangle
         int[] xPoints1 = {x, x + prismWidth, x + prismWidth / 2};
         int[] yPoints1 = {y + prismHeight, y + prismHeight, y};
         g.setColor(new Color(255, 255, 200));
         g.fillPolygon(xPoints1, yPoints1, 3);
         
-        // 后面的三角形
+        // Back triangle
         int[] xPoints2 = {x + depth, x + prismWidth + depth, x + prismWidth / 2 + depth};
         int[] yPoints2 = {y + prismHeight - depth, y + prismHeight - depth, y - depth};
         g.setColor(new Color(255, 255, 220));
         g.fillPolygon(xPoints2, yPoints2, 3);
         
-        // 上面的矩形
+        // Upper rectangle
         int[] xPoints3 = {x + prismWidth / 2, x + prismWidth, x + prismWidth + depth, x + prismWidth / 2 + depth};
         int[] yPoints3 = {y, y + prismHeight, y + prismHeight - depth, y - depth};
         g.setColor(new Color(255, 255, 180));
         g.fillPolygon(xPoints3, yPoints3, 4);
         
-        // 底面矩形
+        // Bottom rectangle
         int[] xPoints4 = {x, x + prismWidth, x + prismWidth + depth, x + depth};
         int[] yPoints4 = {y + prismHeight, y + prismHeight, y + prismHeight - depth, y + prismHeight - depth};
         g.setColor(new Color(255, 255, 150));
         g.fillPolygon(xPoints4, yPoints4, 4);
         
-        // 边框
+        // Border
         g.setColor(Color.BLACK);
         g.drawPolygon(xPoints1, yPoints1, 3);
         g.drawPolygon(xPoints2, yPoints2, 3);
@@ -649,23 +651,23 @@ public class Shape3DPanel extends JPanel {
         int baseSize = size;
         int pyramidHeight = size;
         
-        // 底面正方形
+        // Bottom square
         g.setColor(new Color(220, 220, 255));
         g.fillRect(x, y + pyramidHeight - baseSize/2, baseSize, baseSize/2);
         
-        // 前面的三角形
+        // Front triangle
         int[] xPoints1 = {x, x + baseSize, x + baseSize/2};
         int[] yPoints1 = {y + pyramidHeight - baseSize/2, y + pyramidHeight - baseSize/2, y};
         g.setColor(new Color(200, 200, 255));
         g.fillPolygon(xPoints1, yPoints1, 3);
         
-        // 侧面三角形
+        // Side triangle
         int[] xPoints2 = {x + baseSize, x + baseSize + baseSize/4, x + baseSize/2};
         int[] yPoints2 = {y + pyramidHeight - baseSize/2, y + pyramidHeight - baseSize/4, y};
         g.setColor(new Color(180, 180, 255));
         g.fillPolygon(xPoints2, yPoints2, 3);
         
-        // 边框
+        // Border
         g.setColor(Color.BLACK);
         g.drawRect(x, y + pyramidHeight - baseSize/2, baseSize, baseSize/2);
         g.drawPolygon(xPoints1, yPoints1, 3);

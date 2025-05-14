@@ -10,16 +10,17 @@ import java.util.Set;
 import java.util.HashSet;
 
 /**
- * 附加任务界面
- * Bonus 1: 复合图形面积计算
+ * Bonus Task Interface
+ * Bonus 1: Compound Shape Area Calculation
+ * Provides an interactive interface for students to practice calculating areas of complex compound shapes.
  */
 public class Bonus1 extends JPanel {
     private MainFrame mainFrame;
     private KidButton homeButton;
     private com.geometry.service.Bonus1 bonus1Service;
-    private Set<Integer> completedQuestions; // 已完成的题目
+    private Set<Integer> completedQuestions; // Set to track completed questions
     
-    // Bonus1相关组件
+    // Bonus1 related components
     private JTextField answerField;
     private JComboBox<String> unitComboBox;
     private JLabel resultLabel;
@@ -31,21 +32,21 @@ public class Bonus1 extends JPanel {
     private static final String FONT_NAME = "Comic Sans MS";
     
     /**
-     * 构造函数
-     * @param mainFrame 主窗口引用
+     * Constructor for the Bonus1 panel
+     * @param mainFrame Reference to the main application frame
      */
     public Bonus1(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         this.bonus1Service = new com.geometry.service.Bonus1();
         this.completedQuestions = new HashSet<>();
         
-        // 初始化组件
+        // Initialize components
         initComponents();
         setupLayout();
     }
     
     /**
-     * 初始化组件
+     * Initialize UI components
      */
     private void initComponents() {
         // Create home button
@@ -63,7 +64,7 @@ public class Bonus1 extends JPanel {
     }
     
     /**
-     * 设置布局
+     * Set up the panel layout
      */
     private void setupLayout() {
         setBorder(BorderFactory.createCompoundBorder(
@@ -109,6 +110,10 @@ public class Bonus1 extends JPanel {
         cl.show(contentPanel, "SELECTION");
     }
     
+    /**
+     * Create the question selection panel that displays all available questions
+     * @return The configured selection panel
+     */
     private JPanel createQuestionSelectionPanel() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -139,6 +144,11 @@ public class Bonus1 extends JPanel {
         return panel;
     }
     
+    /**
+     * Create an individual question card for the selection panel
+     * @param questionNum The question number
+     * @return The configured question card panel
+     */
     private JPanel createQuestionCard(int questionNum) {
         JPanel card = new JPanel(new BorderLayout(5, 5));
         card.setBorder(BorderFactory.createLineBorder(new Color(52, 119, 219), 2));
@@ -187,6 +197,10 @@ public class Bonus1 extends JPanel {
         return card;
     }
     
+    /**
+     * Create the question panel for answering compound area questions
+     * @return The configured question panel
+     */
     private JPanel createQuestionPanel() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setOpaque(false);
@@ -206,10 +220,10 @@ public class Bonus1 extends JPanel {
         answerField = new JTextField(10);
         answerField.setFont(new Font(FONT_NAME, Font.PLAIN, 20));
         answerField.setPreferredSize(new Dimension(100, 40));
-        // 添加焦点请求，使面板显示时自动获取焦点
+        // Add focus request to automatically focus the input field when panel is shown
         answerField.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent event) {
-                // 使用SwingUtilities.invokeLater确保组件完全显示后再请求焦点
+                // Use SwingUtilities.invokeLater to ensure component is fully displayed before requesting focus
                 SwingUtilities.invokeLater(() -> answerField.requestFocusInWindow());
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent event) {}
@@ -274,6 +288,9 @@ public class Bonus1 extends JPanel {
         return panel;
     }
     
+    /**
+     * Show the question selection panel
+     */
     private void showSelectionPanel() {
         Container parent = questionPanel.getParent();
         CardLayout cl = (CardLayout)parent.getLayout();
@@ -287,11 +304,15 @@ public class Bonus1 extends JPanel {
         parent.repaint();
     }
     
+    /**
+     * Start a specific question
+     * @param questionNum The question number to start
+     */
     private void startQuestion(int questionNum) {
-        // 设置当前题目
+        // Set current question
         bonus1Service.setCurrentQuestion(questionNum);
         
-        // 重置输入控件
+        // Reset input controls
         answerField.setText("");
         answerField.setEnabled(true);
         answerField.requestFocusInWindow();
@@ -299,21 +320,24 @@ public class Bonus1 extends JPanel {
         submitButton.setEnabled(true);
         nextButton.setVisible(false);
         
-        // 设置单位
+        // Set unit
         unitComboBox.setSelectedItem(bonus1Service.getCurrentQuestionUnit());
         resultLabel.setText("Please calculate the area of the shaded part in the figure");
         
-        // 更新题目图片
+        // Update question image
         ImageIcon questionImage = bonus1Service.getCurrentQuestion().getQuestionImage();
         Image scaledImage = questionImage.getImage().getScaledInstance(400, 300, Image.SCALE_SMOOTH);
         questionImageLabel.setIcon(new ImageIcon(scaledImage));
         
-        // 显示答题面板
+        // Show answer panel
         Container parent = questionPanel.getParent();
         CardLayout cl = (CardLayout)parent.getLayout();
         cl.show(parent, "QUESTION");
     }
     
+    /**
+     * Check the user's answer against the expected result
+     */
     private void checkAnswer() {
         try {
             double answer = Double.parseDouble(answerField.getText());
@@ -426,6 +450,9 @@ public class Bonus1 extends JPanel {
         }
     }
 
+    /**
+     * Display the answer image with solution
+     */
     private void showAnswerImage() {
         // Show answer image
         ImageIcon answerImage = bonus1Service.getCurrentQuestion().getAnswerImage();

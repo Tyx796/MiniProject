@@ -9,139 +9,134 @@ import java.util.Set;
 import com.geometry.resources.task3.Triangle;
 import com.geometry.resources.task3.Parallelogram;
 import com.geometry.resources.task3.Trapezium;
-// 使用精确的Rectangle类引用避免歧义
+// Use fully qualified Rectangle to avoid ambiguity
 import com.geometry.resources.task3.Rectangle;
 
 /**
- * Task3业务逻辑类 - 图形面积计算
+ * Business logic for Task3 - Area calculation for basic shapes (Rectangle, Triangle, Parallelogram, Trapezium).
+ * This class manages random parameter generation, area calculation, answer checking, and progress tracking.
  */
 public class Task3 {
-    // 常量定义
+    // Shape type constants
     public static final String RECTANGLE = "Rectangle";
     public static final String TRIANGLE = "Triangle";
     public static final String PARALLELOGRAM = "Parallelogram";
     public static final String TRAPEZIUM = "Trapezium";
     
-    // 随机数生成器
+    // Random number generator for parameter generation
     private final Random random = new Random();
     
-    // 当前图形类型
+    // Current selected shape type
     private String currentShape;
     
-    // 图形参数
+    // Parameters for the current shape (lengths, heights, etc.)
     private int[] parameters;
     
-    // 图形面积
+    // Calculated area for the current shape
     private double area;
     
-    // 已处理过的图形
+    // Set of shapes that have already been processed in this session
     private final Set<String> processedShapes = new HashSet<>();
     
-    // 剩余尝试次数
+    // Remaining attempts for the current question
     private int remainingAttempts = 3;
     
     /**
-     * 选择图形并生成随机参数
-     * @param shapeType 图形类型
-     * @return 是否成功选择图形
+     * Select a shape type and generate random parameters for it.
+     * @param shapeType The type of shape to select
+     * @return true if selection and parameter generation succeed
      */
     public boolean selectShape(String shapeType) {
-        // 重置尝试次数
+        // Reset attempts for new shape
         remainingAttempts = 3;
         
-        // 设置当前图形
+        // Set current shape type
         currentShape = shapeType;
         
-        // 生成随机参数
+        // Generate random parameters for the selected shape
         generateRandomParameters();
         
-        // 计算面积
+        // Calculate area for the generated parameters
         calculateArea();
         
-        // 将图形添加到已处理集合
+        // Mark this shape as processed
         processedShapes.add(shapeType);
         
         return true;
     }
     
     /**
-     * 生成随机参数 (1-20范围内)
+     * Generate random parameters for the current shape (values in range 1-20).
      */
     private void generateRandomParameters() {
         switch (currentShape) {
             case RECTANGLE:
-                // 长方形需要长和宽两个参数
+                // Rectangle needs length and width
                 parameters = new int[2];
-                parameters[0] = random.nextInt(20) + 1; // 长度
-                parameters[1] = random.nextInt(20) + 1; // 宽度
+                parameters[0] = random.nextInt(20) + 1; // Length
+                parameters[1] = random.nextInt(20) + 1; // Width
                 break;
-                
             case TRIANGLE:
-                // 三角形需要底和高两个参数
+                // Triangle needs base and height
                 parameters = new int[2];
-                parameters[0] = random.nextInt(20) + 1; // 底边长
-                parameters[1] = random.nextInt(20) + 1; // 高
+                parameters[0] = random.nextInt(20) + 1; // Base
+                parameters[1] = random.nextInt(20) + 1; // Height
                 break;
-                
             case PARALLELOGRAM:
-                // 平行四边形需要底和高两个参数
+                // Parallelogram needs base and height
                 parameters = new int[2];
-                parameters[0] = random.nextInt(20) + 1; // 底边长
-                parameters[1] = random.nextInt(20) + 1; // 高
+                parameters[0] = random.nextInt(20) + 1; // Base
+                parameters[1] = random.nextInt(20) + 1; // Height
                 break;
-                
             case TRAPEZIUM:
-                // 梯形需要上底、下底和高三个参数
+                // Trapezium needs top, bottom, and height
                 parameters = new int[3];
-                parameters[0] = random.nextInt(20) + 1; // 上底
-                parameters[1] = random.nextInt(20) + 1; // 下底
-                parameters[2] = random.nextInt(20) + 1; // 高
+                parameters[0] = random.nextInt(20) + 1; // Top length
+                parameters[1] = random.nextInt(20) + 1; // Bottom length
+                parameters[2] = random.nextInt(20) + 1; // Height
                 break;
         }
     }
     
     /**
-     * 计算面积
+     * Calculate the area for the current shape and parameters.
      */
     private void calculateArea() {
         switch (currentShape) {
             case RECTANGLE:
-                // 长方形面积 = 长 × 宽
+                // Rectangle area = length × width
                 area = parameters[0] * parameters[1];
                 break;
-                
             case TRIANGLE:
-                // 三角形面积 = 底 × 高 / 2
+                // Triangle area = base × height / 2
                 area = parameters[0] * parameters[1] / 2.0;
                 break;
-                
             case PARALLELOGRAM:
-                // 平行四边形面积 = 底 × 高
+                // Parallelogram area = base × height
                 area = parameters[0] * parameters[1];
                 break;
-                
             case TRAPEZIUM:
-                // 梯形面积 = (上底 + 下底) × 高 / 2
+                // Trapezium area = (top + bottom) × height / 2
                 area = (parameters[0] + parameters[1]) * parameters[2] / 2.0;
                 break;
         }
     }
     
     /**
-     * 验证用户答案
-     * @param userAnswer 用户输入的答案
-     * @return 是否正确
+     * Check if the user's answer is correct (tolerance < 1).
+     * @param userAnswer The answer provided by the user
+     * @return true if correct, false otherwise
      */
     public boolean checkAnswer(double userAnswer) {
-        // 检查答案是否正确，允许0.001的误差
+        // Allow a tolerance of 1 for floating point answers
         boolean isCorrect = Math.abs(userAnswer - area) < 1;
         
         if (isCorrect) {
-            // 根据剩余尝试次数计算得分
+            // Award score based on remaining attempts
             int attemptsUsed = 3 - remainingAttempts + 1;
             com.geometry.entity.User.addScores("Basic", attemptsUsed);
         } else {
-            // 如果答案不正确，减少尝试次数
+            // Decrement attempts if incorrect
             remainingAttempts--;
         }
         
@@ -149,97 +144,88 @@ public class Task3 {
     }
     
     /**
-     * 获取当前图形类型
-     * @return 图形类型
+     * Get the current shape type.
+     * @return The current shape type
      */
     public String getCurrentShape() {
         return currentShape;
     }
     
     /**
-     * 获取图形参数
-     * @return 参数数组
+     * Get the parameters for the current shape.
+     * @return Array of parameters
      */
     public int[] getParameters() {
         return parameters;
     }
     
     /**
-     * 获取面积
-     * @return 面积
+     * Get the calculated area for the current shape.
+     * @return Area value
      */
     public double getArea() {
         return area;
     }
     
     /**
-     * 获取剩余尝试次数
-     * @return 剩余尝试次数
+     * Get the number of remaining attempts for the current question.
+     * @return Remaining attempts
      */
     public int getRemainingAttempts() {
         return remainingAttempts;
     }
     
     /**
-     * 检查用户是否已完成所有图形
-     * @return 是否完成所有图形
+     * Check if the user has completed all shapes in this task.
+     * @return true if all shapes are completed, false otherwise
      */
     public boolean isAllShapesCompleted() {
-        // 四种图形：矩形、三角形、平行四边形、梯形
+        // There are four shapes: Rectangle, Triangle, Parallelogram, Trapezium
         String[] allShapes = {RECTANGLE, TRIANGLE, PARALLELOGRAM, TRAPEZIUM};
-        
-        // 检查是否所有图形都已处理
+        // Check if all shapes have been processed
         return processedShapes.containsAll(Arrays.asList(allShapes));
     }
     
     /**
-     * 获取面积公式描述
-     * @return 面积公式描述
+     * Get the area formula description for the current shape.
+     * @return Area formula as a string
      */
     public String getAreaFormula() {
         switch (currentShape) {
             case RECTANGLE:
                 return "Area = Length × Width";
-                
             case TRIANGLE:
                 return "Area = (Base × Height) ÷ 2";
-                
             case PARALLELOGRAM:
                 return "Area = Base × Height";
-                
             case TRAPEZIUM:
                 return "Area = ((a + b) ÷ 2) × Height";
-                
             default:
                 return "";
         }
     }
     
     /**
-     * 获取参数名称
-     * @return 参数名称数组
+     * Get the parameter names for the current shape.
+     * @return Array of parameter names
      */
     public String[] getParameterNames() {
         switch (currentShape) {
             case RECTANGLE:
                 return new String[]{"Length", "Width"};
-                
             case TRIANGLE:
                 return new String[]{"Base", "Height"};
-                
             case PARALLELOGRAM:
                 return new String[]{"Base", "Height"};
-                
             case TRAPEZIUM:
                 return new String[]{"Top Length", "Bottom Length", "Height"};
-                
             default:
                 return new String[]{};
         }
     }
     
     /**
-     * 重置状态
+     * Reset the task state, clearing progress and attempts.
      */
     public void reset() {
         processedShapes.clear();
@@ -248,34 +234,29 @@ public class Task3 {
     }
     
     /**
-     * 创建图形展示面板
-     * @return 包含图形的面板
+     * Create a JPanel displaying the current shape with its parameters.
+     * @return JPanel containing the shape drawing
      */
     public JPanel createShapeDisplayPanel() {
         JPanel panel = new JPanel();
-        
         switch (currentShape) {
             case RECTANGLE:
-                // 创建长方形面板，传入长宽参数
+                // Create rectangle panel with length and width
                 panel = new com.geometry.resources.task3.Rectangle.RectanglePanel(parameters[0], parameters[1]);
                 break;
-                
             case TRIANGLE:
-                // 创建三角形面板，传入底和高参数
+                // Create triangle panel with base and height
                 panel = new Triangle.TrianglePanel(parameters[0], parameters[1]);
                 break;
-                
             case PARALLELOGRAM:
-                // 创建平行四边形面板，传入底和高参数
+                // Create parallelogram panel with base and height
                 panel = new Parallelogram.ParallelogramPanel(parameters[0], parameters[1]);
                 break;
-                
             case TRAPEZIUM:
-                // 创建梯形面板，传入上底、下底和高参数
+                // Create trapezium panel with top, bottom, and height
                 panel = new Trapezium.TrapeziumPanel(parameters[0], parameters[1], parameters[2]);
                 break;
         }
-        
         return panel;
     }
 }

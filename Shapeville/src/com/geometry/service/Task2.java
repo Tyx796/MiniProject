@@ -8,45 +8,46 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * 角度识别任务业务逻辑
+ * Business logic for Task2 - Angle recognition task.
+ * This class manages angle type recognition, answer checking, and progress tracking for angle learning.
  */
 public class Task2 {
-    // 角度类型常量
+    // Angle type constants
     public static final String ACUTE_ANGLE = "acute";
     public static final String RIGHT_ANGLE = "right";
     public static final String OBTUSE_ANGLE = "obtuse";
     public static final String STRAIGHT_ANGLE = "straight";
     public static final String REFLEX_ANGLE = "reflex";
     
-    // 角度类型与度数范围的映射
+    // List of all angle types
     private final List<String> angleTypes = Arrays.asList(
         ACUTE_ANGLE, RIGHT_ANGLE, OBTUSE_ANGLE, STRAIGHT_ANGLE, REFLEX_ANGLE
     );
     
-    // 已完成的角度类型
+    // Set of completed angle types
     private Set<String> completedTypes = new HashSet<>();
     
-    // 当前角度
+    // Current angle value (degrees)
     private int currentAngle = 0;
     
-    // 当前尝试次数
+    // Number of attempts for current angle
     private int attempts = 0;
     
-    // 最大尝试次数
+    // Maximum allowed attempts per angle
     private int maxAttempts = 3;
     
-    // 当前角度类型
+    // Current angle type (string)
     private String currentAngleType = "";
     
-    // 正确回答数
+    // Number of correct answers
     private int correctCount = 0;
     
-    // 需要完成的角度类型数
+    // Number of required angle types to complete the task
     private int requiredTypes = 4;
     
     /**
-     * 设置当前角度（用户输入）
-     * @param angle 用户输入的角度
+     * Set the current angle (user input).
+     * @param angle The angle value input by the user
      */
     public void setCurrentAngle(int angle) {
         this.currentAngle = angle;
@@ -55,38 +56,36 @@ public class Task2 {
     }
     
     /**
-     * 根据角度值获取角度类型
-     * @param angle 角度值
-     * @return 角度类型
+     * Get the angle type string for a given angle value.
+     * @param angle Angle value in degrees
+     * @return Angle type string
      */
     public String getAngleType(int angle) {
-        if (angle == 0) return ACUTE_ANGLE; // 特殊情况，0度当作锐角处理
+        if (angle == 0) return ACUTE_ANGLE; // Special case: treat 0° as acute
         if (angle > 0 && angle < 90) return ACUTE_ANGLE;
         if (angle == 90) return RIGHT_ANGLE;
         if (angle > 90 && angle < 180) return OBTUSE_ANGLE;
         if (angle == 180) return STRAIGHT_ANGLE;
         if (angle > 180 && angle < 360) return REFLEX_ANGLE;
-        if (angle == 360) return STRAIGHT_ANGLE; // 特殊情况，360度当作平角处理
+        if (angle == 360) return STRAIGHT_ANGLE; // Special case: treat 360° as straight
         return "";
     }
     
     /**
-     * 检查用户输入的角度类型是否正确
-     * @param answer 用户回答的角度类型
-     * @return 是否正确
+     * Check if the user's answer for angle type is correct.
+     * @param answer User's answer (angle type string)
+     * @return true if correct, false otherwise
      */
     public boolean checkAnswer(String answer) {
         boolean isCorrect = answer.equalsIgnoreCase(currentAngleType);
         
         if (isCorrect) {
-            // 添加分数
+            // Award score based on remaining attempts
             int attemptsUsed = maxAttempts - getRemainingAttempts() + 1;
             User.addScores("Basic", attemptsUsed);
-            
-            // 记录已完成的角度类型
+            // Mark this angle type as completed
             completedTypes.add(currentAngleType);
             correctCount++;
-            
             return true;
         } else {
             attempts++;
@@ -95,73 +94,73 @@ public class Task2 {
     }
     
     /**
-     * 获取当前角度
-     * @return 当前角度
+     * Get the current angle value.
+     * @return Current angle in degrees
      */
     public int getCurrentAngle() {
         return currentAngle;
     }
     
     /**
-     * 获取当前角度类型
-     * @return 当前角度类型
+     * Get the current angle type string.
+     * @return Current angle type
      */
     public String getCurrentAngleType() {
         return currentAngleType;
     }
     
     /**
-     * 获取已尝试次数
-     * @return 已尝试次数
+     * Get the number of attempts used for the current angle.
+     * @return Number of attempts
      */
     public int getAttempts() {
         return attempts;
     }
     
     /**
-     * 获取剩余尝试次数
-     * @return 剩余尝试次数
+     * Get the number of remaining attempts for the current angle.
+     * @return Remaining attempts
      */
     public int getRemainingAttempts() {
         return maxAttempts - attempts;
     }
     
     /**
-     * 获取正确回答次数
-     * @return 正确回答次数
+     * Get the number of correct answers so far.
+     * @return Correct answer count
      */
     public int getCorrectCount() {
         return correctCount;
     }
     
     /**
-     * 检查任务是否完成
-     * @return 是否完成
+     * Check if the angle recognition task is completed.
+     * @return true if completed, false otherwise
      */
     public boolean isTaskCompleted() {
         return completedTypes.size() >= requiredTypes || completedTypes.size() >= angleTypes.size();
     }
     
     /**
-     * 获取当前用户得分
-     * @return 当前得分
+     * Get the current user score.
+     * @return Current score
      */
     public int getCurrentScore() {
         return User.getScores();
     }
     
     /**
-     * 获取所有可用的角度类型
-     * @return 角度类型列表
+     * Get all available angle types.
+     * @return List of angle type strings
      */
     public List<String> getAngleTypes() {
         return new ArrayList<>(angleTypes);
     }
     
     /**
-     * 获取角度类型的显示名称
-     * @param type 角度类型
-     * @return 显示名称
+     * Get the display name for an angle type.
+     * @param type Angle type string
+     * @return Display name
      */
     public String getAngleTypeName(String type) {
         switch (type) {
@@ -181,9 +180,9 @@ public class Task2 {
     }
     
     /**
-     * 获取角度类型的描述
-     * @param type 角度类型
-     * @return 描述
+     * Get the description for an angle type.
+     * @param type Angle type string
+     * @return Description string
      */
     public String getAngleTypeDescription(String type) {
         switch (type) {
@@ -203,9 +202,9 @@ public class Task2 {
     }
     
     /**
-     * 获取角度对应的图像
-     * @param degrees 角度值
-     * @return 角度图像
+     * Get the image icon for a given angle value.
+     * @param degrees Angle value in degrees
+     * @return ImageIcon for the angle
      */
     public javax.swing.ImageIcon getAngleImage(int degrees) {
         return com.geometry.entity.Angles.getAngleIcon(degrees);

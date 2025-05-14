@@ -7,19 +7,24 @@ import java.util.Map;
 import java.util.List;
 
 /**
- * 复合图形数据实体类
+ * Entity class for compound geometric shapes.
+ * Manages properties and calculations for composite shapes.
  */
 public class CompoundArea {
-    private int questionNumber;  // 题目编号 1-9
-    private Map<String, Integer> dimensions;  // 存储图形的各个尺寸
-    // private static List<Double> correctArea;  // 正确答案
-    private double correctArea;
-    private String unit;        // 面积单位（cm2或m2）
-    private String formula;     // 计算公式
-    private String questionImagePath;  // 题目图片路径
-    private String answerImagePath;   // 答案图片路径
+    private int questionNumber;  // Question number (1-9)
+    private Map<String, Integer> dimensions;  // Stores dimensions of the shape
+    // private static List<Double> correctArea;  // Correct answer (commented out)
+    private double correctArea;  // Correct area value
+    private String unit;         // Area unit (cm² or m²)
+    private String formula;      // Calculation formula
+    private String questionImagePath;  // Path to question image
+    private String answerImagePath;    // Path to answer image
 
 
+    /**
+     * Create a compound area question with the specified number
+     * @param questionNumber Question number (1-9)
+     */
     public CompoundArea(int questionNumber) {
         this.questionNumber = questionNumber;
         this.dimensions = new HashMap<>();
@@ -29,6 +34,9 @@ public class CompoundArea {
         initializeAnswerAndUnit();
     }
 
+    /**
+     * Initialize dimensions for the shape based on question number
+     */
     private void initializeDimensions() {
         switch (questionNumber) {
             case 1:
@@ -90,6 +98,9 @@ public class CompoundArea {
         }
     }
 
+    /**
+     * Initialize correct answer and unit for each question
+     */
     private void initializeAnswerAndUnit() {
         switch (questionNumber) {
             case 1:
@@ -131,6 +142,9 @@ public class CompoundArea {
         }
     }
 
+    /**
+     * Calculate area based on dimensions and question type
+     */
     private void calculateArea() {
         switch (questionNumber) {
             case 1:
@@ -174,37 +188,69 @@ public class CompoundArea {
     }
 
     // Getters
+    /**
+     * @return The question number
+     */
     public int getQuestionNumber() { return questionNumber; }
+    
+    /**
+     * @return Map of shape dimensions
+     */
     public Map<String, Integer> getDimensions() { return dimensions; }
+    
+    /**
+     * @return The correct area value
+     */
     public double getCorrectArea() { return correctArea; }
+    
+    /**
+     * @return The area unit (e.g., "cm2", "m2")
+     */
     public String getUnit() { return unit; }
+    
+    /**
+     * @return The calculation formula
+     */
     public String getFormula() { return formula; }
+    
+    /**
+     * @return Path to the question image
+     */
     public String getQuestionImagePath() { return questionImagePath; }
+    
+    /**
+     * @return Path to the answer image
+     */
     public String getAnswerImagePath() { return answerImagePath; }
 
     /**
-     * 检查答案是否正确（允许0.1的误差）
+     * Check if the user's answer is correct (within 0.1 tolerance)
+     * @param userAnswer The user's answer to check
+     * @return true if the answer is correct, false otherwise
      */
     public boolean checkAnswer(double userAnswer) {
         return Math.abs(userAnswer - correctArea) < 0.1;
     }
 
     /**
-     * 获取带单位的答案字符串
+     * Get the formatted area with unit
+     * @return Formatted area string with unit
      */
     public String getFormattedArea() {
         return String.format("%.1f%s", correctArea, unit);
     }
 
     /**
-     * 获取题目图片
+     * Get the question image as an ImageIcon
+     * @return ImageIcon for the question
      */
     public ImageIcon getQuestionImage() {
         return new ImageIcon(getClass().getResource(questionImagePath));
     }
 
     /**
-     * 获取答案图片
+     * Get the answer image as an ImageIcon
+     * @return ImageIcon for the answer
      */
     public ImageIcon getAnswerImage() {
         return new ImageIcon(getClass().getResource(answerImagePath));
