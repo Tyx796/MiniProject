@@ -171,7 +171,7 @@ public class Bonus2 extends JPanel {
         JLabel statusLabel = new JLabel(completedQuestions.contains(questionNum) ? "Completed" : "Not Started");
         statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
         statusLabel.setFont(new Font(FONT_NAME, Font.PLAIN, 14));
-        statusLabel.setForeground(completedQuestions.contains(questionNum) ? new Color(0, 150, 0) : Color.RED);
+        statusLabel.setForeground(completedQuestions.contains(questionNum) ? Color.GRAY : Color.BLACK);
         
         // Add components to card
         card.add(imageLabel, BorderLayout.CENTER);
@@ -416,7 +416,7 @@ public class Bonus2 extends JPanel {
                         completeButton.setFont(new Font(FONT_NAME, Font.BOLD, 20));
                         completeButton.addActionListener(e -> {
                             completionDialog.dispose();
-                            mainFrame.showCard(MainFrame.HOME_PANEL);
+                        mainFrame.showCard(MainFrame.HOME_PANEL);
                         });
                         
                         // Add keyboard enter listener

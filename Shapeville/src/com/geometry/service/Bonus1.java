@@ -35,12 +35,12 @@ public class Bonus1 {
     }
 
     /**
-     * Initialize the question pool with numbers 1-9.
+     * Initialize the question pool with numbers 1-6.
      * Shuffles the questions to create a random sequence.
      */
     private void initializeQuestions() {
         remainingQuestions = new ArrayList<>();
-        for (int i = 1; i <= 9; i++) {
+        for (int i = 1; i <= 6; i++) {
             remainingQuestions.add(i);
         }
         Collections.shuffle(remainingQuestions); // Randomize question order
@@ -48,12 +48,12 @@ public class Bonus1 {
 
     /**
      * Set a specific question as the current challenge.
-     * @param questionNumber Question number (1-9)
+     * @param questionNumber Question number (1-6)
      * @throws IllegalArgumentException if question number is out of valid range
      */
     public void setCurrentQuestion(int questionNumber) {
-        if (questionNumber < 1 || questionNumber > 9) {
-            throw new IllegalArgumentException("Question number must be between 1 and 9");
+        if (questionNumber < 1 || questionNumber > 6) {
+            throw new IllegalArgumentException("Question number must be between 1 and 6");
         }
         currentQuestion = new CompoundArea(questionNumber);
         attempts = 0;

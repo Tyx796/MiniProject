@@ -7,7 +7,6 @@ import javax.swing.SwingUtilities;
  * Main class for the geometry learning application
  */
 public class App {
-    
     /**
      * Program entry point
      * @param args command line arguments

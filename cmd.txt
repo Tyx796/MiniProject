@@ -1,0 +1,3 @@
+Run a terminal in current directory, then run following cmd:
+
+java -cp out/production/MiniProject com.geometry.App

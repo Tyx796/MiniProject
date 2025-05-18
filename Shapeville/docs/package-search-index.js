@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"com.geometry"},{"l":"com.geometry.entity"},{"l":"com.geometry.resources.task3"},{"l":"com.geometry.resources.task4"},{"l":"com.geometry.service"},{"l":"com.geometry.ui"},{"l":"com.geometry.ui.uiUtils"},{"l":"所有程序包","u":"allpackages-index.html"}];updateSearchResults();

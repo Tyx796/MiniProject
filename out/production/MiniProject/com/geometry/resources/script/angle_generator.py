@@ -4,80 +4,80 @@ import os
 import math
 from matplotlib.patches import Arc, Rectangle, FancyArrowPatch, Circle, Polygon
 
-# 创建输出目录
+# Create output directory
 output_dir = 'angles'
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
 def create_angle_image(angle_degrees, filename, figsize=(5, 5), dpi=100):
-    """创建并保存角度图片
+    """Create and save an angle image
     
-    参数:
-        angle_degrees: 角度值(0-360)
-        filename: 输出文件名
-        figsize: 图片尺寸
-        dpi: 分辨率
+    Parameters:
+        angle_degrees: Angle value (0-360)
+        filename: Output file name
+        figsize: Image size
+        dpi: Resolution
     """
-    # 将角度转换为弧度
+    # Convert angle to radians
     angle_rad = math.radians(angle_degrees)
     
-    # 创建图形
+    # Create figure
     fig, ax = plt.subplots(figsize=figsize)
     
-    # 设置坐标轴范围
+    # Set coordinate axis range
     ax.set_xlim(-1.5, 1.5)
     ax.set_ylim(-1.5, 1.5)
     
-    # 隐藏坐标轴
+    # Hide axes
     ax.axis('off')
     
-    # 设置背景颜色 - 淡蓝色背景，与示例图片一致
+    # Set background color - light blue background, consistent with example image
     ax.set_facecolor('#e6f2f5')
     
-    # 定义线条颜色和宽度 - 与示例图片一致
-    line_color = '#4682b4'  # 钢蓝色
-    arc_color = '#b0d0e0'   # 浅蓝色
+    # Define line colors and widths - consistent with example image
+    line_color = '#4682b4'  # Steel blue
+    arc_color = '#b0d0e0'   # Light blue
     line_width = 2.5
     
-    # 确定角度类型并相应绘制
-    if angle_degrees == 0 or angle_degrees == 360:  # 0度或360度
-        # 仅绘制水平向右的线
+    # Determine angle type and draw accordingly
+    if angle_degrees == 0 or angle_degrees == 360:  # 0 degree or 360 degree
+        # Draw only horizontal line pointing right
         ax.arrow(0, 0, 1, 0, head_width=0.08, head_length=0.1, fc=line_color, ec=line_color, linewidth=line_width)
         
-    elif angle_degrees == 90:  # 直角
-        # 绘制水平线与箭头
+    elif angle_degrees == 90:  # Right angle
+        # Draw horizontal line with arrow
         ax.arrow(0, 0, 1, 0, head_width=0.08, head_length=0.1, fc=line_color, ec=line_color, linewidth=line_width)
         
-        # 绘制垂直线与箭头
+        # Draw vertical line with arrow
         ax.arrow(0, 0, 0, 1, head_width=0.08, head_length=0.1, fc=line_color, ec=line_color, linewidth=line_width)
         
-        # 添加直角符号 (小正方形)
+        # Add right angle symbol (small square)
         rect = Rectangle((0, 0), 0.15, 0.15, linewidth=0, edgecolor='none', facecolor=arc_color, alpha=0.7)
         ax.add_patch(rect)
         
-    elif angle_degrees == 180:  # 平角
-        # 绘制双向水平线
+    elif angle_degrees == 180:  # Straight angle
+        # Draw bidirectional horizontal line
         ax.arrow(-1, 0, 1, 0, head_width=0.08, head_length=0.1, fc=line_color, ec=line_color, linewidth=line_width)
         ax.arrow(0, 0, 1, 0, head_width=0.08, head_length=0.1, fc=line_color, ec=line_color, linewidth=line_width)
         
-        # 添加中点标记
+        # Add midpoint mark
         circle = Circle((0, 0), 0.05, facecolor=line_color)
         ax.add_patch(circle)
         
-        # 添加半圆弧线
+        # Add semicircle arc
         arc = Arc((0, 0), 0.4, 0.4, theta1=0, theta2=180, linewidth=1.5, color=line_color)
         ax.add_patch(arc)
         
-    elif 0 < angle_degrees < 90:  # 锐角
-        # 绘制水平线与箭头
+    elif 0 < angle_degrees < 90:  # Acute angle
+        # Draw horizontal line with arrow
         ax.arrow(0, 0, 1, 0, head_width=0.08, head_length=0.1, fc=line_color, ec=line_color, linewidth=line_width)
         
-        # 绘制倾斜线与箭头
+        # Draw angled line with arrow
         end_x = math.cos(angle_rad)
         end_y = math.sin(angle_rad)
         ax.arrow(0, 0, end_x, end_y, head_width=0.08, head_length=0.1, fc=line_color, ec=line_color, linewidth=line_width)
         
-        # 添加角度弧
+        # Add angle arc
         wedge = Polygon(
             [[0, 0]] + 
             [[0.25 * math.cos(math.radians(theta)), 0.25 * math.sin(math.radians(theta))] for theta in range(0, int(angle_degrees) + 1, 2)],
@@ -85,16 +85,16 @@ def create_angle_image(angle_degrees, filename, figsize=(5, 5), dpi=100):
         )
         ax.add_patch(wedge)
         
-    elif 90 < angle_degrees < 180:  # 钝角
-        # 绘制水平线与箭头
+    elif 90 < angle_degrees < 180:  # Obtuse angle
+        # Draw horizontal line with arrow
         ax.arrow(0, 0, 1, 0, head_width=0.08, head_length=0.1, fc=line_color, ec=line_color, linewidth=line_width)
         
-        # 绘制倾斜线与箭头
+        # Draw angled line with arrow
         end_x = math.cos(angle_rad)
         end_y = math.sin(angle_rad)
         ax.arrow(0, 0, end_x, end_y, head_width=0.08, head_length=0.1, fc=line_color, ec=line_color, linewidth=line_width)
         
-        # 添加角度弧
+        # Add angle arc
         wedge = Polygon(
             [[0, 0]] + 
             [[0.25 * math.cos(math.radians(theta)), 0.25 * math.sin(math.radians(theta))] for theta in range(0, int(angle_degrees) + 1, 2)],
@@ -102,19 +102,19 @@ def create_angle_image(angle_degrees, filename, figsize=(5, 5), dpi=100):
         )
         ax.add_patch(wedge)
         
-    elif 180 < angle_degrees < 360:  # 优角/反射角
-        # 绘制水平线与箭头
+    elif 180 < angle_degrees < 360:  # Reflex angle
+        # Draw horizontal line with arrow
         ax.arrow(0, 0, 1, 0, head_width=0.08, head_length=0.1, fc=line_color, ec=line_color, linewidth=line_width)
         
-        # 绘制倾斜线与箭头
+        # Draw angled line with arrow
         end_x = math.cos(angle_rad)
         end_y = math.sin(angle_rad)
         ax.arrow(0, 0, end_x, end_y, head_width=0.08, head_length=0.1, fc=line_color, ec=line_color, linewidth=line_width)
         
-        # 为反射角添加大圆弧
-        # 使用两个部分：从0到180度的弧和从180到angle_degrees的弧
+        # Add large arc for reflex angle
+        # Use two parts: arc from 0 to 180 degrees and arc from 180 to angle_degrees
         if angle_degrees <= 270:
-            # 方法1: 使用两个半透明填充区域
+            # Method 1: Use two semi-transparent filled areas
             wedge1 = Polygon(
                 [[0, 0]] + 
                 [[0.25 * math.cos(math.radians(theta)), 0.25 * math.sin(math.radians(theta))] for theta in range(0, 181, 2)],
@@ -128,10 +128,10 @@ def create_angle_image(angle_degrees, filename, figsize=(5, 5), dpi=100):
             ax.add_patch(wedge1)
             ax.add_patch(wedge2)
         else:
-            # 方法2: 绘制一个完整的环形并在中间有一条线
+            # Method 2: Draw a complete ring with a line in the middle
             circle = Circle((0, 0), 0.25, facecolor=arc_color, alpha=0.4, edgecolor='none')
             ax.add_patch(circle)
-            # 添加一个白色的楔形以表示未被包含的角度部分
+            # Add a white wedge to represent the non-included angle portion
             wedge_not_included = Polygon(
                 [[0, 0]] + 
                 [[0.25 * math.cos(math.radians(theta)), 0.25 * math.sin(math.radians(theta))] for theta in range(int(angle_degrees), 361, 2)],
@@ -139,17 +139,17 @@ def create_angle_image(angle_degrees, filename, figsize=(5, 5), dpi=100):
             )
             ax.add_patch(wedge_not_included)
             
-            # 绘制从原点到圆弧边缘的线，表示角度的起点和终点
+            # Draw lines from origin to circle edge, representing angle start and end points
             ax.plot([0, 0.25], [0, 0], color=line_color, linestyle='-', linewidth=1)
             ax.plot([0, 0.25 * math.cos(angle_rad)], [0, 0.25 * math.sin(angle_rad)], color=line_color, linestyle='-', linewidth=1)
-    # 保存图片
+    # Save image
     plt.savefig(filename, dpi=dpi, bbox_inches='tight', transparent=False)
     plt.close(fig)
 
-# 生成36个角度图片 (0-350度，每10度一个)
+# Generate 36 angle images (0-350 degrees, at 10-degree intervals)
 for degree in range(0, 360, 10):
     filename = f"{output_dir}/angle_{degree}.png"
     create_angle_image(degree, filename)
-    print(f"已生成 {degree}度 角度图片")
+    print(f"Generated {degree} degree angle image")
 
-print("\n所有角度图片生成完成！") 
+print("\nAll angle images generated successfully!") 

@@ -114,7 +114,8 @@ public class AnglePanel extends JPanel {
         
         // Error message label
         errorLabel = new JLabel("");
-        errorLabel.setForeground(Color.RED);
+        errorLabel.setFont(new Font(FONT_NAME, Font.BOLD, 20));
+        errorLabel.setForeground(Color.WHITE);
         errorLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         
         // Angle image label
@@ -300,9 +301,9 @@ public class AnglePanel extends JPanel {
         }
         
         // Update result label
-        // int correctCount = angleTask.getCorrectCount();
-        // int requiredTypes = 4;
-        scoreLabel.setText("You got these angles right!");
+        int correctCount = angleTask.getCorrectCount();
+        int requiredTypes = 4;
+        scoreLabel.setText("You got " + correctCount + " / " + requiredTypes + " angles right!");
         
         // Add result panel
         add(resultPanel, BorderLayout.CENTER);
@@ -318,8 +319,8 @@ public class AnglePanel extends JPanel {
             int angle = Integer.parseInt(angleInput.getText().trim());
             
             // Check if angle is within valid range
-            if (angle < 0 || angle > 360) {
-                errorLabel.setText("Angle must be between 0 and 360 degrees");
+            if (angle <= 0 || angle >= 360) {
+                errorLabel.setText("Angle must be between 0 and 360 degrees (not included)");
                 return;
             }
             

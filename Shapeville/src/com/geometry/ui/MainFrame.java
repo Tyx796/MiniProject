@@ -67,6 +67,7 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Center on screen
         setResizable(true);
+        initColorScheme();
     }
     
     /**
@@ -465,6 +466,24 @@ public class MainFrame extends JFrame {
         
         // Update button text to show current scheme name
         colorModeButton.setText(ColorScheme.getSchemeName(nextScheme));
+        
+        // Update background image to match new color scheme
+        String currentCard = getCurrentVisibleCard();
+        
+        // Update background image
+        updateBackground(HOME_PANEL.equals(currentCard));
+        
+        // Update colors of all UI elements
+        updateUIColors();
+    }
+
+    private void initColorScheme() {
+        int initScheme = 0;
+        
+        ColorScheme.setColorScheme(initScheme);
+        
+        // Update button text to show current scheme name
+        colorModeButton.setText(ColorScheme.getSchemeName(initScheme));
         
         // Update background image to match new color scheme
         String currentCard = getCurrentVisibleCard();

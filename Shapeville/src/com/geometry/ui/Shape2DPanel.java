@@ -128,7 +128,7 @@ public class Shape2DPanel extends JPanel {
         inputPanel.setOpaque(false);
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
         
-
+        
         JPanel attemptsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         attemptsPanel.setOpaque(false);
         attemptsPanel.add(attemptsLabel);
@@ -193,7 +193,7 @@ public class Shape2DPanel extends JPanel {
         
         if (answer.isEmpty()) {
             resultLabel.setText("Type answer!");
-            resultLabel.setForeground(Color.RED);
+            resultLabel.setForeground(Color.WHITE);
             return;
         }
         

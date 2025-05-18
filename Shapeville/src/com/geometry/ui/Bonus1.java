@@ -128,7 +128,7 @@ public class Bonus1 extends JPanel {
         JPanel gridPanel = new JPanel(new GridLayout(3, 3, 10, 10));
         gridPanel.setOpaque(false);
         
-        for (int i = 1; i <= 9; i++) {
+        for (int i = 1; i <= 6; i++) {
             final int questionNum = i;
             JPanel questionCard = createQuestionCard(questionNum);
             gridPanel.add(questionCard);
@@ -169,7 +169,7 @@ public class Bonus1 extends JPanel {
         JLabel statusLabel = new JLabel(completedQuestions.contains(questionNum) ? "Completed" : "Not Started");
         statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
         statusLabel.setFont(new Font(FONT_NAME, Font.PLAIN, 14));
-        statusLabel.setForeground(completedQuestions.contains(questionNum) ? new Color(0, 150, 0) : Color.RED);
+        statusLabel.setForeground(completedQuestions.contains(questionNum) ? Color.GRAY : Color.BLACK);
         
         // Add components to card
         card.add(imageLabel, BorderLayout.CENTER);
@@ -392,7 +392,7 @@ public class Bonus1 extends JPanel {
                     scoreDialog.setVisible(true);
                     
                     // Check if all questions are completed
-                    if (completedQuestions.size() == 9) {
+                    if (completedQuestions.size() == 6) {
                         mainFrame.updateTaskStatus("Bonus 1: Compound Area", true);
                         
                         // Create completion dialog
@@ -415,7 +415,7 @@ public class Bonus1 extends JPanel {
                         completeButton.setFont(new Font(FONT_NAME, Font.BOLD, 20));
                         completeButton.addActionListener(e -> {
                             completionDialog.dispose();
-                            mainFrame.showCard(MainFrame.HOME_PANEL);
+                        mainFrame.showCard(MainFrame.HOME_PANEL);
                         });
                         
                         // Add keyboard enter listener

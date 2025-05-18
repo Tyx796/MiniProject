@@ -89,6 +89,7 @@ public class Task2 {
             return true;
         } else {
             attempts++;
+            completedTypes.add(currentAngleType);
             return false;
         }
     }

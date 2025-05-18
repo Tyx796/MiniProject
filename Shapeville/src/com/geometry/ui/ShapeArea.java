@@ -397,7 +397,7 @@ public class ShapeArea extends JPanel {
         
         // Calculate points
         int points = User.calScores("Basic", 3 - task3Service.getRemainingAttempts() + 1);
-            
+        
         // Create score dialog
         JDialog scoreDialog = new JDialog((Frame)SwingUtilities.getWindowAncestor(this), "Score", true);
         scoreDialog.setLayout(new BorderLayout(10, 10));
@@ -430,7 +430,7 @@ public class ShapeArea extends JPanel {
         
         // Show score dialog
         scoreDialog.setVisible(true);
-
+        
         showTask3Result();
         
         if (task3Service.isAllShapesCompleted()) {
@@ -438,7 +438,7 @@ public class ShapeArea extends JPanel {
             completeTask();
         }
     }
-
+    
     /**
      * Display task completion dialog and update UI state
      */
@@ -524,23 +524,6 @@ public class ShapeArea extends JPanel {
         JPanel resultPanel = task3Service.createShapeDisplayPanel();
         task3DisplayPanel.add(resultPanel, BorderLayout.CENTER);
         
-/*         JPanel answerPanel = new JPanel();
-        answerPanel.setLayout(new BoxLayout(answerPanel, BoxLayout.Y_AXIS));
-        answerPanel.setOpaque(false);
-        
-        JLabel formulaLabel = new JLabel("Formula: " + task3Service.getAreaFormula());
-        formulaLabel.setFont(new Font(FONT_NAME, Font.BOLD, 18));
-        formulaLabel.setForeground(Color.WHITE);
-        
-        JLabel areaLabel = new JLabel("Correct area: " + new DecimalFormat("0.##").format(task3Service.getArea()));
-        areaLabel.setFont(new Font(FONT_NAME, Font.BOLD, 18));
-        areaLabel.setForeground(Color.WHITE);
-        
-        answerPanel.add(formulaLabel);
-        answerPanel.add(Box.createVerticalStrut(5));
-        answerPanel.add(areaLabel);
-        
-        task3DisplayPanel.add(answerPanel, BorderLayout.SOUTH); */
         
         task3DisplayPanel.revalidate();
         task3DisplayPanel.repaint();

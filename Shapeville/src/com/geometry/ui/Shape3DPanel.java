@@ -185,7 +185,7 @@ public class Shape3DPanel extends JPanel {
         
         if (answer.isEmpty()) {
             resultLabel.setText("Type answer!");
-            resultLabel.setForeground(Color.RED);
+            resultLabel.setForeground(Color.WHITE);
             return;
         }
         

@@ -114,8 +114,8 @@ public class Task4 {
      * @return true if all four types (area/circumference by radius/diameter) are completed
      */
     public boolean isAllCompleted() {
-        return completedTypes.contains(AREA_RADIUS) && completedTypes.contains(AREA_DIAMETER)
-            && completedTypes.contains(CIRC_RADIUS) && completedTypes.contains(CIRC_DIAMETER);
+        return (completedTypes.contains(AREA_RADIUS) || completedTypes.contains(AREA_DIAMETER))
+            && (completedTypes.contains(CIRC_RADIUS) || completedTypes.contains(CIRC_DIAMETER));
     }
 
     /**

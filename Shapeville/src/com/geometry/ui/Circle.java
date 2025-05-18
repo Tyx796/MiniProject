@@ -308,7 +308,7 @@ public class Circle extends JPanel {
             paramLabel.setFont(new Font(FONT_NAME, Font.BOLD, 18));
             paramLabel.setForeground(Color.WHITE);
             paramLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-            paramsPanel.add(paramLabel);
+                paramsPanel.add(paramLabel);
             
             JLabel piTip = new JLabel("(Use π = 3.14 for calculations)");
             piTip.setFont(new Font(FONT_NAME, Font.PLAIN, 20));
@@ -353,7 +353,7 @@ public class Circle extends JPanel {
         int seconds = secondsRemaining % 60;
         timerLabel.setText(String.format("Time: %d:%02d", minutes, seconds));
         if (secondsRemaining <= 30) {
-            timerLabel.setForeground(Color.RED);
+            timerLabel.setForeground(Color.WHITE);
         } else {
             timerLabel.setForeground(Color.WHITE);
         }
