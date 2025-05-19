@@ -426,6 +426,8 @@ public class AnglePanel extends JPanel {
             scorePanel.add(okButton, BorderLayout.SOUTH);
             
             scoreDialog.add(scorePanel);
+
+            mainFrame.updateScore();
             
             // Update result label
             resultLabel.setText("Great!");

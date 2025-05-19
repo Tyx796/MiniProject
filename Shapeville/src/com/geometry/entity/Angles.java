@@ -11,6 +11,9 @@ import java.util.Map;
 public class Angles {
     // Map to store the relationship between angle degrees and their image paths
     private static final Map<Integer, String> angleImages = new HashMap<>();
+
+    // Private constructor to prevent instantiation
+    private Angles(){}
     
     // Static initialization block to map angle degrees to their image paths
     static {
