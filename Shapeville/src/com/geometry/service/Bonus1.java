@@ -77,6 +77,7 @@ public class Bonus1 {
         return true;
     }
 
+    
     /**
      * Check the user's answer for correctness.
      * Validates both the numerical value and the unit.
