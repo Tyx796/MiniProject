@@ -362,11 +362,7 @@ public class ShapeArea extends JPanel {
                     answerField.setText("");
                 }
             }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, 
-                    "Please enter a valid number", 
-                    "Input Error", 
-                    JOptionPane.ERROR_MESSAGE);
+        } catch (NumberFormatException e) { 
         }
     }
     
@@ -522,6 +518,7 @@ public class ShapeArea extends JPanel {
         task3DisplayPanel.removeAll();
         
         JPanel resultPanel = task3Service.createShapeDisplayPanel();
+        submitButton.setEnabled(false);
         task3DisplayPanel.add(resultPanel, BorderLayout.CENTER);
         
         

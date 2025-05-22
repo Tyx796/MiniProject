@@ -341,7 +341,6 @@ public class Circle extends JPanel {
                 }
             }
         } catch (NumberFormatException e) {
-            // Handle invalid numeric input
         }
     }
     
@@ -491,6 +490,7 @@ public class Circle extends JPanel {
         task4DisplayPanel.removeAll();
         JPanel resultPanel = task4Service.createDisplayPanel();
         task4DisplayPanel.add(resultPanel, BorderLayout.CENTER);
+        submitButton.setEnabled(false);
         
         task4DisplayPanel.revalidate();
         task4DisplayPanel.repaint();
