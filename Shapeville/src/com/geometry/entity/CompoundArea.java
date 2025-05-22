@@ -53,11 +53,11 @@ public class CompoundArea {
                 unit = "m2";
                 break;
             case 4:
-                correctArea = 3456.0;
+                correctArea = 18.0;
                 unit = "m2";
                 break;
             case 5:
-                correctArea = 18.0;
+                correctArea = 3456.0;
                 unit = "m2";
                 break;
             case 6:

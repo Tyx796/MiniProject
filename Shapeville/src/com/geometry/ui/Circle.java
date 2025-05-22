@@ -60,9 +60,9 @@ public class Circle extends JPanel {
         homeButton.setPreferredSize(new Dimension(150, 40));
         homeButton.addActionListener(e -> {
             // Reset Timer status
-            if (task4Timer != null && task4Timer.isRunning()) {
-                task4Timer.stop();
-            }
+            // if (task4Timer != null && task4Timer.isRunning()) {
+            //     task4Timer.stop();
+            // }
             
             mainFrame.showCard(MainFrame.HOME_PANEL);
         });

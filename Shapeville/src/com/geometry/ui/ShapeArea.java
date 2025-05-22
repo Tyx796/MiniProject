@@ -61,10 +61,10 @@ public class ShapeArea extends JPanel {
         homeButton.setPreferredSize(new Dimension(150, 40));
         homeButton.addActionListener(e -> {
             // Reset Task3 status
-            if (task3Timer != null && task3Timer.isRunning()) {
-                task3Timer.stop();
-            }
-            task3Service.reset();
+            // if (task3Timer != null && task3Timer.isRunning()) {
+            //    task3Timer.stop();
+            // }
+            // task3Service.reset();
             
             mainFrame.showCard(MainFrame.HOME_PANEL);
         });
