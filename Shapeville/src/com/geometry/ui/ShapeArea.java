@@ -492,6 +492,11 @@ public class ShapeArea extends JPanel {
         submitButton.setEnabled(false);
         
         showTask3Result();
+
+        if (task3Service.isAllShapesCompleted()) {
+            mainFrame.updateTaskStatus("Shape Area", true);
+            completeTask();
+        }
     }
     
     /**
@@ -509,6 +514,11 @@ public class ShapeArea extends JPanel {
         submitButton.setEnabled(false);
         
         showTask3Result();
+
+        if (task3Service.isAllShapesCompleted()) {
+            mainFrame.updateTaskStatus("Shape Area", true);
+            completeTask();
+        }
     }
     
     /**

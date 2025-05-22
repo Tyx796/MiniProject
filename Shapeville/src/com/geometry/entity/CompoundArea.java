@@ -41,7 +41,7 @@ public class CompoundArea {
     private void initializeAnswerAndUnit() {
         switch (questionNumber) {
             case 1:
-                correctArea = 331.0;
+                correctArea =310.0;
                 unit = "cm2";
                 break;
             case 2:

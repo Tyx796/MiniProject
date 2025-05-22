@@ -468,6 +468,11 @@ public class Circle extends JPanel {
         answerField.setEditable(false);
         submitButton.setEnabled(false);
         showResult();
+
+        if (task4Service.isAllCompleted()) {
+            mainFrame.updateTaskStatus("Circle", true);
+            completeTask();
+        }
     }
     
     /**
@@ -481,6 +486,11 @@ public class Circle extends JPanel {
         answerField.setEditable(false);
         submitButton.setEnabled(false);
         showResult();
+
+        if (task4Service.isAllCompleted()) {
+            mainFrame.updateTaskStatus("Circle", true);
+            completeTask();
+        }
     }
     
     /**

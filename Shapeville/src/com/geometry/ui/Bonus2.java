@@ -19,7 +19,16 @@ public class Bonus2 extends JPanel {
     private MainFrame mainFrame;
     private KidButton homeButton;
     private com.geometry.service.Bonus2 bonus2Service;
-    private Set<Integer> completedQuestions; // Set to track completed questions
+    private Set<Integer> completedQuestions = new HashSet<>() {{
+        add(1);
+        add(2);
+        add(3);
+        add(4);
+        add(5);
+        add(6);
+        add(7);
+        
+    }}; // Set  to track completed questions
     
     // Bonus2 related components
     private JTextField answerField;
@@ -168,7 +177,7 @@ public class Bonus2 extends JPanel {
         infoLabel.setFont(new Font(FONT_NAME, Font.BOLD, 16));
         
         // Create status label
-        JLabel statusLabel = new JLabel(completedQuestions.contains(questionNum) ? "Completed" : "Not Started");
+        JLabel statusLabel = new JLabel(completedQuestions.contains(questionNum) ? "Practiced" : "Not Started");
         statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
         statusLabel.setFont(new Font(FONT_NAME, Font.PLAIN, 14));
         statusLabel.setForeground(completedQuestions.contains(questionNum) ? Color.GRAY : Color.BLACK);
@@ -293,6 +302,10 @@ public class Bonus2 extends JPanel {
      * Show the question selection panel
      */
     private void showSelectionPanel() {
+        // Check if all questions are completed
+        if (completedQuestions.size() == 8) {
+            completeTask();
+        }
         Container parent = questionPanel.getParent();
         CardLayout cl = (CardLayout)parent.getLayout();
         cl.show(parent, "SELECTION");
@@ -303,6 +316,44 @@ public class Bonus2 extends JPanel {
         parent.add(questionPanel, "QUESTION");
         parent.revalidate();
         parent.repaint();
+    }
+
+    private void completeTask() {
+        // Check if all questions are completed
+        mainFrame.updateTaskStatus("Bonus 2: Sector Area", true);
+        
+        // Create completion dialog
+        JDialog completionDialog = new JDialog((Frame)SwingUtilities.getWindowAncestor(this), "Completion", true);
+        completionDialog.setLayout(new BorderLayout(10, 10));
+        completionDialog.setSize(400, 220);
+        completionDialog.setLocationRelativeTo(this);
+        
+        // Create completion panel
+        JPanel completionPanel = new JPanel(new BorderLayout(10, 10));
+        completionPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        
+        // Add completion information
+        JLabel completionLabel = new JLabel("You calculated all sectors!", SwingConstants.CENTER);
+        completionLabel.setFont(new Font(FONT_NAME, Font.BOLD, 28));
+        completionLabel.setForeground(new Color(0, 150, 0));
+        
+        // Confirm button
+        KidButton completeButton = new KidButton("OK");
+        completeButton.setFont(new Font(FONT_NAME, Font.BOLD, 20));
+        completeButton.addActionListener(e -> {
+            completionDialog.dispose();
+        mainFrame.showCard(MainFrame.HOME_PANEL);
+        });
+        
+        // Add keyboard enter listener
+        completionDialog.getRootPane().setDefaultButton(completeButton);
+        
+        // Assemble panel
+        completionPanel.add(completionLabel, BorderLayout.CENTER);
+        completionPanel.add(completeButton, BorderLayout.SOUTH);
+        
+        completionDialog.add(completionPanel);
+        completionDialog.setVisible(true);
     }
     
     /**
@@ -392,43 +443,7 @@ public class Bonus2 extends JPanel {
                     // Show score dialog
                     scoreDialog.setVisible(true);
                     
-                    // Check if all questions are completed
-                    if (completedQuestions.size() == 8) {
-                        mainFrame.updateTaskStatus("Bonus 2: Sector Area", true);
-                        
-                        // Create completion dialog
-                        JDialog completionDialog = new JDialog((Frame)SwingUtilities.getWindowAncestor(this), "Completion", true);
-                        completionDialog.setLayout(new BorderLayout(10, 10));
-                        completionDialog.setSize(400, 220);
-                        completionDialog.setLocationRelativeTo(this);
-                        
-                        // Create completion panel
-                        JPanel completionPanel = new JPanel(new BorderLayout(10, 10));
-                        completionPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-                        
-                        // Add completion information
-                        JLabel completionLabel = new JLabel("You calculated all sectors!", SwingConstants.CENTER);
-                        completionLabel.setFont(new Font(FONT_NAME, Font.BOLD, 28));
-                        completionLabel.setForeground(new Color(0, 150, 0));
-                        
-                        // Confirm button
-                        KidButton completeButton = new KidButton("OK");
-                        completeButton.setFont(new Font(FONT_NAME, Font.BOLD, 20));
-                        completeButton.addActionListener(e -> {
-                            completionDialog.dispose();
-                        mainFrame.showCard(MainFrame.HOME_PANEL);
-                        });
-                        
-                        // Add keyboard enter listener
-                        completionDialog.getRootPane().setDefaultButton(completeButton);
-                        
-                        // Assemble panel
-                        completionPanel.add(completionLabel, BorderLayout.CENTER);
-                        completionPanel.add(completeButton, BorderLayout.SOUTH);
-                        
-                        completionDialog.add(completionPanel);
-                        completionDialog.setVisible(true);
-                    }
+                    
                     break;
                     
                 case INCORRECT:
@@ -441,6 +456,7 @@ public class Bonus2 extends JPanel {
                 case MAX_ATTEMPTS_REACHED:
                     resultLabel.setText("Maximum attempts reached. The correct answer is: " +
                         bonus2Service.getCurrentQuestionFormattedArea());
+                    completedQuestions.add(bonus2Service.getCurrentQuestion().getQuestionNumber());
                     showAnswerImage();
                     break;
             }
